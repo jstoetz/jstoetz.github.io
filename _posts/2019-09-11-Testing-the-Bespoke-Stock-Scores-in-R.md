@@ -4,12 +4,12 @@ title:  "Testing the Bespoke Stock Scores in R"
 by: "Jake Stoetzner"
 categories: [r,backtesting]
 tags: [Bespoke]
+excerpt_separator: <!--more-->
 ---
-
+I have been a subscriber to [Bespoke Premium](https://www.bespokepremium.com) for a long time.  Tuesdays are always a special day; that’s when Bespoke Members get a fresh copy of the Bespoke Stock Scores Report.  This is their proprietary blend of Technical, Fundamental and Sentiment Analysis that is derived down to a single, weighted score.  I have always wanted to backtest their recommendations.  So I decided to do so in R.
+<!--more-->
 
 ## Introduction
-
-I have been a subscriber to [Bespoke Premium](https://www.bespokepremium.com) for a long time.  Tuesdays are always a special day; that’s when Bespoke Members get a fresh copy of the Bespoke Stock Scores Report.  This is their proprietary blend of Technical, Fundamental and Sentiment Analysis that is derived down to a single, weighted score.
 
 From their website:
 
