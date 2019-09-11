@@ -1,6 +1,9 @@
 ---
 layout: post
 title:  "Testing the Bespoke Stock Scores in R"
+by: "Jake Stoetzner"
+categories: [r,backtesting]
+tags: [Bespoke]
 ---
 
 
