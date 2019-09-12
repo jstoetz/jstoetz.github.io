@@ -1,5 +1,5 @@
 <body>
-   
+  {{ content }}
 
  <div class="header">
   <h2>Data Science for Fun (and Profit!)</h2>
