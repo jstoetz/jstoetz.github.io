@@ -4,6 +4,41 @@
 @import "{{ site.theme }}";
 
 body {
-        font-family: 'Montserrat', serif;
-        font-size: 12px;
+        font-family: 'Roboto', serif;
+        font-size: 16px;
       }
+h1 {
+    font-family: 'Montserrat', serif;    
+    font-size: 36px;
+    line-height: 40px;
+}
+
+h2 {
+    font-family: 'Montserrat', serif;
+    font-size: 30px;
+    line-height: 40px;
+}
+
+h3 {
+    font-family: 'Montserrat', serif;
+    font-size: 24px;
+    line-height: 40px;
+}
+
+h4 {
+    font-family: 'Montserrat', serif;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+h5 {
+    font-family: 'Montserrat', serif;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+h6 {
+    font-family: 'Montserrat', serif;
+    font-size: 12px;
+    line-height: 20px;
+}
