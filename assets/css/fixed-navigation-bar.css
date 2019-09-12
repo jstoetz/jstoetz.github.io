@@ -59,10 +59,10 @@ a.sitename, a:visited.sitename {
   color: #004C99;
 }
 .show {
-  background-image: url(/assets/menu.png);
+  background-image: url(/assets/img/menu.png);
 }
 .hide {
-  background-image: url(/assets/menu.png);
+  background-image: url(/assets/img/menu.png);
 }
 
 @media only screen and (max-width: 800px) {
