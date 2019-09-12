@@ -1,17 +1,5 @@
 <body>
-    <nav class="fixed-nav-bar">
-      <div id="menu" class="menu">
-        <a class="sitename" href="/">@jstoetz</a>
-        <!-- Example responsive navigation menu  -->
-          <a class="show" href="#menu">Menu</a><a class="hide" href="#hidemenu">Menu</a>
-            <ul class="menu-items">
-              <li><a href="/blog/">Blog</a></li>
-              <li><a href="/about/">About</a></li>
-              <li><a href="https://twitter.com/jstoetz">Twitter</a></li>
-              <li><a href="https://www.facebook.com/jstoetz">Facebook</a></li>
-          </ul>
-      </div>
-    </nav>
+   
 
  <div class="header">
   <h2>Data Science for Fun (and Profit!)</h2>
