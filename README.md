@@ -1,3 +1,7 @@
+<div class="header">
+  <h2>Data Science for Fun (and Profit!)</h2>
+</div>
+
 <div class="row">
   <div class="leftcolumn">
     <div class="card">
@@ -11,17 +15,14 @@
             {% endfor %}
         </ul>
     </div>
-  </div>
-</div>
 
-<div class="rightcolumn">
-  
+  </div>
+  <div class="rightcolumn">
     <div class="card">
       <h2>About Me</h2>
       <div class="fakeimg" style="height:100px;">Image</div>
       <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
     </div>
-    
     <div class="card">
       <h3>Areas of Interest</h3>
       <a href="/R-Programming"><img src="/assets/img/web-programming.svg" style="width:64px;height:64px;"><a><br>
@@ -31,12 +32,15 @@
       <a href="/Real-Estate"><img src="/assets/img/building.svg" style="width:64px;height:64px;"><a><br>
       Real Estate<br>
     </div>
-
     <div class="card">
-      <h3>Follow Me</h3>
       <a href="https://facebook.com/jstoetz"><img src="/assets/img/hollow-cut-facebook.svg" style="width:32px;height:32px;"><a>
       <a href="https://github.com/jstoetz"><img src="/assets/img/hollow-cut-github.svg" style="width:32px;height:32px;"><a>
       <a href="https://www.linkedin.com/in/jstoetz/"><img src="/assets/img/hollow-cut-linkedin.svg" style="width:32px;height:32px;"><a>
       <a href="https://twitter.com/jstoetz"><img src="/assets/img/hollow-cut-twitter.svg" style="width:32px;height:32px;"><a>
     </div>
+  </div>
+</div>
+
+<div class="footer">
+  <h2>Footer</h2>
 </div>
