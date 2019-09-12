@@ -31,16 +31,10 @@
       Data Science<br>
       <a href="/Real-Estate"><img src="/assets/img/building.svg" style="width:64px;height:64px;"><a><br>
       Real Estate<br>
-    </div>
+
     <div class="card">
       <a href="https://facebook.com/jstoetz"><img src="/assets/img/hollow-cut-facebook.svg" style="width:32px;height:32px;"><a>
       <a href="https://github.com/jstoetz"><img src="/assets/img/hollow-cut-github.svg" style="width:32px;height:32px;"><a>
       <a href="https://www.linkedin.com/in/jstoetz/"><img src="/assets/img/hollow-cut-linkedin.svg" style="width:32px;height:32px;"><a>
       <a href="https://twitter.com/jstoetz"><img src="/assets/img/hollow-cut-twitter.svg" style="width:32px;height:32px;"><a>
-    </div>
-  </div>
-</div>
-
-<div class="footer">
-  <h2>Footer</h2>
-</div>
+    
