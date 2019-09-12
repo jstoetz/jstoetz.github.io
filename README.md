@@ -11,6 +11,7 @@
             {% endfor %}
         </ul>
     </div>
+
     <div class="card">
       <h2>TITLE HEADING</h2>
       <h5>Title description, Sep 2, 2017</h5>
@@ -19,6 +20,7 @@
       <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
     </div>
   </div>
+
   <div class="rightcolumn">
     <div class="card">
       <h2>About Me</h2>
@@ -27,22 +29,24 @@
     </div>
     <div class="card">
       <h3>Areas of Interest</h3>
-      <div><a href="/R-Programming"><img src="/assets/img/web-programming.svg" style="width:64px;height:64px;"><a>R-Programming</div><br>
-      <div><a href="/Data-Science"><img src="/assets/img/data-mining.svg" style="width:64px;height:64px;"><a>Data Science</div><br>
-      <div><a href="/Real-Estate"><img src="/assets/img/building.svg" style="width:64px;height:64px;"><a>Real Estate</div>
+      <a href="/R-Programming"><img src="/assets/img/web-programming.svg" style="width:64px;height:64px;"><a><br>
+      R-Programming<br>
+      <a href="/Data-Science"><img src="/assets/img/data-mining.svg" style="width:64px;height:64px;"><a><br>
+      Data Science<br>
+      <a href="/Real-Estate"><img src="/assets/img/building.svg" style="width:64px;height:64px;"><a><br>
+      Real Estate<br>
     </div>
-        
+
     <div class="card">
       <h3>Follow Me</h3>
-      <p><a href="https://facebook.com/jstoetz"><img src="/assets/img/hollow-cut-facebook.svg" style="width:32px;height:32px;"><a></p>
-      <p><a href="https://github.com/jstoetz"><img src="/assets/img/hollow-cut-github.svg" style="width:32px;height:32px;"><a></p>
-      <p><a href="https://www.linkedin.com/in/jstoetz/"><img src="/assets/img/hollow-cut-linkedin.svg" style="width:32px;height:32px;"><a></p>
-      <p><a href="https://twitter.com/jstoetz"><img src="/assets/img/hollow-cut-twitter.svg" style="width:32px;height:32px;"><a></p>
+      <a href="https://facebook.com/jstoetz"><img src="/assets/img/hollow-cut-facebook.svg" style="width:32px;height:32px;"><a>
+      <a href="https://github.com/jstoetz"><img src="/assets/img/hollow-cut-github.svg" style="width:32px;height:32px;"><a>
+      <a href="https://www.linkedin.com/in/jstoetz/"><img src="/assets/img/hollow-cut-linkedin.svg" style="width:32px;height:32px;"><a>
+      <a href="https://twitter.com/jstoetz"><img src="/assets/img/hollow-cut-twitter.svg" style="width:32px;height:32px;"><a>
     </div>
   </div>
-</div>
+
 
 <div class="footer">
   <h2>Footer</h2>
 </div>
-
