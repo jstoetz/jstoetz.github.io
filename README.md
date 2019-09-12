@@ -3,7 +3,7 @@
 
  <div class="header">
   <h2>Data Science for Fun (and Profit!)</h2>
-  {% include button.html url="/blog" %}
+  
 </div>
 
 <div class="row">
