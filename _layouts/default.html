@@ -42,18 +42,17 @@
     <div class="card">
       <h2>Blog</h2>
       <h5>Read All Blog Posts</h5>
-      <div class="fakeimg" style="height:200px;">Image</div>
-      <p>Some text..</p>
-      {{ content }}
+      <ul>
+      {% for post in site.posts %}
+      <li>
+        <a href="{{ post.url }}">{{ post.title }}</a>
+      {{ post.excerpt }}
+      </li>
+      {% endfor %}
+    </ul>
+
     </div>
-    <div class="card">
-      <h2>TITLE HEADING</h2>
-      <h5>Title description, Sep 2, 2017</h5>
-      <div class="fakeimg" style="height:200px;">Image</div>
-      <p>Some text..</p>
-      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-    </div>
-  </div>
+ </div>
   <div class="rightcolumn">
     <div class="card">
       <h2>About Me</h2>
@@ -63,12 +62,15 @@
     <div class="card">
       <h3>More Information</h3>
       <div><a href="/R-Programming"><img src="/assets/img/web-programming.svg" alt="R Programming">R Programming</a></div><br>
-      <div class="fakeimg">Image</div><br>
-      <div class="fakeimg">Image</div>
+      <div><a href="/Data-Science"><img src="/assets/img/data-mining.svg" alt="Data Science">Data Science</a></div><br>
+      <div><a href="/Real-Estate"><img src="/assets/img/building.svg" alt="Building">Real Estate</a></div>
     </div>
     <div class="card">
       <h3>Follow Me</h3>
-      <p></p>
+      <p><a href="https://twitter.com/jstoetz"><img src="/assets/img/hollow-cut-twitter.svg"></a></p>
+      <p><a href="https://facebook.com/jstoetz"><img src="/assets/img/hollow-cut-facebook.svg"></a></p>
+      <p><a href="https://www.linkedin.com/in/jstoetz/"><img src="/assets/img/hollow-cut-linkedin.svg"></a></p>
+      <p><a href="https://www.github.com/jstoetz"><img src="/assets/img/hollow-cut-github.svg"></a></p>
     </div>
   </div>
 </div>
