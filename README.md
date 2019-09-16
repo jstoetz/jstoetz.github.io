@@ -1,19 +1,4 @@
 
-
-<!-- First Grid -->
-<div class="w3-row-padding w3-padding-64 w3-container">
-  <div class="w3-content">
-    
-      <h1 id="About">About</h1>
-      <h5 class="w3-padding-16">Jake Stoetzner loves talking about himself in the third person.  He grew up in Austin, TX.  He played football at the University of Tulsa where he met his brilliant wife, Dr. Kelli Henderson.  They have three boys - Cooper, Parker and Greyson - and currently live in Lawrence, KS.</h5>
-
-      <p class="w3-text-grey">Jake has his mechanical engineering degree from the University of Tulsa.  He graduated summa cum laude from Oklahoma City University Law School.  He was later admitted to the Texas, Kansas and Missouri bars, but he no longer practices.  After a 10 year career in the financial services industry, he is now focused on writing, algorithmic options trading strategies and commercial real estate.</p>
-    </div>
-
-   
-  </div>
-</div>
-
 <!-- Second Grid -->
 <div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
   <div class="w3-content">
