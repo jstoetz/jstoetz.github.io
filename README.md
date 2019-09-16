@@ -1,15 +1,4 @@
-<!-- Header -->
-<header class="w3-container w3-black w3-center" style="padding:128px 16px">
-  <h1 class="w3-margin w3-jumbo">JAKE STOETZNER</h1>
-  <div class="w3-padding w3-jumbo w3-text-white w3-center">
-    		<a href="tel:1-785-691-5223"><i class="fa fa-phone-square"></i></a>
-		<a href="mailto:jake.stoetzner@gmail.com"><i class="fa fa-envelope"></i></a>
-   	 	<a href="https://twitter.com/jstoetz"><i class="fab fa-twitter"></i></a>
-    		<a href="https://www.linkedin.com/in/jstoetz/"><i class="fab fa-linkedin"></i></a>
-    		<a href="https://www.facebook.com/jstoetz/"><i class="fab fa-facebook"></i></a>
-		<a href="https://www.instagram.com/jstoetz/"><i class="fab fa-instagram"></i></a>
-  	</div>
-</header>
+
 
 <!-- First Grid -->
 <div class="w3-row-padding w3-padding-64 w3-container">
@@ -117,8 +106,4 @@
   </div>
 </div>
 
-<!-- Footer -->
-<footer class="w3-container w3-padding-64 w3-center w3-opacity">  
-  
- <p>Copyright Jake Stoetzner 2019.</p>
-</footer>
+
