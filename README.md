@@ -1,6 +1,3 @@
-<div class="header">
-  <h2>Data Science for Fun (and Profit!)</h2>
-</div>
 
 <div class="row">
   <div class="leftcolumn">
@@ -19,9 +16,9 @@
   </div>
   <div class="rightcolumn">
     <div class="card">
-      <h2>About Me</h2>
-      <div class="fakeimg" style="height:100px;">Image</div>
-      <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+      <a href="/about"><h2>About Me</h2><a>
+      <a href="/about"><img src="/assets/img/pic.jpg" style="height:100px;">jstoetz</div><a>
+      <p>Learn more about the goals of this site.</p>
     </div>
     <div class="card">
       <h3>Areas of Interest</h3>
