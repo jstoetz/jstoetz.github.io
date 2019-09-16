@@ -9,63 +9,55 @@
 	<div class="w3-container w3-card w3-white w3-margin-bottom">
 		<h2 class="w3-text-grey w3-padding-16">
 			<a href="#">
-			<i class="fa fa-edit fa-fw w3-margin-right w3-xxlarge w3-text-red"></i>Writing Projects</a>
+			<i class="fa fa-fw w3-margin-right w3-xxlarge w3-text-red"></i>Blog
 		</h2>
 		<div class="w3-container">
-          		<h5 class="w3-opacity"><b>Author</b>
+          		<h5 class="w3-opacity"><b>Read Posts</b>
 			</h5>
-			<h6 class="w3-text-red"><i class="fa fa-calendar fa-fw w3-margin-right"></i>
-				March 2018 - <span class="w3-tag w3-red w3-round">Current</span>
-			</h6>
-			<p>Writing a young-adult novel focused on computer coding.  Release TBD.</p>
+			
+			<p>Get all of the blog posts on statistics, data science and R-programming.</p></a>
   		</div>
 	</div>
 
 	<!-- Project Box -->
 	<div class="w3-container w3-card w3-white w3-margin-bottom">
 		<h2 class="w3-text-grey w3-padding-16">
-			<a href="https://www.optionem.com">
-			<i class="fa fa-money-bill-alt fa-fw w3-margin-right w3-xxlarge w3-text-green"></i>OptionEm.com</a>
+			<a href="#">
+			<i class="fa fa-fw w3-margin-right w3-xxlarge w3-text-red"></i>Blog
 		</h2>
 		<div class="w3-container">
-          		<h5 class="w3-opacity"><b>Owner</b>
+          		<h5 class="w3-opacity"><b>Read Posts</b>
 			</h5>
-			<h6 class="w3-text-green"><i class="fa fa-calendar fa-fw w3-margin-right"></i>
-				March 2018 - <span class="w3-tag w3-green w3-round">Current</span>
-			</h6>
-			<p>Creator of a website focused on algorithmic option trading using Excel, R, Python and C##.</p>
+			
+			<p>Get all of the blog posts on statistics, data science and R-programming.</p></a>
   		</div>
 	</div>
 
 	<!-- Project Box -->
 	<div class="w3-container w3-card w3-white w3-margin-bottom">
 		<h2 class="w3-text-grey w3-padding-16">
-			<a href="https://www.luckydogsllc.com">
-			<i class="fa fa-warehouse fa-fw w3-margin-right w3-xxlarge w3-text-yellow"></i>Commercial Real Estate</a>
+			<a href="#">
+			<i class="fa fa-fw w3-margin-right w3-xxlarge w3-text-red"></i>Blog
 		</h2>
 		<div class="w3-container">
-          		<h5 class="w3-opacity"><b>Owner/Investor</b>
+          		<h5 class="w3-opacity"><b>Read Posts</b>
 			</h5>
-			<h6 class="w3-text-yellow"><i class="fa fa-calendar fa-fw w3-margin-right"></i>
-				March 2018 - <span class="w3-tag w3-yellow w3-round">Current</span>
-			</h6>
-			<p>Owner and investor of multiple commercial real estate properties throughout Kansas, including office, medical and mini-storage.</p>
+			
+			<p>Get all of the blog posts on statistics, data science and R-programming.</p></a>
   		</div>
 	</div>
-
+	
 	<!-- Project Box -->
 	<div class="w3-container w3-card w3-white w3-margin-bottom">
 		<h2 class="w3-text-grey w3-padding-16">
-			<a href="https://www.wegrowsmiles.com">
-			<i class="fa fa-tooth fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Growing Smiles</a>
+			<a href="#">
+			<i class="fa fa-fw w3-margin-right w3-xxlarge w3-text-red"></i>Blog
 		</h2>
 		<div class="w3-container">
-          		<h5 class="w3-opacity"><b>CFO</b>
+          		<h5 class="w3-opacity"><b>Read Posts</b>
 			</h5>
-			<h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>
-				April 2007 - <span class="w3-tag w3-teal w3-round">Current</span>
-			</h6>
-			<p>Chief financial officer of a pediatric dentistry office in Lawrence, KS.</p>
+			
+			<p>Get all of the blog posts on statistics, data science and R-programming.</p></a>
   		</div>
 	</div>
    
@@ -84,10 +76,10 @@
         <div class="w3-container">
           <p><a href="tel:1-785-691-5223"><i class="fa fa-phone-square fa-fw w3-margin-right w3-xlarge w3-text-orange"></i>785-691-5223</a></p>
          <p><a href="mailto:jake.stoetzner@gmail.com"><i class="fa fa-envelope fa-fw w3-margin-right w3-xlarge w3-text-orange"></i>jake.stoetzner@gmail.com</a></p>
-	<p><a href="https://twitter.com/jstoetz"><i class="fab fa-twitter fa-fw w3-margin-right w3-xlarge w3-text-orange"></i>@jstoetz</a></p>
-	<p><a href="https://www.linkedin.com/in/jstoetz/"><i class="fab fa-linkedin fa-fw w3-margin-right w3-xlarge w3-text-orange"></i>@jstoetz</a></p>
-	<p><a href="https://www.facebook.com/jstoetz/"><i class="fab fa-facebook fa-fw w3-margin-right w3-xlarge w3-text-orange"></i>@jstoetz</a></p>
-	<p><a href="https://www.instagram.com/jstoetz/"><i class="fab fa-instagram fa-fw w3-margin-right w3-xlarge w3-text-orange"></i>@jstoetz</a></p>
+	<p><a href="https://twitter.com/jstoetz"><i class="fa fa-twitter fa-fw w3-margin-right w3-xlarge w3-text-orange"></i>@jstoetz</a></p>
+	<p><a href="https://www.linkedin.com/in/jstoetz/"><i class="fa fa-linkedin fa-fw w3-margin-right w3-xlarge w3-text-orange"></i>@jstoetz</a></p>
+	<p><a href="https://www.facebook.com/jstoetz/"><i class="fa fa-facebook fa-fw w3-margin-right w3-xlarge w3-text-orange"></i>@jstoetz</a></p>
+	<p><a href="https://www.instagram.com/jstoetz/"><i class="fa fa-instagram fa-fw w3-margin-right w3-xlarge w3-text-orange"></i>@jstoetz</a></p>
   </div>
 </div>
 
