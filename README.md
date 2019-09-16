@@ -7,32 +7,26 @@
 	<!-- Project Box -->
 	<div class="w3-container w3-card w3-white w3-margin-bottom">
 		<h2 class="w3-text-grey w3-padding-16">
-			<a href="#">
-			<i class="fa fa-edit fa-fw w3-margin-right w3-xxlarge w3-text-red"></i>Writing Projects</a>
+			<a href="/blog.html">
+			<i class="fa fa-fw w3-margin-right w3-xxlarge"></i>Blog</a>
 		</h2>
 		<div class="w3-container">
-          		<h5 class="w3-opacity"><b>Author</b>
+          		<h5 class="w3-opacity"><b>Read Posts</b>
 			</h5>
-			<h6 class="w3-text-red"><i class="fa fa-calendar fa-fw w3-margin-right"></i>
-				March 2018 - <span class="w3-tag w3-red w3-round">Current</span>
-			</h6>
-			<p>Writing a young-adult novel focused on computer coding.  Release TBD.</p>
+			<p>Read all blog posts on data science, statistics and R-programming.</p>
   		</div>
 	</div>
 
 	<!-- Project Box -->
 	<div class="w3-container w3-card w3-white w3-margin-bottom">
 		<h2 class="w3-text-grey w3-padding-16">
-			<a href="https://www.optionem.com">
-			<i class="fa fa-money-bill-alt fa-fw w3-margin-right w3-xxlarge w3-text-green"></i>OptionEm.com</a>
+			<a href="/R-Programming.html">
+			<i class="fa-fw w3-margin-right w3-xxlarge"></i>Financial Analysis</a>
 		</h2>
 		<div class="w3-container">
-          		<h5 class="w3-opacity"><b>Owner</b>
+          		<h5 class="w3-opacity"><b>Get Guides</b>
 			</h5>
-			<h6 class="w3-text-green"><i class="fa fa-calendar fa-fw w3-margin-right"></i>
-				March 2018 - <span class="w3-tag w3-green w3-round">Current</span>
-			</h6>
-			<p>Creator of a website focused on algorithmic option trading using Excel, R, Python and C##.</p>
+			<p>Get the guides focused on algorithmic stock and options trading using Excel, R, Python and C##.</p>
   		</div>
 	</div>
 
