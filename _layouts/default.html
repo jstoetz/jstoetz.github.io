@@ -51,6 +51,7 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.min.css">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue-red.min.css" />
     <link rel="stylesheet" href="/assets/css/style.css">
+
     <style>
     #view-source {
       position: fixed;
@@ -63,38 +64,60 @@
     }
     </style>
   </head>
+
   <body>
-    <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-        </div>
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-          <h3>@jstoetz</h3>
-        </div>
-        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-        </div>
-        <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
-          <a href="/" class="mdl-layout__tab">Home</a>
-          <a href="/blog.html" class="mdl-layout__tab">Blog</a>
-          <a href="/r_programmming.html" class="mdl-layout__tab">R-Programming</a>
-          <a href="/data_science.html" class="mdl-layout__tab">Data Science</a>
-          <a href="/real_estate" class="mdl-layout__tab">Real Estate</a>
-          <a href="/about.md" class="mdl-layout__tab">About</a>
-          <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="add">
-            <i class="material-icons" role="presentation">add</i>
-            <span class="visuallyhidden">Add</span>
-          </button>
-        </div>
-      </header>
-      
-        
 
-          {{ content }}
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
-        
 
-        <footer class="mdl-mega-footer">
+<!-- header content and navigation -->
+  <header class="mdl-layout__header">
+  <div class="mdl-layout__header-row">
+
+    <!-- Title -->
+    <span class="mdl-layout__title">@jstoetz</span>
+    <div class="mdl-layout-spacer"></div>
+
+    <!-- Navigation -->
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/blog.html">Blog</a>
+        <a class="mdl-navigation__link" href="/r_programmming.html">R-Programming</a>
+        <a class="mdl-navigation__link" href="/data_science.html">Data Science</a>
+        <a class="mdl-navigation__link" href="/real_estate">Real Estate</a>
+        <a class="mdl-navigation__link" href="/about.md">About</a>
+
+      </nav>
+  </div>
+  </header>
+
+    <!-- drawer -->
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout__title">@jstoetz</span>
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="/">Home</a>
+            <a class="mdl-navigation__link" href="/blog.html">Blog</a>
+            <a class="mdl-navigation__link" href="/r_programmming.html">R-Programming</a>
+            <a class="mdl-navigation__link" href="/data_science.html">Data Science</a>
+            <a class="mdl-navigation__link" href="/real_estate">Real Estate</a>
+            <a class="mdl-navigation__link" href="/about.md">About</a>
+        </nav>
+      </div>
+
+      <!-- Main Content -->
+      <main class="mdl-layout__content">
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--12-col">
+
+            <!-- Content by Page Below -->
+            {{ content }}
+
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="mdl-mega-footer">
           <div class="mdl-mega-footer--middle-section">
             <div class="mdl-mega-footer--drop-down-section">
               <input class="mdl-mega-footer--heading-checkbox" type="checkbox" checked>
@@ -119,29 +142,29 @@
             </ul>
           </div>
         </footer>
-     
-    </div>
+  </div>
 
 
 
-    </div>
-    <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
-    {% if site.google_analytics %}
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', '{{ site.google_analytics }}', 'auto');
-      ga('send', 'pageview');
-    </script>
-    {% endif %}
-  </body>
-</html>
 
-<!--theme: jekyll-theme-minimal-->
-<!---
----
----
+          <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
+          {% if site.google_analytics %}
+          <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          ga('create', '{{ site.google_analytics }}', 'auto');
+          ga('send', 'pageview');
+          </script>
+          {% endif %}
 
-@import "{{ site.theme }}";--->
+          </body>
+          </html>
+
+          <!--theme: jekyll-theme-minimal-->
+          <!---
+          ---
+          ---
+
+          @import "{{ site.theme }}";--->
