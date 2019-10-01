@@ -1,5 +1,4 @@
-<!-- Full Width Card -->
-            <div class="mdl-cell mdl-cell--12-col mdl-shadow--4dp">
+<div class="mdl-cell mdl-cell--12-col mdl-shadow--4dp">
               <div class="mdl-card__title">
                 <h4 class="mdl-card__title-text"><a href="/blog.html">Blog</a></h4>
               </div>
@@ -14,4 +13,3 @@
                 Read all blog posts</a>
               </div>
             </div>
-            <!-- End Full Width Card -->
