@@ -1,22 +1,20 @@
-<!-- Second Grid -->
-<div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
-  <div class="w3-content">
-
-<h1 id="Current Projects" class="w3-padding-16">Current Projects</h1>
-
-	<!-- Project Box -->
-	<div class="w3-container w3-card w3-white w3-margin-bottom">
-		<h2>
-			<a href="/blog.html">
-			<i class="fa fa-fw w3-margin-right w3-xxlarge"></i>Blog</a>
-		</h2>
-		<div class="w3-container">
-          		<h5 class="w3-opacity"><b>Read Posts</b>
-			</h5>
-			<p>Read all blog posts on data science, statistics and R-programming.</p>
-  		</div>
-	</div>
-
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+  <div class="mdl-card mdl-cell mdl-cell--12-col">
+    <div class="mdl-card__supporting-text">
+      <h4>Blog</h4>
+      The blog contains posts about r-programming and data science and how each can be applied to finance, through applications to stocks, ETFs and options, and commercial real estate.
+    </div>
+    <div class="mdl-card__actions">
+      <a href="#" class="mdl-button">Read All Blog Posts</a>
+    </div>
   </div>
-</div>
+  <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn3">
+    <i class="material-icons">more_vert</i>
+  </button>
+  <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn3">
+    <li class="mdl-menu__item">All Blog Posts</li>
+    <li class="mdl-menu__item">R-Programming Blog Posts</li>
+    <li class="mdl-menu__item">Data Science Blog Posts</li>
+  </ul>
+</section>
 
