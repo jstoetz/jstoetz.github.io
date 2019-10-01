@@ -1,10 +1,11 @@
-<div class="mdl-cell mdl-cell--12-col mdl-shadow--4dp">
+<!-- Full Width Card -->
+            <div class="mdl-cell mdl-cell--12-col mdl-shadow--4dp">
               <div class="mdl-card__title">
-                <h4 class="mdl-card__title-text">Blog</h4>
+                <h4 class="mdl-card__title-text"><a href="/blog.html">Blog</a></h4>
               </div>
-              <div class="mdl-card__media">
-                <img src="/assets/img/Profit_Loss_90.png" border="0" alt="">
-              </div>
+              <!---<div class="mdl-card__media">
+                <img src="Stock.Return.png" style="max-width:100%;" border="0" alt="">
+              </div>-->
               <div class="mdl-card__supporting-text">
                 The blog contains posts about r-programming and data science and how each can be applied to finance, through applications to stocks, ETFs and options, and commercial real estate.
               </div>
@@ -13,3 +14,4 @@
                 Read all blog posts</a>
               </div>
             </div>
+            <!-- End Full Width Card -->
