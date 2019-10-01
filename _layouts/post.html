@@ -1,7 +1,13 @@
 ---
 layout: default
 ---
-<h1>{{ page.title }}</h1>
-<p>{{ page.date | date_to_string }} - {{ page.author }}</p>
-
-{{ content }}
+<div class="mdl-cell mdl-cell--12-col mdl-card mdl-shadow--4dp">
+            <!-- Title, photo and caption -->
+              <div class="mdl-grid portfolio-copy">
+                <h3 class="mdl-cell mdl-cell--12-col mdl-typography--headline">{{ page.title }}</h3>
+                <div class="mdl-cell mdl-cell--12-col mdl-card__supporting-text no-padding">
+                  <p>{{ page.date | date_to_string }} - {{ page.author }}</p>
+                  <p>{{content}}</p>
+                </div>
+              </div>
+            </div>
