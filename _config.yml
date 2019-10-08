@@ -1,3 +1,5 @@
+theme:minima
+
 title: @jstoetz
 author: Jake Stoetzner
 email: jake.stoetzner@gmail.com
@@ -43,9 +45,6 @@ header_pages:
 - /about.md
 - /blog.html
 
-# Build settings
-theme: minima
-
-plugins:
- - jekyll-feed
- - jekyll-seo-tag
+#plugins:
+# - jekyll-feed
+# - jekyll-seo-tag
