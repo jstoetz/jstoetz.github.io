@@ -1,9 +1,32 @@
+<footer class="site-footer h-card">
+  <data class="u-url" href="{{ "/" | relative_url }}"></data>
 
-<footer class="w3-container w3-padding-64 w3-center w3-opacity">  
-  <div class="w3-xlarge w3-padding-32">
-    <a href="https://www.facebook.com/jstoetz"><i class="fa fa-facebook-official w3-hover-opacity"></i><a>
-    <a href="https://www.twitter.com/jstoetz"><i class="fa fa-twitter w3-hover-opacity"></i><a>
-    <a href="https://www.linkedin.com/in/jstoetz/"><i class="fa fa-linkedin w3-hover-opacity"></i><a>
- </div>
- <p>Copyright Jake Stoetzner 2019</p>
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col one-half">
+      <h2 class="footer-heading">{{ site.title | escape }}</h2>
+        <ul class="contact-list">
+          <li class="p-name">
+            {%- if site.author -%}
+              {{ site.author | escape }}
+            {%- endif -%}
+            </li>
+            {%- if site.email -%}
+            <li><a class="u-email" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+            {%- endif -%}
+        </ul>
+      </div>
+
+      <div class="footer-col one-half">
+        <p>{{- site.description | escape -}}</p>
+      </div>
+
+      <div class="social-links">
+        {%- include social.html -%}
+      </div>
+    </div>
+
+  </div>
+
 </footer>
