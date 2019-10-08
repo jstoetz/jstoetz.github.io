@@ -1,5 +1,3 @@
-theme: minima
-          
 title: @jstoetz
 author: Jake Stoetzner
 email: jake.stoetzner@gmail.com
@@ -43,6 +41,9 @@ minima:
 # this and add the path to the pages in order as they should show up
 #header_pages:
 # - about.md
+
+# Build settings
+theme: minima
 
 plugins:
  - jekyll-feed
