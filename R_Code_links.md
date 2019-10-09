@@ -4,9 +4,9 @@ title: Link to All R Code Repositories on GitHub
 permalink: /R-Code/
 ---
 
-[Link to All GitHub Repositories for the Blog](https://github.com/jstoetz/R_Code){: .btn}
+[Link to All GitHub Repositories for the Blog](https://github.com/jstoetz/R_Code){: .button}
 
-<button name="button">Click me</button>
+<button name="button"><a href="https://github.com/jstoetz/R_Code">Link to All GitHub Repositories for the Blog</a></button>
 
 |Post Link|GitHub Repository Link|
 |:-:|:-:|
