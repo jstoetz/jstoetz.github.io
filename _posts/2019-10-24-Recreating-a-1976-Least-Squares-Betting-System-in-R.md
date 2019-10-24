@@ -39,37 +39,6 @@ Creating a sports betting system that beats the bookmaker is, to say the least, 
 	- [Least Squares and Regression](#least-squares-and-regression)
 	- [The comperes, comprank and PlayerRatings Packages](#the-comperes-comprank-and-playerratings-packages)
 
-<!-- /TOC -->!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-
-- [Table Contents](#table-contents)
-- [Research](#research)
-	- [Implied Probability and Betting Odds - Decimal, Fraction and American Style](#implied-probability-and-betting-odds-decimal-fraction-and-american-style)
-		- [Implied Probability and System Value](#implied-probability-and-system-value)
-		- [Converting an American Money Line to Implied Probability](#converting-an-american-money-line-to-implied-probability)
-		- [Bookmaker’s Margin](#bookmakers-margin)
-	- [Least Squares Regression](#least-squares-regression)
-		- [Basics of Least Squares Regression](#basics-of-least-squares-regression)
-		- [Mathematics of Least Squares Regression](#mathematics-of-least-squares-regression)
-		- [R Squared](#r-squared)
-	- [Using R to Model Money Line Minimums](#using-r-to-model-money-line-minimums)
-		- [Modeling NFL Money Line Implied Probability Minimums](#modeling-nfl-money-line-implied-probability-minimums)
-		- [Locating and Preparing the Money Line Data](#locating-and-preparing-the-money-line-data)
-		- [Calculating Average Implied Probability and Expected Value for NFL Favorites and Underdogs](#calculating-average-implied-probability-and-expected-value-for-nfl-favorites-and-underdogs)
-		- [Solving for the Required System Winning Percentage based on the Implied Money Line Odds](#solving-for-the-required-system-winning-percentage-based-on-the-implied-money-line-odds)
-- [Testing](#testing)
-	- [An Overview of the 1976 System](#an-overview-of-the-1976-system)
-	- [The compres and comperank Packages](#the-compres-and-comperank-packages)
-	- [Data Preparation: In-Sample and Out-Of Sample Division](#data-preparation-in-sample-and-out-of-sample-division)
-	- [Simple Linear Regression](#simple-linear-regression)
-	- [Multiple Regression](#multiple-regression)
-- [Sources and Notes](#sources-and-notes)
-	- [Overview of Predictive Systems for Sports](#overview-of-predictive-systems-for-sports)
-	- [Odds, Implied Probability and Margin](#odds-implied-probability-and-margin)
-	- [Least Squares and Regression](#least-squares-and-regression)
-	- [The comperes, comprank and PlayerRatings Packages](#the-comperes-comprank-and-playerratings-packages)
-
-<!-- /TOC -->
-
 ## Research
 
 ### Implied Probability and Betting Odds - Decimal, Fraction and American Style
