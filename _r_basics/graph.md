@@ -1,6 +1,8 @@
 ---
 title: R Basics: Graphing
-layout: page
+layout: default
 ---
+#### Line G
+
 #### Histograms
 -  [R Histograms](https://www.datamentor.io/r-programming/histogram/)
