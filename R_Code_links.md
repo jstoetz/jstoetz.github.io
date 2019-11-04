@@ -8,4 +8,4 @@ permalink: /R-Code/
 
 |Post Link|GitHub Repository Link|
 |:-:|:-:|
-|[Testing the Bespoke Stock Scores in R -Blog Post 1](https://jstoetz.github.io/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R.html)|[Blog Post 1 - R Code on Github](https://github.com/jstoetz/R_Code/blob/master/Blog_Post_1)|
+|[Testing the Bespoke Stock Scores in R - Blog Post 1](https://jstoetz.github.io/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R.html)|[Blog Post 1 - R Code on Github](https://github.com/jstoetz/R_Code/blob/master/Blog_Post_1)|
