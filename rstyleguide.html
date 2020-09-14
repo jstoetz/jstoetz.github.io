@@ -1,0 +1,13 @@
+---
+layout: default
+
+permalink: /rstyleguide/
+---
+
+{% for rstyleguide in site.rstyleguide %}
+  <h2>
+    <a href="{{ rstyleguide.url }}">
+      {{ rstyleguide.title }}
+    </a>
+  </h2>
+{% endfor %}

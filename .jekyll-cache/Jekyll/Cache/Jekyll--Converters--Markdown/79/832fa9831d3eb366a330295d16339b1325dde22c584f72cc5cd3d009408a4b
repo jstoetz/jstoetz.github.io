@@ -1,0 +1,461 @@
+I"*�<p>Creating a sports betting system that beats the bookmaker is, to say the least, a challenge.  In this post, I create a betting system using least squares regression that has an accuracy rate of up to 70% using out-of-sample data.
+<!--more--></p>
+
+<h2 id="table-contents">Table Contents</h2>
+<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+<ul>
+  <li><a href="#table-contents">Table Contents</a></li>
+  <li><a href="#research">Research</a>
+    <ul>
+      <li><a href="#implied-probability-and-betting-odds-decimal-fraction-and-american-style">Implied Probability and Betting Odds - Decimal, Fraction and American Style</a>
+        <ul>
+          <li><a href="#implied-probability-and-system-value">Implied Probability and System Value</a></li>
+          <li><a href="#converting-an-american-money-line-to-implied-probability">Converting an American Money Line to Implied Probability</a></li>
+          <li><a href="#bookmakers-margin">Bookmaker’s Margin</a></li>
+        </ul>
+      </li>
+      <li><a href="#least-squares-regression">Least Squares Regression</a>
+        <ul>
+          <li><a href="#basics-of-least-squares-regression">Basics of Least Squares Regression</a></li>
+          <li><a href="#mathematics-of-least-squares-regression">Mathematics of Least Squares Regression</a></li>
+          <li><a href="#r-squared">R Squared</a></li>
+        </ul>
+      </li>
+      <li><a href="#using-r-to-model-money-line-minimums">Using R to Model Money Line Minimums</a>
+        <ul>
+          <li><a href="#modeling-nfl-money-line-implied-probability-minimums">Modeling NFL Money Line Implied Probability Minimums</a></li>
+          <li><a href="#locating-and-preparing-the-money-line-data">Locating and Preparing the Money Line Data</a></li>
+          <li><a href="#calculating-average-implied-probability-and-expected-value-for-nfl-favorites-and-underdogs">Calculating Average Implied Probability and Expected Value for NFL Favorites and Underdogs</a></li>
+          <li><a href="#solving-for-the-required-system-winning-percentage-based-on-the-implied-money-line-odds">Solving for the Required System Winning Percentage based on the Implied Money Line Odds</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#testing">Testing</a>
+    <ul>
+      <li><a href="#an-overview-of-the-1976-system">An Overview of the 1976 System</a></li>
+      <li><a href="#the-compres-and-comperank-packages">The compres and comperank Packages</a></li>
+      <li><a href="#data-preparation-in-sample-and-out-of-sample-division">Data Preparation: In-Sample and Out-Of Sample Division</a></li>
+      <li><a href="#simple-linear-regression">Simple Linear Regression</a></li>
+      <li><a href="#multiple-regression">Multiple Regression</a></li>
+    </ul>
+  </li>
+  <li><a href="#sources-and-notes">Sources and Notes</a>
+    <ul>
+      <li><a href="#overview-of-predictive-systems-for-sports">Overview of Predictive Systems for Sports</a></li>
+      <li><a href="#odds-implied-probability-and-margin">Odds, Implied Probability and Margin</a></li>
+      <li><a href="#least-squares-and-regression">Least Squares and Regression</a></li>
+      <li><a href="#the-comperes-comprank-and-playerratings-packages">The comperes, comprank and PlayerRatings Packages</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="research">Research</h2>
+
+<h3 id="implied-probability-and-betting-odds---decimal-fraction-and-american-style">Implied Probability and Betting Odds - Decimal, Fraction and American Style</h3>
+
+<h4 id="implied-probability-and-system-value">Implied Probability and System Value</h4>
+<p>“Implied probability is a conversion of betting odds into a percentage. It takes into account the bookmaker margin to express the expected probability of an outcome occurring….if the implied probability is less than your assessment, then it represents betting value.” See <a href="https://help.smarkets.com/hc/en-gb/articles/214058369-How-to-calculate-implied-probability-in-betting">How to calculate implied probability in betting.</a>  Most betting systems seek to find <em>value</em> by identifying a difference between the implied probability of the bookmaker’s odds and the system’s odds.  For instance, a bookmaker may be offering even (50%) odds that Team A will win versus Team B, but your system indicates Team A is a 60% favorite to win.  Value then is found by betting Team A.</p>
+
+<h4 id="converting-an-american-money-line-to-implied-probability">Converting an American Money Line to Implied Probability</h4>
+<p>A Money Line bet is a bet that a specific team will win. American based money lines can be positive or negative. Negative odds mean that the team or player is favored.  Positive odds mean that the team or player is the underdog.  American Money Lines are generally in multiples of $100 and indicate the amount of money you would need to risk to win the indicated amount.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"> </th>
+      <th style="text-align: center">American Odds</th>
+      <th style="text-align: center">Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Negative Money Line</td>
+      <td style="text-align: center">Favorite</td>
+      <td style="text-align: center">-600 = bet $600 to win $100</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Positive Money Line</td>
+      <td style="text-align: center">Underdog</td>
+      <td style="text-align: center">+450 = bet $100 to win $450</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>A negative money line means that team is favored; a line of -600 for Team A means that the bookmaker believes Team A will win 6 out of 7 times (expressed as a fraction as 1/6 or as a decimal as 1.167).</p>
+
+<p>For negative American Odds, implied probability can be calculated as:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Negative American odds / (Negative American odds + 100) * 100 = Implied Probability
+</code></pre></div></div>
+<p>Note that you use the absolute value of the negative odds when solving for Implied Probability.</p>
+
+<p>Conversely, a positive money line means the team is the underdog. A line of +450 (9/2 as a fraction and 5.5 as a decimal) means that Team B would only win 2 out of every 11 matches. Implied probability for positive money lines are calculated by:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>100 / (positive American odds + 100) * 100 = implied probability
+</code></pre></div></div>
+
+<p>For our example of Team A at -600 and Team B at +450, the implied probability for each team winning is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Team A = 600/(600+100)*100 = 85.7%
+
+Team B = 450/(450+100)*100 = 18.1%
+</code></pre></div></div>
+
+<h4 id="bookmakers-margin">Bookmaker’s Margin</h4>
+<p>Note the two implied probabilities for team A and team B do not add up to 100%. This is common as bookmakers add in <em>margin</em> for each bet. This margin (also called “vig”) is the profit the bookmaker can expect to make assuming that there is equal action on each side of the bet. The margin can be calculated by:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Margin = (Implied Probability Team A + Implied Probability Team B)-1
+</code></pre></div></div>
+
+<p>So the margin for our example for Team A and Team B is:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Margin = (85.7% + 18.1%)-1 = 3.81%
+</code></pre></div></div>
+
+<p>Margin can also be calculated from decimal odds by:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(1/Decimal Odds option A) * 100 + (1/Decimal Odds option B) * 100 = Margin
+</code></pre></div></div>
+
+<h3 id="least-squares-regression">Least Squares Regression</h3>
+
+<h4 id="basics-of-least-squares-regression">Basics of Least Squares Regression</h4>
+<p>Imagine that you are invited to play a round of golf with Tiger Woods. Tiger is, to say the least, a golfer that is far better than average. On the other hand, you are <em>far</em> below average at best and play once or twice a year. On the agreed date, it’s you and Tiger on the first tee. Tiger steps up and hammers one 350 yards down the middle. You tee up your ball, calm your nerves and whack one out there 225 yards as straight as an arrow! You repeat this feat on the 2nd and 3rd holes. Tiger even comments on how well you are playing. On the 4th hole, your confidence is high as you step up to the tee box, driver in hand. If you had to guess, where do you think your drive will end up?</p>
+
+<p>If you’re like most golfers, that next shot will likely be a shank into the rough!  You outpaced your ability on the first three holes. It was only a matter of time before you got back to how you really play golf - terribly! The shank off the tee is your golfing ability reverting to your average.</p>
+
+<p>In statistical terms, a linear regression is based on a reversion to the mean.  Just like a bad golfer shanking it off the tee after a few good shots, regression works on the theory that most things in life will return to normal.</p>
+
+<blockquote>
+  <p>When you hear the word regression, you probably think of how extreme performance during an earlier period most likely gets closer to average during a later period. It’s difficult to sustain an outlier performance. <a href="https://thepowerrank.com/2018/08/14/how-to-make-accurate-football-predictions-with-linear-regression/">ThePowerRank.com.</a></p>
+</blockquote>
+
+<p>The goal of any forecasting or predictive system is as follows:</p>
+
+<blockquote>
+  <p>How does a quantity in an earlier period predict the same quantity during a later period? Some quantities persist from the early to later period, which makes a prediction possible. For other quantities, measurements during the earlier period have no relationship to the later period. You might as well guess the mean, which corresponds to our intuitive idea of regression. <a href="https://thepowerrank.com/2018/08/14/how-to-make-accurate-football-predictions-with-linear-regression/">ThePowerRank.com.</a></p>
+</blockquote>
+
+<h4 id="mathematics-of-least-squares-regression">Mathematics of Least Squares Regression</h4>
+<p>Least squares regression seeks to minimize the error between a line of best fit and the measured data points on an x- and y-coordinate graph. Dependent variables are illustrated on the vertical y-axis, while independent variables are illustrated on the horizontal x-axis.  In linear regression, a line of best fit is generated by using the equation of a line:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>y = mx + b
+
+Where:
+
+- m = slope of the line
+- b = y-intercept
+</code></pre></div></div>
+
+<p><img src="https://www.mathsisfun.com/data/images/least-squares2.svg" alt="Example Line of Best Fit from MathIsFun.com" /></p>
+
+<p>If you square the errors and add them all together, the line with the “minimum” or least total is the line of best fit. Hence, the “least squares error.”</p>
+
+<h4 id="r-squared">R Squared</h4>
+<p>Our hypothesis is that future period data can be predicted based on past period data. Later data then is <em>dependent</em> on our past, <em>independent</em> variable. The past data could be anything - margin of victory, relative strength, turnovers etc. We can then measure how well that independent data predicts future period data.</p>
+
+<p>The error for each data point is the distance from the line of best fit. This error is then squared; for our purposes it doesn’t matter if the error is above or below the line. The minimum mean squared error can then be represented by the red boxes below:</p>
+
+<p><img src="https://thepowerrank.com/wp-content/uploads/2018/08/regress_learn_4.png" alt="Visual Representation of Minimum Minimum Squared Error from ThePowerRank.com" /></p>
+
+<p>How well does the red boxes explain the difference between the dependent variable and the independent variable?  The difference between the expected value and the mean squared error is called <a href="https://en.wikipedia.org/wiki/Variance"><em>variance</em>.</a>  In simpler terms, variance measures how far the predicted values are away from the mean.  The proportion of the variance that is explained by the model (the distance from the actual data point to the linear best fit line) is the measure of how well the model replicates actual data.  This measure is called R-squared.</p>
+
+<blockquote>
+  <p>R-squared is a statistic that will give some information about the goodness of fit of a model. In regression, the R-squared coefficient of determination is a statistical measure of how well the regression predictions approximate the real data points. An R-squared of 1 indicates that the regression predictions perfectly fit the data. <a href="https://en.wikipedia.org/wiki/Coefficient_of_determination">Coefficient of Determination</a> on Wikipedia.</p>
+</blockquote>
+
+<p>Referring to the red boxes mentioned before on ThePowerRank.com, the model represented by the best fit and the red boxes (recall they are a visual representation of the minimum mean squared error) account for 70% of the variance.  In other words, the model <em>explains</em> 70% of the difference between the model and the actual data points.  Note the original variance is illustrated by the blue boxes below and that the volume of the red boxes are 70% less than the blue boxes:</p>
+
+<p><img src="https://thepowerrank.com/wp-content/uploads/2018/08/regress_learn_5.png" alt="Visual Representation of the Variance and Model" /></p>
+
+<p>That still leaves 30% of the variance that the model does not explain.  The higher the R-squared value, the better the model illustrates and predicts real world data.</p>
+
+<h3 id="using-r-to-model-money-line-minimums">Using R to Model Money Line Minimums</h3>
+<p>Remember that Money Line winners are handicapped. A heavily favored team may have a Money line of -400 which means you are <em>laying</em> 4 to 1 odds or betting $400 to win $100 if the team wins. Conversely, if a big underdog is listed at -600, you are getting 6 to 1 odds or betting $100 to win $600.</p>
+
+<p>Many touts have systems that claim to predict the winner of a game with 70% accuracy. The system may be incredible if it hits on bets that have an implied probability of less than 70%.  It’s a terrible system if you only win bets that have an implied probability greater than 70%. The real question we need to answer is whether the system will still be profitable based on different money line odds? And what are the minimum or maximum money line odds to ensure a profitable system? While it is important to have a system that has a high winning percentage, it is equally important to know the Money Line odds required to ensure you have a profitable system. <a href="https://wizardofodds.com/games/sports-betting/">Sports Betting Basics.</a></p>
+
+<h4 id="modeling-nfl-money-line-implied-probability-minimums">Modeling NFL Money Line Implied Probability Minimums</h4>
+<p>Is a system with a 40% winning percentage high enough to be profitable <em>if</em> the Money Line odds on all of the games it predicts average out to +125?  Or is a system that picks only big favorites profitable if the average money line odds are -200?</p>
+
+<p>To answer these questions, I will initially look at actual  Money Line data for the National Football League (“NFL”) going back to the 2007-2008 season.  Then, I will model the implied probabilities for favorites and underdogs.</p>
+
+<h4 id="locating-and-preparing-the-money-line-data">Locating and Preparing the Money Line Data</h4>
+<p>Part of the challenge of any data science project is <em>getting the data</em>.  Luckily, with enough poking around the internet, you can find just about anything.  I downloaded Excel files with historical odds data from the <a href="https://www.sportsbookreviewsonline.com/scoresoddsarchives/nfl/nfloddsarchives.htm">NFL Scores and Odds Archive</a>.  These were then read into R and analyzed.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>temp = list.files(pattern = "^nfl")
+
+NFL.Odds.Data &lt;-
+    lapply(temp,function(x)(
+        read_excel(x,sheet = "Sheet1")
+    ))
+
+NFL.Odds.Data &lt;-
+  rbindlist(NFL.Odds.Data)
+
+NFL.Odds.Data$ML &lt;- as.numeric(NFL.Odds.Data$ML)
+</code></pre></div></div>
+
+<p>This left me with data for approximately 9,100 teams that had money line info.  I then divided the money lines between positive (underdog team) and negative (favored team).  I also limited the upper and lower limits to only get Money Line information between -500 and 500.</p>
+
+<h4 id="calculating-average-implied-probability-and-expected-value-for-nfl-favorites-and-underdogs">Calculating Average Implied Probability and Expected Value for NFL Favorites and Underdogs</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NFL.Odds.Data.Positive &lt;-
+  NFL.Odds.Data %&gt;% select(ML) %&gt;%
+    group_by(ML) %&gt;%
+    filter(!is.na(ML),ML &gt;= 10,ML &lt;= 500)
+
+NFL.Odds.Data.Negative &lt;-
+  NFL.Odds.Data %&gt;% select(ML) %&gt;%
+    group_by(ML) %&gt;%
+    filter(!is.na(ML),ML &gt;= -500,ML &lt;= -10)
+</code></pre></div></div>
+
+<p>Both data sets were charted on a histogram and summarized.  A probability density function was overlaid on the histogram.  The vertical dashed red line on the graph represents the average.</p>
+
+<p><img src="/assets/img/CH.NFL.Odds.Data.Positive.png" alt="Positive Money Line - Favorites" /></p>
+
+<p><img src="/assets/img/CH.NFL.Odds.Data.Negative.png" alt="Negative Money Line - Underdogs" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;summary(NFL.Odds.Data$ML)
+      Min.    1st Qu.     Median       Mean    3rd Qu.
+-105000.00    -200.00    -110.00     -47.39     170.00
+      Max.       NA's
+  35000.00        770
+&gt; summary(NFL.Odds.Data.Positive$ML)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+  100.0   130.0   166.0   196.3   240.0   500.0
+&gt; summary(NFL.Odds.Data.Negative$ML)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+   -500    -260    -180    -212    -141    -101
+</code></pre></div></div>
+
+<p>Unsurprisingly, favorites are more expensive when compared with underdogs. On average, you would have to bet $212 on an NFL favorite to win $100, while a $100 bet on an average underdog pays out $196.</p>
+
+<p><strong>Convert American to Decimal Odds</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Positive Odds (+) = (MoneyLine/100) + 1
+Negative Odds (-) = (100/MoneyLine) + 1
+
+Average Underdog MoneyLine Decimal Odds (+) = 196.3/100 + 1 = 2.963
+Average Favorite MoneyLine Decimal Odds (-) = 100/212.0 + 1 = 1.471
+</code></pre></div></div>
+
+<p><strong>Convert Decimal Odds to Implied Probability</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Implied Probability = (1/ decimal odds) * 100
+
+Average Underdog MoneyLine Implied Probability (+) = (1/2.963) * 100 = 33.74%
+Average Favorite MoneyLine Implied Probability (-) = (1/1.471) * 100 = 67.98%
+</code></pre></div></div>
+
+<p>Quick summary for what the odds imply for both the favorite and the underdog:</p>
+<ul>
+  <li>The odds imply a favorite wins 67.98% of the time; when this happens, you win $100 and when you lose, you lose $212.</li>
+  <li>An underdog wins 33.7% of the time, and you win $196 when successful and lose $100 when you are not.</li>
+</ul>
+
+<p>The implied probabilities can then be used to calculate the <strong>expected value</strong> (“EV”) for both bets.  “Expected value is a predicted value of a variable, calculated as the sum of all possible values each multiplied by the probability of its occurrence.”  See <a href="https://help.smarkets.com/hc/en-gb/articles/214554985-How-to-calculate-expected-value-in-betting">How to calculate expected value in betting</a>.  The <a href="https://towardsdatascience.com/what-is-expected-value-4815bdbd84de">Expected Value (EV)</a> can be calculated as follows in R:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Pos.Expected.Value &lt;-
+  (NFL.Odds.Data.Positive.Implied.Prob*mean(NFL.Odds.Data.Positive$ML)) -
+  ((1 - NFL.Odds.Data.Positive.Implied.Prob)* 100)
+
+Neg.Expected.Value &lt;-
+  NFL.Odds.Data.Negative.Implied.Prob*100 -
+  (1 -NFL.Odds.Data.Negative.Implied.Prob)*abs(mean(NFL.Odds.Data.Negative$ML))
+</code></pre></div></div>
+
+<p>This results in an EV of close to $0 for both underdogs (positive (+) money line) and favorites (negative (-) money line).  This makes sense because the bookmaker’s goal is to have balanced action on both sides - equal money on favorites and underdogs.  Theoretically then, based only on the implied probabilities, betting on just the favorites or just the underdogs should not give you a profitable system.</p>
+
+<p>But do the actual results support the expected results?  Since the odds imply a certain winning percentage, does the historical data match?  Turns out, favorites win 13% less than the odds imply and underdogs win about 9% more than the odds imply.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"> </th>
+      <th style="text-align: center">Implied Probability</th>
+      <th style="text-align: center">Actual Results</th>
+      <th style="text-align: center">Diff</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Underdog</td>
+      <td style="text-align: center">33.74%</td>
+      <td style="text-align: center">36.82%</td>
+      <td style="text-align: center">+3.08%</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Favorites</td>
+      <td style="text-align: center">67.98%</td>
+      <td style="text-align: center">59.89%</td>
+      <td style="text-align: center">-8.09%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The actual results support the conclusion that oddsmakers likely bias their lines against favorites because the betting public bet favorites a lot more than underdogs.</p>
+
+<blockquote>
+  <p>In 2004, University of Chicago economist Steven Levitt identified the fact that point spreads aren’t set like typical market prices, by equating relative levels of supply and demand. Instead, bookmakers set the margin to make the chance of the favorite covering the spread to be roughly 50 percent. Levitt speculated that bookmakers substantially improve their profits by biasing the spread very slightly against the favorite. This approach is profitable for bookmakers in part because, despite facing virtually even odds, people are much more likely to bet on the favorite than the underdog. See <a href="https://fivethirtyeight.com/features/why-people-bet-on-the-favorite-even-when-the-spread-favors-the-underdog/">Why People Bet on the Favorite Even When the Spread Favors the Underdog</a> on FiveThirtyEight.</p>
+</blockquote>
+
+<p>The actual results show that betting $100 on all the underdogs would be a profitable approach:</p>
+
+<p><img src="/assets/img/CH.PosML.Dogs.PL.png" alt="Cumulative Profit and Loss for NFL Underdogs" /></p>
+
+<p>The actual results for favorites is not so great - betting $100 game results in a substantial loss!</p>
+
+<p><img src="/assets/img/CH.NegML.Fav.PL.png" alt="Cumulative Profit and Loss for NFL Underdogs" /></p>
+
+<h4 id="solving-for-the-required-system-winning-percentage-based-on-the-implied-money-line-odds">Solving for the Required System Winning Percentage based on the Implied Money Line Odds</h4>
+<p>Implied probabilities can then be modeled for all money lines.  Think of the implied probability as the minimum winning percentage for your betting system to be profitable.  For instance, if your system only bet on favorites at -200 to win, then you would be required to win more than 66.67% to be profitable.</p>
+
+<p>The charts below show the minimum system probability percentage that you would need to be profitable.  Anything below the black line highlighted in red is non-profitable.  Anything above the line highlighted in green is profitable.</p>
+
+<p><img src="/assets/img/CH.PosML.Dogs.Min.png" alt="Implied Odds based on Positive Money Line" /></p>
+
+<p><img src="/assets/img/CH.NegML.Fav.Min.png" alt="Implied Odds based on Negative Money Line" /></p>
+
+<h2 id="testing">Testing</h2>
+
+<h3 id="an-overview-of-the-1976-system">An Overview of the 1976 System</h3>
+<p>The <a href="https://www.researchgate.net/profile/Raymond_Stefani/publication/291588643_Football_and_basketball_predictions_using_least_squares/links/582648c808aecfd7b8be88a1/Football-and-basketball-predictions-using-least-squares.pdf?origin=publication_detail">rating described in the 1976 paper</a> (the “1976 System”) referenced in the title of this post relates previous outcomes to team ratings.  Ratings seek to analyze the results of the competition and provide an objective measure of a team’s capabilities.  <a href="https://en.wikipedia.org/wiki/Sports_rating_system">Sports Ratings System</a> on Wikipedia.  In brief, the 1976 System’s team rating is defined as the average opponent rating plus the team’s average win margin.  More specifically, the ratings are found as the team’s average win margin plus the 1/(n(i)+1) times the sum of each opponents average win margin.  I will attempt to recreate this system using different packages within R.</p>
+
+<p>Before we create our system, let’s chart the margin of victory distribution for our historical NFL data (note: margin of victory can be positive or negative - the winner is positive and the loser is negative).  It look’s roughly normally distributed.  The black curve in the chart below is a plot of the normal distribution, the bars are the actual margin of victory and the red is the average (which is zero).</p>
+
+<p><img src="/assets/img/CH.Margin.Victory.png" alt="Distribution of NFL Margin of Victory" /></p>
+
+<blockquote>
+  <p>The main assumption that forms the basis of the least square rating system is that the difference in scores between the winning team and the losing team is directly proportional to the difference in the ratings of the two teams. Therefore, the least squares rating system attempts to express the margin of victory as a linear function of the strengths of the playing teams. <a href="https://homepages.cwi.nl/~schaffne/projects/reports/JoostMarysiaSportRatings14.pdf">Sports Ratings.</a></p>
+</blockquote>
+
+<p>In other words, margin of victory in <em>past</em> periods should predict margin of victory (and therefore a win or a loss) in <em>future</em> periods.</p>
+
+<h3 id="the-compres-and-comperank-packages">The compres and comperank Packages</h3>
+<p>To help organize and sort the game data, I will use two R packages:  (1) <a href="https://cran.r-project.org/package=comperes">comperes</a> which is an R tool to store and manage competition results, and (2) the companion package to compres, <a href="https://cran.r-project.org/package=comperank">comperank</a> which ranks and rates the data provided.</p>
+
+<h3 id="data-preparation-in-sample-and-out-of-sample-division">Data Preparation: In-Sample and Out-Of Sample Division</h3>
+<p>First, divide the data into an in-sample and out-of-sample portions with an 80%/20% ratio of in-sample to out-of-sample. Next, use the compres package to create a tibble of head-to-head matchups with the mean score difference, cumulative score difference and number of wins columns.  Then, remove all of the head-to-head matchups between a team (and itself).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>q &lt;- NFL.Odds.Data %&gt;% select(Rot,Team,Final)
+names(q) &lt;- (c("game","player","score"))
+q1 &lt;- rep(1:(length(q$game)/2),each = 2)
+q$game &lt;- q1
+q &lt;- q %&gt;% filter(!is.na(score))
+q.in.sample &lt;- q %&gt;% subset(game &lt;= length(q$game)/2*.8)
+q.out.sample &lt;- q %&gt;% subset(game &gt; length(q$game)/2*.2)
+q3 &lt;- q.in.sample %&gt;% h2h_long(!!! h2h_funs)
+q3 &lt;- q3 %&gt;% filter(!is.na(num_wins),!is.na(mean_score_diff),player1 != player2)
+</code></pre></div></div>
+<h3 id="simple-linear-regression">Simple Linear Regression</h3>
+<p>The correlation matrix for the data is as follows:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>               mean_score_diff mean_score_diff_pos mean_score sum_score_diff sum_score_diff_pos sum_score num_wins num_wins2   num
+mean_score_diff                1.00                0.84       0.74           0.66               0.53      0.13     0.26      0.26  0.00
+mean_score_diff_pos            0.84                1.00       0.64           0.55               0.56     -0.01     0.11      0.11 -0.12
+mean_score                     0.74                0.64       1.00           0.49               0.38      0.13     0.16      0.16 -0.04
+sum_score_diff                 0.66                0.55       0.49           1.00               0.79      0.19     0.40      0.40  0.00
+sum_score_diff_pos             0.53                0.56       0.38           0.79               1.00      0.52     0.65      0.65  0.38
+sum_score                      0.13               -0.01       0.13           0.19               0.52      1.00     0.94      0.94  0.97
+num_wins                       0.26                0.11       0.16           0.40               0.65      0.94     1.00      1.00  0.89
+num_wins2                      0.26                0.11       0.16           0.40               0.65      0.94     1.00      1.00  0.89
+num                            0.00               -0.12      -0.04           0.00               0.38      0.97     0.89      0.89  1.00
+</code></pre></div></div>
+
+<p>The average score difference for team 1 vs team 2 (referred to as “player 1” and “player 2” in the compres package) and the mean score of team 1 vs team 2 is positively correlated by 0.74.  For simple linear regression, the format for the lm() function is “YVAR ~ XVAR” where YVAR is the dependent, or predicted, variable and XVAR is the independent, or predictor, variable.  <a href="https://www.r-bloggers.com/r-tutorial-series-simple-linear-regression/">R Tutorial Series: Simple Linear Regression</a>.  The hypothesis is that the average points scored by a given team in the past can predict the margin of victory in future matchups.  Our dependent or predicted y-variable then is “mean_score_diff” and our x-variable (the predictor variable) is “mean_score”.</p>
+
+<p>A quick scatter plot of the in-sample data for “mean_score_diff” vs the “mean_score” shows a linear relationship between the two.</p>
+
+<p><img src="/assets/img/CH.q5.png" alt="Plot of Number of Wins vs Positive Score Difference" /></p>
+
+<p>A summary of the linear regression:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Call:
+lm(formula = q3$mean_score_diff ~ q3$mean_score)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-33.726  -3.755   0.236   3.734  20.483
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)   -24.54641    0.69118  -35.51   &lt;2e-16 ***
+q3$mean_score   1.08181    0.02931   36.91   &lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 6.397 on 1156 degrees of freedom
+Multiple R-squared:  0.5409,	Adjusted R-squared:  0.5405
+F-statistic:  1362 on 1 and 1156 DF,  p-value: &lt; 2.2e-16
+</code></pre></div></div>
+<p>The $R^2$ value represents the proportion of variability in the response variable that is explained by the explanatory variable. For this model, 54% of the variability in score differential is explained by the historical average score of team 1 vs team 2.</p>
+
+<p>Based on the regression, the difference in team 1 score vs team 2 score is equal to:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mean_score_diff = -24.56 + 1.08181 * mean_score
+</code></pre></div></div>
+<p>Using the predict() function, the mean squared error (“MSE”) for the in-sample data was 6.39 compared with an MSE of 7.53 for the out-of-sample data.</p>
+
+<p>But recall - we are not concerned with <em>win or loss margin</em> even though the model we just created attempts to predict it. Rather, we are looking for the predicted <em>winner</em> of the game so that we can bet the Money Line.  How often does the model predict the positive/negative margin of victory then? For the in-sample data, the model predicted the correct positive/negative margin of victory correctly 78.50% of the time.  The out-of-sample data did not do as well - the model only predicted it 70.80% of the time!</p>
+
+<p>But we are not concerned with the accuracy of the margin of victory OR how often it was predicted correctly.  When you drill down to wins and losses, the model predicted the Money Line winner 61.89% in-sample and 61.29% out-of-sample.  According to the original paper, they hit on winners in the NFL of 67.7%.  Based on the large difference between the two, our model needs a little work!</p>
+
+<h3 id="multiple-regression">Multiple Regression</h3>
+<p>One option to improve the model is to use multiple linear regression on the data.  In essence, we are adding more data to help project the outcome.  Our multiple linear regression model is:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fit &lt;- lm(q3$mean_score_diff~q3$mean_score_diff_pos+q3$mean_score+q3$sum_score_diff+q3$sum_score_diff_pos+q3$sum_score+q3$num_wins)
+</code></pre></div></div>
+<p>Does the extra data lead to better accuracy when predicting postive or negative margin of victory?  The $R^2$ value increased to 0.85, and the model predicted whether the whether the margin of victory would be positive or negative approximately 91% of the time for in-sample data, and 85.49% for the out-of-sample data.</p>
+
+<p>The multiple regression also increased the accuracy for predicting Money Line winners (using the positive or negative approach).  In-sample accuracy increased to 65.81% and (curiously) out-of-sample data accuracy improved to 70.33%.</p>
+
+<h2 id="sources-and-notes">Sources and Notes</h2>
+<h3 id="overview-of-predictive-systems-for-sports">Overview of Predictive Systems for Sports</h3>
+<ul>
+  <li><a href="https://www.investopedia.com/terms/l/least-squares-method.asp">Least Squares Method Definition on Investopedia</a></li>
+  <li><a href="https://www.researchgate.net/profile/Raymond_Stefani/publication/291588643_Football_and_basketball_predictions_using_least_squares/links/582648c808aecfd7b8be88a1/Football-and-basketball-predictions-using-least-squares.pdf?origin=publication_detail">Football and Basketball Predictions Using Least Squares</a></li>
+  <li><a href="https://homepages.cae.wisc.edu/~dwilson/rsfc/rate/papers/bcs.pdf">LEAST SQUARES MODEL FOR PREDICTING COLLEGE FOOTBALL SCORES</a></li>
+  <li><a href="https://pdfs.semanticscholar.org/fe4f/123780e0eaf8418243e14d791d19c815ee50.pdf">COLLEGE FOOTBALL: A MODIFIED LEAST SQUARES APPROACH TO RATING AND PREDICTION</a></li>
+  <li><a href="https://www.1843magazine.com/features/the-daily/how-i-used-maths-to-beat-the-bookies">How I Used Maths to Beat the Bookies</a></li>
+  <li><a href="https://www.stats.com/wp-content/uploads/2018/09/2011.pdf">The Problem with Win Probability</a> - Paper from the MIT Sloan Sports Analytics Conference.</li>
+  <li><a href="https://www.masseyratings.com/theory/massey97.pdf">Statistical Models Applied to the Rating of Sports Teams</a></li>
+  <li><a href="https://www3.nd.edu/~apilking/Math10170/Information/Lectures%202015/Topic%209%20Massey's%20Method.pdf">Massey’s Method</a></li>
+  <li><a href="https://omfgpwn3d.livejournal.com/5069.html">Massey’s “Game Outcome Function”</a></li>
+  <li><a href="http://www.thepredictiontracker.com/football.php">Prediction Tracker Archive - Football</a> on the Prediction Tracker.</li>
+  <li><a href="http://homepages.cae.wisc.edu/~dwilson/rsfc/rate/biblio.html">Bibliography on College Football Ranking Systems</a></li>
+</ul>
+
+<h3 id="odds-implied-probability-and-margin">Odds, Implied Probability and Margin</h3>
+<ul>
+  <li><a href="https://help.smarkets.com/hc/en-gb/articles/214058369-How-to-calculate-implied-probability-in-betting">How to calculate implied probability in betting</a></li>
+  <li><a href="https://help.smarkets.com/hc/en-gb/articles/214180145-How-to-calculate-betting-margins">How to Calculate Betting Margin</a></li>
+  <li><a href="https://help.smarkets.com/hc/en-gb/sections/360003674031-Trading-and-Betting-Basics">Trading and Betting Basics</a></li>
+  <li>Information on converting Decimal, Fractional and American Odds along with a odds calculator can be found here:  (1)  <a href="http://www.betsmart.co/odds-conversion-formulas/#americantodecimal">Odds Conversion Formulas</a> on BetSmart.co; and (2) <a href="https://help.smarkets.com/hc/en-gb/articles/214062929-How-to-convert-betting-odds">How to Convert Betting Odds</a> on Smarkets.com.</li>
+  <li>For implied probability calculations, check out <a href="https://help.smarkets.com/hc/en-gb/articles/214058369-How-to-calculate-implied-probability-in-betting">How to calculate implied probability in betting</a>.  You can use the implied probabilities to determine <a href="https://help.smarkets.com/hc/en-gb/articles/214554985-How-to-calculate-expected-value-in-betting">How to calculate expected value in betting</a>.</li>
+  <li><a href="https://www.kaggle.com/c/mens-machine-learning-competition-2018/discussion/52253">Historical Vegas Odds Discussion</a> on Kaggle.</li>
+  <li><a href="https://www.sportsbookreviewsonline.com/scoresoddsarchives/nfl/nfloddsarchives.htm">NFL Scores and Odds Archive</a>.</li>
+</ul>
+
+<h3 id="least-squares-and-regression">Least Squares and Regression</h3>
+<ul>
+  <li><a href="https://www.mathsisfun.com/data/least-squares-regression.html">Least Squares Regression</a> on Math is Fun.</li>
+  <li><a href="https://www.investopedia.com/terms/l/least-squares-method.asp">Least Squares Method Definition</a> on Investopedia.</li>
+  <li><a href="http://r-statistics.co/Linear-Regression.html">Linear Regression</a> Overview by r-statistics.co</li>
+  <li><a href="http://www.automatingthefuture.com/blog/2017/5/9/making-predictions-with-simple-linear-regression-models">Making Predictions With Simple Linear Regression Models</a></li>
+  <li><a href="https://rafalab.github.io/dsbook/linear-models.html#lse">Introduction to Data Science Book - 19.3 Least Squared Estimates</a></li>
+  <li><a href="https://medium.com/@andrew.chamberlain/the-linear-algebra-view-of-least-squares-regression-f67044b7f39b">The Linear Algebra View of Least-Squares Regression</a></li>
+  <li><a href="http://www.learnbymarketing.com/tutorials/linear-regression-in-r/">Linear Regression Example in R using lm() Function</a></li>
+  <li><a href="https://www.r-bloggers.com/ordinary-least-squares-ols-linear-regression-in-r/">Ordinary Least Squares (OLS) Linear Regression in R</a></li>
+  <li><a href="http://people.duke.edu/~rnau/regexbaseball.htm">A simple regression example: predicting baseball batting averages</a></li>
+  <li><a href="https://datascienceplus.com/linear-regression-from-scratch-in-r/">Linear Regression from Scratch in R</a></li>
+  <li><a href="http://www.rpubs.com/ajbayquen/176851">Introduction to linear regression</a> on RPubs.</li>
+  <li><a href="https://www.r-bloggers.com/r-tutorial-series-simple-linear-regression/">R Tutorial Series: Simple Linear Regression</a></li>
+  <li><a href="https://campus.datacamp.com/courses/machine-learning-toolbox/regression-models-fitting-them-and-evaluating-their-performance?ex=8">Data Camp Tutorial on Predict() Function</a></li>
+  <li><a href="https://csrgxtu.github.io/2015/03/20/Writing-Mathematic-Fomulars-in-Markdown/">Writing Mathematic Fomulars in Markdown</a></li>
+  <li><a href="https://www.statmethods.net/stats/regression.html">Multiple (Linear) Regression</a></li>
+</ul>
+
+<h3 id="the-comperes-comprank-and-playerratings-packages">The comperes, comprank and PlayerRatings Packages</h3>
+<ul>
+  <li><a href="https://www.r-bloggers.com/harry-potter-and-competition-results-with-comperes/">Harry Potter and competition results with comperes</a></li>
+  <li><a href="https://cran.r-project.org/web/packages/comperank/vignettes/methods-overview.html">comperes Vignette</a> and <a href="https://cran.r-project.org/web/packages/comperes/comperes.pdf">comperes Manual</a></li>
+  <li><a href="https://cran.r-project.org/web/packages/PlayerRatings/vignettes/AFLRatings.pdf">PlayerRatings Vignette</a> and <a href="https://cran.r-project.org/web/packages/PlayerRatings/PlayerRatings.pdf">PlayerRatings Manual</a></li>
+</ul>
+:ET

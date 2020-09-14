@@ -1,0 +1,72 @@
+I"�
+<h3 id="file-types">File Types</h3>
+
+<h4 id="data-files">Data Files</h4>
+<p>Data files tend to come in many different forms - .csv, .txt, .xls etc.  Sometimes you can’t control the type of file you are working with.  Sometimes the data is just <em>given</em> to you and you have to figure it all out.</p>
+<h4 id="r-files">R files</h4>
+<h4 id="functions">functions</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># good
+fn.all.weekdays
+# bad
+get.all.the.weekdays.from.now.until.later
+</code></pre></div></div>
+<h4 id="templates">Templates</h4>
+
+<h4 id="data-frames">data frames</h4>
+
+<h3 id="file-names">File Names</h3>
+<h4 id="purpose">Purpose</h4>
+<p>The goal of any good naming system is to convey <em>content</em>. If you can look at a file name and immediately associate it with a specific project and understand the content of the file, then you have achieved your goal.</p>
+<h4 id="format">Format</h4>
+<h5 id="r-files-1">R files.</h5>
+<p>File names should be meaningful and end in .R.</p>
+
+<h5 id="underscores">Underscores</h5>
+<p>All files - regardless of type - should separate relevant names by underscores.  Avoid using special characters in file names - stick only with numbers, letters, and underscores.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Good
+fit_models.R
+utility_functions.R
+
+# Bad
+fit models.R
+foo.r
+stuff.r
+</code></pre></div></div>
+
+<h5 id="lower-case">Lower Case</h5>
+<p>All names shall be in lower case.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Good
+p12_blog1_data_section_1.csv
+# Bad
+P13.FILE.FOR.THE.THINGY.xls
+</code></pre></div></div>
+
+<h5 id="ordering">Ordering</h5>
+<p>If files should be run in a particular order, prefix them with numbers. If it seems likely you’ll have more than 10 files, left pad with zero:
+          <code class="language-plaintext highlighter-rouge">
+          00_download.R
+          01_explore.R
+          ...
+          09_model.R
+          10_visualize.R
+         </code></p>
+
+<h3 id="external-organization">External Organization</h3>
+<h4 id="folder-structure">Folder Structure</h4>
+
+<h3 id="internal-organization">Internal Organization</h3>
+
+<h4 id="front-matter">Front Matter</h4>
+<h5 id="who-wrote-the-code">Who Wrote the Code</h5>
+<h5 id="contact-information--nameemailsocial">Contact Information:  Name/Email/Social</h5>
+<h5 id="date-started">Date Started</h5>
+
+<h4 id="dividers">Dividers</h4>
+<h5 id="heading-dividers">Heading Dividers</h5>
+<h5 id="main-dividers">Main Dividers</h5>
+<h5 id="comments">Comments</h5>
+
+<h3 id="internal-structure">Internal Structure</h3>
+:ET

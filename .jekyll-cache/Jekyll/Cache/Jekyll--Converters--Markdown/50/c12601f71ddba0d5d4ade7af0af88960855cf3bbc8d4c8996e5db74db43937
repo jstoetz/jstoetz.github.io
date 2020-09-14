@@ -1,0 +1,3 @@
+I"-<h2 id="introduction">Introduction</h2>
+<p>Part of the challenge of backtesting is coming up with a repeatable framework to compare trading systems.  In this example, I will use Monte Carlo simulation in R as a way to measure whether or not a particular trading system is better than pure chance.</p>
+:ET

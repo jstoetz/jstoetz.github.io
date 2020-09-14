@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Testing the Bespoke Stock Scores in R | jstoetz</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Testing the Bespoke Stock Scores in R" />
+<meta name="author" content="Jake Stoetzner" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I have been a subscriber to Bespoke Premium for a long time. Tuesdays are always a special day; that’s when Bespoke Members get a fresh copy of the Bespoke Stock Scores Report. This is their proprietary blend of Technical, Fundamental and Sentiment Analysis that is derived down to a single, weighted score. I have always wanted to backtest their recommendations. So I decided to do so in R." />
+<meta property="og:description" content="I have been a subscriber to Bespoke Premium for a long time. Tuesdays are always a special day; that’s when Bespoke Members get a fresh copy of the Bespoke Stock Scores Report. This is their proprietary blend of Technical, Fundamental and Sentiment Analysis that is derived down to a single, weighted score. I have always wanted to backtest their recommendations. So I decided to do so in R." />
+<link rel="canonical" href="http://localhost:4000/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R/" />
+<meta property="og:url" content="http://localhost:4000/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R/" />
+<meta property="og:site_name" content="jstoetz" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-09-11T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"I have been a subscriber to Bespoke Premium for a long time. Tuesdays are always a special day; that’s when Bespoke Members get a fresh copy of the Bespoke Stock Scores Report. This is their proprietary blend of Technical, Fundamental and Sentiment Analysis that is derived down to a single, weighted score. I have always wanted to backtest their recommendations. So I decided to do so in R.","headline":"Testing the Bespoke Stock Scores in R","dateModified":"2019-09-11T00:00:00-05:00","datePublished":"2019-09-11T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R/"},"url":"http://localhost:4000/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R/","author":{"@type":"Person","name":"Jake Stoetzner"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="jstoetz" /></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">jstoetz</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Testing the Bespoke Stock Scores in R</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2019-09-11T00:00:00-05:00" itemprop="datePublished">Sep 11, 2019
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>I have been a subscriber to <a href="https://www.bespokepremium.com">Bespoke Premium</a> for a long time.  Tuesdays are always a special day; that’s when Bespoke Members get a fresh copy of the Bespoke Stock Scores Report.  This is their proprietary blend of Technical, Fundamental and Sentiment Analysis that is derived down to a single, weighted score.  I have always wanted to backtest their recommendations.  So I decided to do so in R.
+<!--more--></p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>From their website:</p>
+
+<blockquote>
+  <p>“The Bespoke Stock Scores are a complete proprietary ranking of a stock’s attractiveness made up of three categories - Fundamental, Technical, and Sentiment.
+The Fundamental Score is an overall measure of a stock’s key financial ratios including earnings, sales, growth, and yield.  In addition, we analyze each company’s debt and capital levels and compare these to their peers.
+The Technical Score analyzes and measures indicators related to a stock’s momentum, relative strength, trend, and volume.  Each stock is then compared to the market and its group.
+The Sentiment Score is derived by analyzing the actions of investors and analysts.  Sub categories include trends in institutional ownership, option activity, short interest, analyst sentiment, and seasonal performance patterns.
+The Total Score comprises a weighted average of the three main categories described above.  Our experience has shown that certain environments require different approaches.”</p>
+</blockquote>
+
+<p>A score over 70 indicates that the stock is a good candidate for a buy evaluation.</p>
+
+<p>They publish all of the scores for all of the S&amp;P 1500 stocks ranked accordingly.  They also publish a list of the Top 40 Stock Scores.  This report comes out weekly, generally on Tuesdays.</p>
+
+<h2 id="tools">Tools</h2>
+<p>I used R for the data analysis and <a href="www.iqFeed.net">iQFeed</a> via the (QCollector Expert)[http://www.mechtrading.com/] for the historical stock prices.</p>
+
+<h2 id="goal">Goal</h2>
+<p>The goal of this test was to determine if the recommendations, specifically the Top 40 recommendations, give you a statistical edge over the rest of the stocks in the S&amp;P 1500 and whether adapting a trading system using the Top 40 rankings is a reliable and profitable approach as compared to a “buy and hold” approach of the S&amp;P 1500.</p>
+
+<h2 id="characteristics">Characteristics</h2>
+<p>I looked at 589 Excel files that each contained different lists of stock scores dating back to May 29, 2007.  Notably, I missed a few reports.  That’s as far back as I could find the Bespoke Stock Scores, although they may have some that are older.</p>
+
+<p>From each file, I extracted the Top 40 stocks and the date they were recommended.  This totaled approximately 23,560 individual stock pick recommendations.  It is important to emphasize that Bespoke isn’t technically recommending these stocks (nor am I).  Rather, a score is a ranking relative to all of the remaining stocks in the S&amp;P 1500.  For the purpose of this report, I am assuming that the stock is purchased at the open on the date it is recommended as a Top 40 stock (<strong>“Entry Date”</strong>).</p>
+
+<p>After all of the files were examined, there were 1587 different symbols – some that are no longer traded and some that have been recommended multiple times.</p>
+
+<p>One of the challenges that I faced was that while the Bespoke Stock Scores gave me an easy entry rule (ie, enter on the date of the recommendation), there were no exit rules.</p>
+
+<p>Thus, I came up with a few options to exit my position:</p>
+
+<ol>
+  <li>
+    <p><strong>Exit after a given number of calendar days (not trading days) after the recommendation date.</strong>  I referred to this in the code as <strong>“nDays”</strong> and set it at 365 days.  I looked at holding the stock for 1 – 365 days after the Entry Date.  Because of the practicalities of reporting, I only show reports for 30, 90, 180 and 365 day holding periods.</p>
+  </li>
+  <li>
+    <p><strong>Exit after some given profit target or stop loss was hit.</strong>  For a couple of different reasons, I did not attempt to model this.</p>
+  </li>
+  <li>
+    <p><strong>Exit after the Bespoke Stock Score fell below 70 after entry.</strong> I discarded this idea because of the time between entry and a (possible) exit was, at a minimum, 1 week.  For example, a stock might get recommended on a Tuesday but by the following day, it might have fallen below 70.  You wouldn’t know this immediately because you have to wait until the following Tuesday for the next report to come out.</p>
+  </li>
+  <li>
+    <p><strong>Don’t worry about the exit (so to speak) and evaluate each trade on a daily basis, evaluating the daily returns, maximum drawdown and the annualized return compared with the standard deviation of the daily returns (Sharpe Ratio).</strong> Because nDays was set to 365 (one year) I could compare the annualized daily returns and risk of the system to the annualized risk/return of the benchmark.  Note:  for the purpose of this report, the risk-free rate for the Sharpe Ratio is set to zero.</p>
+  </li>
+</ol>
+
+<h2 id="limitations">Limitations</h2>
+<ul>
+  <li><strong>Long 40 Stocks Weekly.</strong>  It’s important to note that the way the system is designed for this report, you would be buying 40 stocks each week.  Sometimes a specific stock is recommended multiple weeks in a row.  That means that you could have a concentrated position in one single stock.</li>
+  <li><strong>Holding Period is Important.</strong> Under Exit #1 above (exit after nDays), you could potentially be in a position longer than 1 year.  This makes a comparison with other benchmarks a little more difficult.</li>
+  <li><strong>Entry Values Not Included.</strong> Since <a href="www.bespokepremium.com">Bespoke Premium</a> is a paid service, I did not include any data related to their specific recommendations.</li>
+</ul>
+
+<h2 id="process">Process</h2>
+<p>(Note:  if you aren’t interested in R or how to replicate this report, skip down to the next section.)</p>
+
+<ol>
+  <li>
+    <p>I had R create and read in a list of all 1587 stocks that were recommended.  I looked up the historical daily stock prices using <a href="http://www.mechtrading.com/">QCollector</a> and saved those as .txt files of Open/High/Low/Close/Volume going back to January 1, 2007.</p>
+  </li>
+  <li>
+    <p>I had R combine all of this history of all of the stocks, sorted by the stock symbol. In doing so, I extracted the entry date of the recommendation from the file name.  Each file was saved as some form of “BespokeStockScoresMMDDYY.xls.”  Each “MMDDYY” corresponded to the entry date of the recommendation.</p>
+  </li>
+  <li>
+    <p>I found the entry value of the stock on the date of the recommendation.  Although this is given in each of the Bespoke Top 40 reports, I wanted to make sure that the system was using accurate historical prices (it was).</p>
+  </li>
+  <li>
+    <p>I cycled through the recommendation lists at entry to find the value at exit from 1 to nDays days after each entry recommendation.  Much like the Entry Date, I assumed that the exit would happen on the Open at the nth day (<strong>“Exit Date”</strong>).  I then calculated the cumulative percentage and point return gained for each recommendation for 1 - 365 days.  This strategy assumed that you entered <strong>EVERY</strong> stock on the recommendation date regardless of your existing position.  For example, you would be long 40 different stocks every week.  Over the testing period, it means you would make 23,560 trades.  I will discuss the value of this approach and how it could be improved in the conclusions section below.</p>
+  </li>
+  <li>
+    <p>I then created a table showing each stock and how many times each stock was recommended.  Below is a list of the Top 20 most recommended stocks.</p>
+  </li>
+</ol>
+
+<p><img src="/assets/img/Top_20_Stocks.PNG" alt="Top 20 Stocks By Times Recommended" /></p>
+
+<ol>
+  <li>I then separated the cumulative daily percent return for <strong>EACH STOCK</strong> (rather than by recommendation date, as in Step 4 above).  This return was measured from the Entry Date. This allowed me to analyze the cumulative return of each stock recommendation from 1 to nDays. For example, ABM was recommended 49 times during the time period tested. The first time was on 2010-07-13, and on that date it opened at 21.56.  Below is the cumulative returns for the following 252 trading days.  As you can see, it performed rather well.</li>
+</ol>
+
+<p><img src="/assets/img/Profit_Loss_ABM.png" alt="Example Cumulative Return Graph" /></p>
+
+<ol>
+  <li>I also separated the daily percent return (day over day returns) for each stock from the date of the recommendation. This helped in evaluating the day-to-day performance of each recommendation.</li>
+</ol>
+
+<h2 id="results">Results</h2>
+
+<p>Initially, it was difficult to measure the performance of the system against the S&amp;P1500 benchmark.  Comparing the cumulative performance against a benchmark proved futile.  However, it was easier comparing the system on a day-to-day basis versus the benchmark.  I attempted to annualize the 30/90/180 day exit performance so as to compare that against the historical annualized performance of the S&amp;P Composite 1500. Additionally, I was only able to obtain information on the S&amp;P Composite 1500 dating back to August 31, 2009.  For that reason, relevant benchmark comparisons will ignore any recommendations prior to this date.</p>
+
+<h3 id="exit-after-30-calendar-days-from-entry-date">Exit After 30 Calendar Days From Entry Date</h3>
+
+<h4 id="cumulative-percent-return-with-30-day-exit">Cumulative Percent Return with 30 Day Exit</h4>
+<p><img src="/assets/img/Profit_Loss_30.png" alt="Profit &amp; Loss Graph - Exit at Day 30" /></p>
+
+<p>Exiting at 30 days after recommendation provided an average return of .67%, a winning percentage of 56.12%, a profit factor (Average Win/Average Loss) of -.95 and a cumulative return of 10,838%.</p>
+
+<h4 id="benchmark-comparison-with-30-day-exit">Benchmark Comparison with 30 Day Exit</h4>
+<p>Since August 31, 2009, the 30 day exit strategy provided an annualized return of 12.58% with annualized volatility (risk) of 28.4% for a Sharpe Ratio of 0.44.</p>
+
+<p>This compares unfavorably versus the S&amp;P Composite 1500 - see the table below.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Annualized Return (%)</th>
+      <th>Annualized Risk (%)</th>
+      <th>Sharpe Ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>30 Day Strategy</td>
+      <td>12.58</td>
+      <td>28.49</td>
+      <td>0.44</td>
+    </tr>
+    <tr>
+      <td>Benchmark</td>
+      <td>13.42</td>
+      <td>12.77</td>
+      <td>1.05</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Note:  see <a href="https://www.barclayhedge.com/annualized-standard-deviation-of-monthly-quarterly-return/">this link</a> for calculating Annualized Standard Deviation of Monthly / Quarterly Return.</p>
+
+<h4 id="cumulative-percent-return-with-90-day-exit">Cumulative Percent Return with 90 Day Exit</h4>
+<p><img src="/assets/img/Profit_Loss_90.png" alt="Profit &amp; Loss Graph - Exit at Day 90" /></p>
+
+<p>Exiting at 90 days after recommendation provided an average return of 1.2%, a winning percentage of 55.7%, a profit factor (Average Win/Average Loss) of -.97 and a cumulative return of 17,646%.</p>
+
+<h4 id="benchmark-comparison-with-90-day-exit">Benchmark Comparison with 90 Day Exit</h4>
+<p>Since August 31, 2009, the 90 day exit strategy provided an annualized return of 9.8% with annualized volatility (risk) of 28.31% for a Sharpe Ratio of .35.</p>
+
+<p>This is not as favorable to the benchmark - see table below.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Annualized Return (%)</th>
+      <th>Annualized Risk (%)</th>
+      <th>Sharpe Ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>90 Day Strategy</td>
+      <td>9.8</td>
+      <td>28.31</td>
+      <td>0.35</td>
+    </tr>
+    <tr>
+      <td>Benchmark</td>
+      <td>13.42</td>
+      <td>12.77</td>
+      <td>1.05</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="cumulative-percent-return-with-180-day-exit">Cumulative Percent Return with 180 Day Exit</h4>
+<p><img src="/assets/img/Profit_Loss_180.png" alt="Profit &amp; Loss Graph - Exit at Day 180" /></p>
+
+<p>Exiting at 180 days after recommendation provided an average return of 2.8%, a winning percentage of 56.8%, a profit factor (Average Win/Average Loss) of -1.05 and a cumulative return of 39,545%.</p>
+
+<h4 id="benchmark-comparison-with-180-day-exit">Benchmark Comparison with 180 Day Exit</h4>
+<p>Since August 31, 2009, the 180 day exit strategy provided an annualized return of 10.17% with annualized volatility (risk) of 28.4% for a Sharpe Ratio of .35.</p>
+
+<p>This is not as favorable to the benchmark - see table below.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Annualized Return (%)</th>
+      <th>Annualized Risk (%)</th>
+      <th>Sharpe Ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>180 Day Strategy</td>
+      <td>10.17</td>
+      <td>28.4</td>
+      <td>0.35</td>
+    </tr>
+    <tr>
+      <td>Benchmark</td>
+      <td>13.42</td>
+      <td>12.77</td>
+      <td>1.05</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="cumulative-percent-return-with-365-day-exit">Cumulative Percent Return with 365 Day Exit</h4>
+<p><img src="/assets/img/Profit_Loss_365.png" alt="Profit &amp; Loss Graph - Exit at Day 365" /></p>
+
+<p>Exiting at 365 days after recommendation provided an average return of 8.3%, a winning percentage of 61.3%, a profit factor (Average Win/Average Loss) of -1.24 and a cumulative return of 116,981%.</p>
+
+<h4 id="benchmark-comparison-with-365-day-exit">Benchmark Comparison with 365 Day Exit</h4>
+<p>Since August 31, 2009, the 365 day exit strategy provided an annualized return of 11.9% with annualized volatility (risk) of 29.45% for a Sharpe Ratio of .40.</p>
+
+<p>This is not as favorable to the benchmark - see table below.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Annualized Return (%)</th>
+      <th>Annualized Risk (%)</th>
+      <th>Sharpe Ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>365 Day Strategy</td>
+      <td>11.9</td>
+      <td>29.45</td>
+      <td>.406</td>
+    </tr>
+    <tr>
+      <td>Benchmark</td>
+      <td>13.42</td>
+      <td>12.77</td>
+      <td>1.05</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Over each time period, the strategy had a lower risk-adjusted return as compared to the S&amp;P Composite 1500 benchmark.  However, over the short-term, the Top 40 Bespoke Stock Scores significantly outperformed the benchmark on a pure, risk-unadjusted annualized return basis.  For instance, exiting at 10 days provided a 17.24% annualized return, exceeding the benchmark by more than 4 points.</p>
+
+<h2 id="notes--additional-research">Notes &amp; Additional Research</h2>
+<ol>
+  <li>
+    <p>See this excellent blog post on evaluating trading strategies in R.  <a href="https://www.signalplot.com/how-to-measure-the-performance-of-a-trading-strategy/">How to Measure the Performance of a Trading Strategy</a>.  The author also includes a link to the R Code here:  <a href="https://github.com/luyongxu/SignalPlot/blob/master/1.001%20Code/1.005%20Measuring%20Performance.R">1.005 Measuring Performance.R</a>.</p>
+  </li>
+  <li>
+    <p>The graphs on this report were created using the <a href="https://bbc.github.io/rcookbook/">BBC Visual and Data Journalism cookbook for R graphics</a>.  You can find all of the R code to recreate the BBC style graphics at the <a href="https://github.com/bbc/bbplot">BBC Github Repository</a>.</p>
+  </li>
+  <li>
+    <p>S&amp;P 1500 historical performance was obtained from the <a href="https://us.spindices.com/indices/equity/sp-composite-1500">S&amp;P Composite 1500 Page</a>.</p>
+  </li>
+  <li>
+    <p>“Annualized Return is the constant annual return applied to each period in arrays that would result in the actual compounded return over that range. An Annualized Return is a special case of a Geometric Average Return where the time periods are expressed in terms of years.” See <a href="http://www.crsp.com/products/documentation/crsp-calculations">CRSP Calculations</a>.</p>
+  </li>
+</ol>
+
+  </div><a class="u-url" href="/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R/" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      <div class="social-links"><ul class="social-media-list"><li><a href="https://www.facebook.com/jstoetz" title="jstoetz"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#facebook"></use></svg></a></li><li><a href="https://github.com/jstoetz" title="jstoetz"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a href="https://twitter.com/jstoetz" title="jstoetz"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li><li><a href="https://t.me/jstoetz" title="jstoetz"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#telegram"></use></svg></a></li><li><a href="/feed.xml" title="rss"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#rss"></use></svg></a></li></ul>
+</div>
+    </div>
+
+  </div>
+
+</footer>
+<script>
+    $( document ).ready(function() {
+        $('a').each( function() {
+            if ($(this).text().match("^\\[") && $(this).text().match("\\]$")) {
+                $(this).addClass('btn').addClass('btn-primary');
+                $(this).text($(this).text().substring(1, $(this).text().length-1));
+            }
+        });
+    });
+</script>
+
+
+  </body>
+
+</html>

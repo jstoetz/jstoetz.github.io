@@ -1,0 +1,32 @@
+I"¬<h2 id="basics">Basics</h2>
+
+<ul>
+  <li><a href="http://www.cyclismo.org/tutorial/R/index.html#">R Tutorial by Kelly Black, Dept of Mathematics, University of Georgia</a></li>
+  <li><a href="https://www.r-project.org/doc/bib/R-jabref.html">A List of Books and Articles Related to R on r-project.org</a></li>
+</ul>
+
+<h2 id="data-management">data management</h2>
+
+<ul>
+  <li>
+    <p><a href="https://suzan.rbind.io/2018/01/dplyr-tutorial-1/">Data Wrangling Part 1: Basic to Advanced Ways to Select Columns</a></p>
+  </li>
+  <li>
+    <p><a href="https://suzan.rbind.io/2018/02/dplyr-tutorial-2/">Data Wrangling Part 2: Transforming your columns into the right shape</a></p>
+  </li>
+  <li>
+    <p><a href="https://suzan.rbind.io/2018/02/dplyr-tutorial-3/">Data Wrangling Part 3: Filtering rows</a></p>
+  </li>
+  <li>
+    <p><a href="https://suzan.rbind.io/2018/04/dplyr-tutorial-4/#summarising-data">Data Wrangling Part 4: Summarizing and slicing your data</a></p>
+  </li>
+</ul>
+
+<h2 id="statistics">statistics</h2>
+<ul>
+  <li><a href="http://onlinestatbook.com/2/index.html">Online Statistics Education: An Interactive Multimedia Course of Study</a></li>
+  <li><a href="https://www.uvm.edu/~dhowell/StatPages/">Outline of Statistical Pages, by David Howell, University of Vermont</a></li>
+  <li><a href="http://www.uvm.edu/~dhowell/StatPages/Randomization%20Tests/RandomizationTestsOverview.html#Lunneborg">Overview of Randomization Tests
+</a></li>
+</ul>
+:ET

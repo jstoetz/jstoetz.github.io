@@ -1,0 +1,33 @@
+I"@<h2 id="basics">basics</h2>
+
+<ul>
+  <li>
+    <p><a href="https://www.msperlin.com/pafdR/">Processing and Analyzing Financial Data with R by Marcelo S. Perlin</a>.  One of the best books I have read that covers dealing with financial data in R.</p>
+  </li>
+  <li>
+    <p><a href="https://bookdown.org/csgillespie/efficientR/introduction.html#prerequisites">Efficient R Programming by Colin Gillespie &amp; Robin Lovelace</a>.  An excellent beginner book for “R beginners with little experience of programming.”</p>
+  </li>
+  <li>
+    <p><a href="https://r4ds.had.co.nz/">R for Data Science by Garrett Grolemund &amp; Hadley Wickham</a></p>
+  </li>
+  <li>
+    <p><a href="https://style.tidyverse.org/">The tidyverse style guide by Hadley Wickham</a></p>
+  </li>
+  <li>
+    <p><a href="https://livebook.manning.com/book/practical-data-science-with-r-second-edition/welcome/v-6/">Practical Data Science with R, Second Edition!</a></p>
+  </li>
+</ul>
+
+<h2 id="statistics">statistics</h2>
+<ul>
+  <li><a href="https://nostarch.com/learnbayes">Bayesian Statistics the Fun Way</a></li>
+  <li>Book of R. <a href="https://web.itu.edu.tr/~tokerem/The_Book_of_R.pdf">PDF</a></li>
+  <li>Learning statistics with R.  <a href="https://learningstatisticswithr.com/book/">Bookdown</a></li>
+  <li>An Introduction to Statistical Learning With Applications in R. <a href="https://faculty.marshall.usc.edu/gareth-james/ISL/ISLR%20Seventh%20Printing.pdf">PDF</a></li>
+</ul>
+
+<h2 id="time-series">time series</h2>
+<ul>
+  <li>Forecasting: Principles and Practice <a href="https://otexts.com/fpp3/">bookdown</a></li>
+</ul>
+:ET

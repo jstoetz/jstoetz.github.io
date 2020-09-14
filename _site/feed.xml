@@ -1,0 +1,1228 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-09-14T14:49:44-05:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">jstoetz</title><subtitle>Adventures in R programming and data science for stocks, ETFs and options, as well as commercial real estate and sports gambling.
+</subtitle><author><name>Jake Stoetzner</name><email>Jake.stoetzner@gmail.com</email></author><entry><title type="html">Backtesting Triple Miss Stocks in R</title><link href="http://localhost:4000/r/backtesting/2019/11/04/Bespoke-Triple-Play-Analysis/" rel="alternate" type="text/html" title="Backtesting Triple Miss Stocks in R" /><published>2019-11-04T00:00:00-06:00</published><updated>2019-11-04T00:00:00-06:00</updated><id>http://localhost:4000/r/backtesting/2019/11/04/Bespoke-Triple-Play-Analysis</id><content type="html" xml:base="http://localhost:4000/r/backtesting/2019/11/04/Bespoke-Triple-Play-Analysis/">&lt;p&gt;Backtesting possible short positions by examining stocks that miss EPS and revenue estimates and lower forward guidance reveals that the behavior of these &lt;strong&gt;Triple Miss&lt;/strong&gt; stocks offers a profitable opportunity over the short-term.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#goal&quot;&gt;Goal&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#get-the-data&quot;&gt;Get the Data&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#extract-the-stock-symbols-and-dates-of-each-triple-miss&quot;&gt;Extract the Stock Symbols and Dates of Each Triple Miss&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#get-historical-stock-data&quot;&gt;Get Historical Stock Data&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#filter-out-data-prior-to-triple-miss&quot;&gt;Filter Out Data Prior to Triple Miss&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#examine-the-aggregate-stock-data&quot;&gt;Examine the Aggregate Stock Data&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#examine-the-aggregate-stock-data-1--5-and-10-days-after-triple-miss&quot;&gt;Examine the Aggregate Stock Data 1, 5 and 10 Days After Triple Miss&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#notes---research&quot;&gt;Notes &amp;amp; Research&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;goal&quot;&gt;Goal&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;www.bespokepremium.com&quot;&gt;Bespoke Investment Group&lt;/a&gt; offers a stock screen feature that “allows users to run in-depth earnings report screens and easily filter more than 150,000 individual quarterly reports for US stocks since 2001.”&lt;/p&gt;
+
+&lt;p&gt;They also offer a report showing what they have termed an &lt;strong&gt;Earnings Triple Play&lt;/strong&gt; - that is a stock that “beats consensus analyst EPS estimates, beats revenue estimates, and raises forward guidance.”  The term has become so well known that &lt;a href=&quot;https://www.investopedia.com/terms/t/triple-play.asp&quot;&gt;none other than Investopedia have given Bespoke credit for it.&lt;/a&gt;  These stocks are the best candidates for long-term buy opportunities.&lt;/p&gt;
+
+&lt;p&gt;But is the opposite also true?  Does a stock that &lt;em&gt;misses&lt;/em&gt; consensus analyst EPS estimates, &lt;em&gt;misses&lt;/em&gt; revenue estimates and &lt;em&gt;lowers&lt;/em&gt; forward guidance a terrible long-term buy opportunity and a possible short opportunity?  We can refer to these stocks in this category as a &lt;strong&gt;Triple Miss&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The goal is to quantify whether a Triple Miss makes a good short opportunity starting the day after the announcement.&lt;/p&gt;
+
+&lt;h2 id=&quot;get-the-data&quot;&gt;Get the Data&lt;/h2&gt;
+&lt;h3 id=&quot;extract-the-stock-symbols-and-dates-of-each-triple-miss&quot;&gt;Extract the Stock Symbols and Dates of Each Triple Miss&lt;/h3&gt;
+&lt;p&gt;Using the aforementioned stock screener, I researched Triple Miss stocks in 2018, and downloaded a .csv file of the data.  Turns out there were 132 Triple Miss instances (with 104 different stocks - some companies were listed more than once!) in 2018.  On an aggregate basis, this was the return:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/2018.Triple.Miss.Stats.png&quot; alt=&quot;Aggregate Stats of Triple Miss Stocks&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;After reading in the data in R, I extracted the symbols and dates of each Triple Miss.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#create a list of symbols that can be read in
+symbols &amp;lt;- unlist(temp$ticker)
+ticker &amp;lt;- as.character(unlist(temp$ticker))
+
+#get list of dates of triple miss dates
+date &amp;lt;- as.Date(unlist(temp$date))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Once this was created, I tried to use the quantmod() package to look-up the historical data.  quantmod() is wonderful for looking up individual stocks and analyzing them, but it is a challenge to deal with multiple stocks on varying dates of interest.&lt;/p&gt;
+
+&lt;h3 id=&quot;get-historical-stock-data&quot;&gt;Get Historical Stock Data&lt;/h3&gt;
+
+&lt;p&gt;Enter the batchgetsymbols() package.&lt;/p&gt;
+
+&lt;p&gt;As the &lt;a href=&quot;https://cran.r-project.org/web/packages/BatchGetSymbols/vignettes/BatchGetSymbols-vignette.html&quot;&gt;creator of the package lamented&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;In the past I have used function GetSymbols from the CRAN package quantmod in order to download end of day trade data for several stocks in the financial market. The problem in using GetSymbols is that it does not aggregate or clean the financial data for several tickers. In the usage of GetSymbols, each stock will have its own xts object with different column names and this makes it harder to store data from several tickers in a single dataframe.  Package BatchGetSymbols is my solution to this problem. Based on a list of tickers and a time period, BatchGetSymbols will download price data from yahoo finance and organize it so that you don’t need to worry about cleaning it yourself.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The batchgetsymbols() package worked beautifully to download all of the historical data for each stock going back to 2018 and return it in one giant, clean dataframe.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#&amp;lt;-----TRIPLE MISS ANALYSIS -----&amp;gt;
+#Batch download symbols - change type.return to &quot;log&quot; for log
+l.out   &amp;lt;-  BatchGetSymbols(tickers   = ticker,
+                         first.date   = start.data,
+                         last.date    = end.data,
+                         type.return  = &quot;arit&quot;,
+                         freq.data    = freq.data)
+
+#get a list of tickers that were downloaded
+all.ticker &amp;lt;- l.out$df.control$ticker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;filter-out-data-prior-to-triple-miss&quot;&gt;Filter Out Data Prior to Triple Miss&lt;/h3&gt;
+&lt;p&gt;After getting the dataframe set-up, I used the dplyr() package to filter out data prior to the Triple Miss announcement.  This was required because I only wanted to look at the performance of the stock &lt;em&gt;after&lt;/em&gt; the date of the Triple Miss. I then created a new data frame to hold this data using the bind_rows() function.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#filter out all data before entry date by ticker
+b &amp;lt;- mapply(function(a,b)(l.out$df.tickers %&amp;gt;% filter(ref.date &amp;gt; a, ticker == b)),date,ticker,SIMPLIFY = F)
+
+#create new df without the post entry date data
+b1 &amp;lt;- bind_rows(b)
+summary(b1$ret.closing.prices)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;examine-the-aggregate-stock-data&quot;&gt;Examine the Aggregate Stock Data&lt;/h3&gt;
+&lt;p&gt;Interestingly, the average cumulative daily return for each stock measured from the date of the Triple Miss to the date of this post has been 4.28% - that means an average annual return of 1.36%.  The average daily return is .005%.  On an annualized basis, this is a Sharpe Ratio (return/volatility) of 0.59 - clearly a lot of volatility for not a whole lot of return!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/ch.All.png&quot; alt=&quot;Individual Triple Miss Stocks Cumulative Return All Days&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;b2 &amp;lt;- b1 %&amp;gt;%
+  select(ref.date,ticker,ret.closing.prices) %&amp;gt;%
+    group_by(ticker) %&amp;gt;%
+      summarise(Mean_Daily_Return = mean(ret.closing.prices,na.rm = TRUE)*100, Cum_Daily_Return = sum(ret.closing.prices,na.rm = TRUE)*100) %&amp;gt;%         arrange(Cum_Daily_Return)
+
+&amp;gt; mean(b2$Cum_Daily_Return)
+[1] 4.281108
+&amp;gt; mean(b2$Mean_Daily_Return)
+[1] 0.00539823
+&amp;gt; mean(b2$Mean_Daily_Return)/sd(b2$Mean_Daily_Return)*sqrt(252)
+[1] 0.5942328
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;examine-the-aggregate-stock-data-1-5-and-10-days-after-triple-miss&quot;&gt;Examine the Aggregate Stock Data 1, 5 and 10 Days After Triple Miss&lt;/h3&gt;
+&lt;p&gt;What if we shortened the window for analyzing the returns of all of the Triple Miss Stocks?  Do the effects of the Triple Miss “wear off” at a certain point or do they continue?&lt;/p&gt;
+
+&lt;p&gt;The Triple Miss stocks are very negative - below is a chart with the cumulative return from 1 to 10 days after each Triple Miss.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/ch.10days.all.png&quot; alt=&quot;All Triple Miss Stocks Cumulative Return Day 1 to 10&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;On an individual basis, you can see the downward trend each stock exhibits post-Triple Miss.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/ch.10days.png&quot; alt=&quot;Individual Triple Miss Stocks Cumulative Return Day 1 to 10&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;On an aggregate basis after 10 days:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;71 out of the 113 stocks (approximately 63%) had a negative cumulative daily return 10 days after the Triple Miss,&lt;/li&gt;
+  &lt;li&gt;each stock had an average daily return of -0.58% and cumulatively lost 4.55% in value by day 10, and&lt;/li&gt;
+  &lt;li&gt;had an average Sharpe Ratio (average daily return divided by average standard deviation of the daily returns) of -5.57.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In short, the returns were &lt;strong&gt;less&lt;/strong&gt; than spectacular.&lt;/p&gt;
+
+&lt;p&gt;Over 5 days, returns were even worse:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;66 out of the 113 stocks (approximately 58%) had a negative cumulative daily return 5 days after the Triple Miss,&lt;/li&gt;
+  &lt;li&gt;each stock had an average daily return of -1.46% and cumulatively lost 5.26% in value by day 5, and&lt;/li&gt;
+  &lt;li&gt;had an average Sharpe Ratio of -6.50.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/ch.5days.all.png&quot; alt=&quot;All Triple Miss Stocks Cumulative Return Day 1 to 5&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And the day after a Triple miss?  95 of 113 (84%) were down day-over-day by an average of 6.86% with a Sharpe Ratio of -10.62.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;It seems clear that Triple Miss stocks would be a good place to start when looking for stocks to short over the near-term.  Obviously, this is not a recommendation to buy or sell; you would need to do your own research and make your own decision to determine that.  But the Triple Miss stocks might be a good filter to start looking for opportunities.&lt;/p&gt;
+
+&lt;h2 id=&quot;notes--research&quot;&gt;Notes &amp;amp; Research&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://towardsdatascience.com/analyzing-stocks-using-r-550be7f5f20d&quot;&gt;Analyzing Stocks Using R&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://ntguardian.wordpress.com/2017/03/27/introduction-stock-market-data-r-1/&quot;&gt;An Introduction to Stock Market Data Analysis with R (Part 1)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;[getSymbols Extra&lt;/td&gt;
+          &lt;td&gt;R-bloggers](https://www.r-bloggers.com/getsymbols-extra/)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.quantmod.com/examples/data/&quot;&gt;quantmod: examples :: data&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://programmingforfinance.com/2017/10/different-ways-to-obtain-and-manipulate-stock-data-in-r-using-quantmod/&quot;&gt;Different Ways to Obtain and Manipulate Stock Data In R Using quantmod – Programming For Finance&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://srdas.github.io/MLBook/MoreDataHandling.html#using-the-apply-class-of-functions&quot;&gt;Data Science: Theories, Models, Algorithms, and Analytics&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://cran.r-project.org/web/packages/tidyquant/vignettes/TQ02-quant-integrations-in-tidyquant.html#performanceanalytics-functionality&quot;&gt;R Quantitative Analysis Package Integrations in tidyquant&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://bookdown.org/sstoeckl/Tidy_Portfoliomanagement_in_R/s-4portfolios.html&quot;&gt;Tidy Portfoliomanagement in R&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://rstudio-pubs-static.s3.amazonaws.com/288218_117e183e74964557a5da4fc5902fc671.html#first-order-of-business---basic-manipulations&quot;&gt;Manipulating Time Series Data in R with xts &amp;amp; zoo&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://s3.amazonaws.com/assets.datacamp.com/production/course_1127/slides/chapter_4.pdf&quot;&gt;chapter4.key&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.msperlin.com/pafdR/Financial-data.html&quot;&gt;Processing and Analyzing Financial Data with R&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://faculty.washington.edu/ezivot/econ424/Working%20with%20Time%20Series%20Data%20in%20R.pdf&quot;&gt;Working with Time Series Data in R&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://statmath.wu.ac.at/~hornik/QFS1/quantmod-vignette.pdf&quot;&gt;quantmod-vignette.pdf&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/26640795/using-lapply-on-quantmod-get-straight-to-xts-object&quot;&gt;r - Using lapply on quantmod, get straight to xts object? - Stack Overflow&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://cran.r-project.org/web/packages/BatchGetSymbols/vignettes/BatchGetSymbols-vignette.html&quot;&gt;Using BatchGetSymbols to download financial data for several tickers&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;[Easy multi-panel plots in R using facet_wrap() and facet_grid() from ggplot2&lt;/td&gt;
+          &lt;td&gt;Technical Tidbits From Spatial Analysis &amp;amp; Data Science](http://zevross.com/blog/2019/04/02/easy-multi-panel-plots-in-r-using-facet_wrap-and-facet_grid-from-ggplot2/)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.sthda.com/english/articles/17-tips-tricks/57-dplyr-how-to-add-cumulative-sums-by-groups-into-a-data-framee/&quot;&gt;dplyr: How to Add Cumulative Sums by Groups Into a Data Frame? - Articles - STHDA&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;[Make Beautiful Tables with the Formattable Package&lt;/td&gt;
+          &lt;td&gt;R-bloggers](https://www.r-bloggers.com/make-beautiful-tables-with-the-formattable-package/)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.sthda.com/english/wiki/ggplot2-barplots-quick-start-guide-r-software-and-data-visualization&quot;&gt;ggplot2 barplots : Quick start guide - R software and data visualization - Easy Guides - Wiki - STHDA&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;[Make Beautiful Tables with the Formattable Package&lt;/td&gt;
+          &lt;td&gt;Displayr](https://www.displayr.com/formattable/)&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Jake Stoetzner</name><email>Jake.stoetzner@gmail.com</email></author><category term="r" /><category term="backtesting" /><category term="Bespoke" /><summary type="html">Backtesting possible short positions by examining stocks that miss EPS and revenue estimates and lower forward guidance reveals that the behavior of these Triple Miss stocks offers a profitable opportunity over the short-term. Goal Get the Data Extract the Stock Symbols and Dates of Each Triple Miss Get Historical Stock Data Filter Out Data Prior to Triple Miss Examine the Aggregate Stock Data Examine the Aggregate Stock Data 1, 5 and 10 Days After Triple Miss Conclusion Notes &amp;amp; Research Goal Bespoke Investment Group offers a stock screen feature that “allows users to run in-depth earnings report screens and easily filter more than 150,000 individual quarterly reports for US stocks since 2001.” They also offer a report showing what they have termed an Earnings Triple Play - that is a stock that “beats consensus analyst EPS estimates, beats revenue estimates, and raises forward guidance.” The term has become so well known that none other than Investopedia have given Bespoke credit for it. These stocks are the best candidates for long-term buy opportunities. But is the opposite also true? Does a stock that misses consensus analyst EPS estimates, misses revenue estimates and lowers forward guidance a terrible long-term buy opportunity and a possible short opportunity? We can refer to these stocks in this category as a Triple Miss. The goal is to quantify whether a Triple Miss makes a good short opportunity starting the day after the announcement. Get the Data Extract the Stock Symbols and Dates of Each Triple Miss Using the aforementioned stock screener, I researched Triple Miss stocks in 2018, and downloaded a .csv file of the data. Turns out there were 132 Triple Miss instances (with 104 different stocks - some companies were listed more than once!) in 2018. On an aggregate basis, this was the return: After reading in the data in R, I extracted the symbols and dates of each Triple Miss. #create a list of symbols that can be read in symbols &amp;lt;- unlist(temp$ticker) ticker &amp;lt;- as.character(unlist(temp$ticker)) #get list of dates of triple miss dates date &amp;lt;- as.Date(unlist(temp$date)) Once this was created, I tried to use the quantmod() package to look-up the historical data. quantmod() is wonderful for looking up individual stocks and analyzing them, but it is a challenge to deal with multiple stocks on varying dates of interest. Get Historical Stock Data Enter the batchgetsymbols() package. As the creator of the package lamented: In the past I have used function GetSymbols from the CRAN package quantmod in order to download end of day trade data for several stocks in the financial market. The problem in using GetSymbols is that it does not aggregate or clean the financial data for several tickers. In the usage of GetSymbols, each stock will have its own xts object with different column names and this makes it harder to store data from several tickers in a single dataframe. Package BatchGetSymbols is my solution to this problem. Based on a list of tickers and a time period, BatchGetSymbols will download price data from yahoo finance and organize it so that you don’t need to worry about cleaning it yourself. The batchgetsymbols() package worked beautifully to download all of the historical data for each stock going back to 2018 and return it in one giant, clean dataframe. #&amp;lt;-----TRIPLE MISS ANALYSIS -----&amp;gt; #Batch download symbols - change type.return to &quot;log&quot; for log l.out &amp;lt;- BatchGetSymbols(tickers = ticker, first.date = start.data, last.date = end.data, type.return = &quot;arit&quot;, freq.data = freq.data) #get a list of tickers that were downloaded all.ticker &amp;lt;- l.out$df.control$ticker Filter Out Data Prior to Triple Miss After getting the dataframe set-up, I used the dplyr() package to filter out data prior to the Triple Miss announcement. This was required because I only wanted to look at the performance of the stock after the date of the Triple Miss. I then created a new data frame to hold this data using the bind_rows() function. #filter out all data before entry date by ticker b &amp;lt;- mapply(function(a,b)(l.out$df.tickers %&amp;gt;% filter(ref.date &amp;gt; a, ticker == b)),date,ticker,SIMPLIFY = F) #create new df without the post entry date data b1 &amp;lt;- bind_rows(b) summary(b1$ret.closing.prices) Examine the Aggregate Stock Data Interestingly, the average cumulative daily return for each stock measured from the date of the Triple Miss to the date of this post has been 4.28% - that means an average annual return of 1.36%. The average daily return is .005%. On an annualized basis, this is a Sharpe Ratio (return/volatility) of 0.59 - clearly a lot of volatility for not a whole lot of return! b2 &amp;lt;- b1 %&amp;gt;% select(ref.date,ticker,ret.closing.prices) %&amp;gt;% group_by(ticker) %&amp;gt;% summarise(Mean_Daily_Return = mean(ret.closing.prices,na.rm = TRUE)*100, Cum_Daily_Return = sum(ret.closing.prices,na.rm = TRUE)*100) %&amp;gt;% arrange(Cum_Daily_Return) &amp;gt; mean(b2$Cum_Daily_Return) [1] 4.281108 &amp;gt; mean(b2$Mean_Daily_Return) [1] 0.00539823 &amp;gt; mean(b2$Mean_Daily_Return)/sd(b2$Mean_Daily_Return)*sqrt(252) [1] 0.5942328 Examine the Aggregate Stock Data 1, 5 and 10 Days After Triple Miss What if we shortened the window for analyzing the returns of all of the Triple Miss Stocks? Do the effects of the Triple Miss “wear off” at a certain point or do they continue? The Triple Miss stocks are very negative - below is a chart with the cumulative return from 1 to 10 days after each Triple Miss. On an individual basis, you can see the downward trend each stock exhibits post-Triple Miss. On an aggregate basis after 10 days: 71 out of the 113 stocks (approximately 63%) had a negative cumulative daily return 10 days after the Triple Miss, each stock had an average daily return of -0.58% and cumulatively lost 4.55% in value by day 10, and had an average Sharpe Ratio (average daily return divided by average standard deviation of the daily returns) of -5.57. In short, the returns were less than spectacular. Over 5 days, returns were even worse: 66 out of the 113 stocks (approximately 58%) had a negative cumulative daily return 5 days after the Triple Miss, each stock had an average daily return of -1.46% and cumulatively lost 5.26% in value by day 5, and had an average Sharpe Ratio of -6.50. And the day after a Triple miss? 95 of 113 (84%) were down day-over-day by an average of 6.86% with a Sharpe Ratio of -10.62. Conclusion It seems clear that Triple Miss stocks would be a good place to start when looking for stocks to short over the near-term. Obviously, this is not a recommendation to buy or sell; you would need to do your own research and make your own decision to determine that. But the Triple Miss stocks might be a good filter to start looking for opportunities. Notes &amp;amp; Research Analyzing Stocks Using R An Introduction to Stock Market Data Analysis with R (Part 1) [getSymbols Extra R-bloggers](https://www.r-bloggers.com/getsymbols-extra/) quantmod: examples :: data Different Ways to Obtain and Manipulate Stock Data In R Using quantmod – Programming For Finance Data Science: Theories, Models, Algorithms, and Analytics R Quantitative Analysis Package Integrations in tidyquant Tidy Portfoliomanagement in R Manipulating Time Series Data in R with xts &amp;amp; zoo chapter4.key Processing and Analyzing Financial Data with R Working with Time Series Data in R quantmod-vignette.pdf r - Using lapply on quantmod, get straight to xts object? - Stack Overflow Using BatchGetSymbols to download financial data for several tickers [Easy multi-panel plots in R using facet_wrap() and facet_grid() from ggplot2 Technical Tidbits From Spatial Analysis &amp;amp; Data Science](http://zevross.com/blog/2019/04/02/easy-multi-panel-plots-in-r-using-facet_wrap-and-facet_grid-from-ggplot2/) dplyr: How to Add Cumulative Sums by Groups Into a Data Frame? - Articles - STHDA [Make Beautiful Tables with the Formattable Package R-bloggers](https://www.r-bloggers.com/make-beautiful-tables-with-the-formattable-package/) ggplot2 barplots : Quick start guide - R software and data visualization - Easy Guides - Wiki - STHDA [Make Beautiful Tables with the Formattable Package Displayr](https://www.displayr.com/formattable/)</summary></entry><entry><title type="html">Recreating a 1976 Least Squares Betting System in R</title><link href="http://localhost:4000/r/sports-betting/2019/10/24/Recreating-a-1976-Least-Squares-Betting-System-in-R/" rel="alternate" type="text/html" title="Recreating a 1976 Least Squares Betting System in R" /><published>2019-10-24T00:00:00-05:00</published><updated>2019-10-24T00:00:00-05:00</updated><id>http://localhost:4000/r/sports-betting/2019/10/24/Recreating-a-1976-Least-Squares-Betting-System-in-R</id><content type="html" xml:base="http://localhost:4000/r/sports-betting/2019/10/24/Recreating-a-1976-Least-Squares-Betting-System-in-R/">&lt;p&gt;Creating a sports betting system that beats the bookmaker is, to say the least, a challenge.  In this post, I create a betting system using least squares regression that has an accuracy rate of up to 70% using out-of-sample data.
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;table-contents&quot;&gt;Table Contents&lt;/h2&gt;
+&lt;!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 --&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#table-contents&quot;&gt;Table Contents&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#research&quot;&gt;Research&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#implied-probability-and-betting-odds-decimal-fraction-and-american-style&quot;&gt;Implied Probability and Betting Odds - Decimal, Fraction and American Style&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#implied-probability-and-system-value&quot;&gt;Implied Probability and System Value&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#converting-an-american-money-line-to-implied-probability&quot;&gt;Converting an American Money Line to Implied Probability&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#bookmakers-margin&quot;&gt;Bookmaker’s Margin&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#least-squares-regression&quot;&gt;Least Squares Regression&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#basics-of-least-squares-regression&quot;&gt;Basics of Least Squares Regression&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#mathematics-of-least-squares-regression&quot;&gt;Mathematics of Least Squares Regression&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#r-squared&quot;&gt;R Squared&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#using-r-to-model-money-line-minimums&quot;&gt;Using R to Model Money Line Minimums&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#modeling-nfl-money-line-implied-probability-minimums&quot;&gt;Modeling NFL Money Line Implied Probability Minimums&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#locating-and-preparing-the-money-line-data&quot;&gt;Locating and Preparing the Money Line Data&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#calculating-average-implied-probability-and-expected-value-for-nfl-favorites-and-underdogs&quot;&gt;Calculating Average Implied Probability and Expected Value for NFL Favorites and Underdogs&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#solving-for-the-required-system-winning-percentage-based-on-the-implied-money-line-odds&quot;&gt;Solving for the Required System Winning Percentage based on the Implied Money Line Odds&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#testing&quot;&gt;Testing&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#an-overview-of-the-1976-system&quot;&gt;An Overview of the 1976 System&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#the-compres-and-comperank-packages&quot;&gt;The compres and comperank Packages&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#data-preparation-in-sample-and-out-of-sample-division&quot;&gt;Data Preparation: In-Sample and Out-Of Sample Division&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#simple-linear-regression&quot;&gt;Simple Linear Regression&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#multiple-regression&quot;&gt;Multiple Regression&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#sources-and-notes&quot;&gt;Sources and Notes&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#overview-of-predictive-systems-for-sports&quot;&gt;Overview of Predictive Systems for Sports&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#odds-implied-probability-and-margin&quot;&gt;Odds, Implied Probability and Margin&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#least-squares-and-regression&quot;&gt;Least Squares and Regression&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#the-comperes-comprank-and-playerratings-packages&quot;&gt;The comperes, comprank and PlayerRatings Packages&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;research&quot;&gt;Research&lt;/h2&gt;
+
+&lt;h3 id=&quot;implied-probability-and-betting-odds---decimal-fraction-and-american-style&quot;&gt;Implied Probability and Betting Odds - Decimal, Fraction and American Style&lt;/h3&gt;
+
+&lt;h4 id=&quot;implied-probability-and-system-value&quot;&gt;Implied Probability and System Value&lt;/h4&gt;
+&lt;p&gt;“Implied probability is a conversion of betting odds into a percentage. It takes into account the bookmaker margin to express the expected probability of an outcome occurring….if the implied probability is less than your assessment, then it represents betting value.” See &lt;a href=&quot;https://help.smarkets.com/hc/en-gb/articles/214058369-How-to-calculate-implied-probability-in-betting&quot;&gt;How to calculate implied probability in betting.&lt;/a&gt;  Most betting systems seek to find &lt;em&gt;value&lt;/em&gt; by identifying a difference between the implied probability of the bookmaker’s odds and the system’s odds.  For instance, a bookmaker may be offering even (50%) odds that Team A will win versus Team B, but your system indicates Team A is a 60% favorite to win.  Value then is found by betting Team A.&lt;/p&gt;
+
+&lt;h4 id=&quot;converting-an-american-money-line-to-implied-probability&quot;&gt;Converting an American Money Line to Implied Probability&lt;/h4&gt;
+&lt;p&gt;A Money Line bet is a bet that a specific team will win. American based money lines can be positive or negative. Negative odds mean that the team or player is favored.  Positive odds mean that the team or player is the underdog.  American Money Lines are generally in multiples of $100 and indicate the amount of money you would need to risk to win the indicated amount.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;American Odds&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Example&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Negative Money Line&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Favorite&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;-600 = bet $600 to win $100&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Positive Money Line&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Underdog&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;+450 = bet $100 to win $450&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;A negative money line means that team is favored; a line of -600 for Team A means that the bookmaker believes Team A will win 6 out of 7 times (expressed as a fraction as 1/6 or as a decimal as 1.167).&lt;/p&gt;
+
+&lt;p&gt;For negative American Odds, implied probability can be calculated as:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Negative American odds / (Negative American odds + 100) * 100 = Implied Probability
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Note that you use the absolute value of the negative odds when solving for Implied Probability.&lt;/p&gt;
+
+&lt;p&gt;Conversely, a positive money line means the team is the underdog. A line of +450 (9/2 as a fraction and 5.5 as a decimal) means that Team B would only win 2 out of every 11 matches. Implied probability for positive money lines are calculated by:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;100 / (positive American odds + 100) * 100 = implied probability
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For our example of Team A at -600 and Team B at +450, the implied probability for each team winning is:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Team A = 600/(600+100)*100 = 85.7%
+
+Team B = 450/(450+100)*100 = 18.1%
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;bookmakers-margin&quot;&gt;Bookmaker’s Margin&lt;/h4&gt;
+&lt;p&gt;Note the two implied probabilities for team A and team B do not add up to 100%. This is common as bookmakers add in &lt;em&gt;margin&lt;/em&gt; for each bet. This margin (also called “vig”) is the profit the bookmaker can expect to make assuming that there is equal action on each side of the bet. The margin can be calculated by:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Margin = (Implied Probability Team A + Implied Probability Team B)-1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So the margin for our example for Team A and Team B is:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Margin = (85.7% + 18.1%)-1 = 3.81%
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Margin can also be calculated from decimal odds by:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(1/Decimal Odds option A) * 100 + (1/Decimal Odds option B) * 100 = Margin
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;least-squares-regression&quot;&gt;Least Squares Regression&lt;/h3&gt;
+
+&lt;h4 id=&quot;basics-of-least-squares-regression&quot;&gt;Basics of Least Squares Regression&lt;/h4&gt;
+&lt;p&gt;Imagine that you are invited to play a round of golf with Tiger Woods. Tiger is, to say the least, a golfer that is far better than average. On the other hand, you are &lt;em&gt;far&lt;/em&gt; below average at best and play once or twice a year. On the agreed date, it’s you and Tiger on the first tee. Tiger steps up and hammers one 350 yards down the middle. You tee up your ball, calm your nerves and whack one out there 225 yards as straight as an arrow! You repeat this feat on the 2nd and 3rd holes. Tiger even comments on how well you are playing. On the 4th hole, your confidence is high as you step up to the tee box, driver in hand. If you had to guess, where do you think your drive will end up?&lt;/p&gt;
+
+&lt;p&gt;If you’re like most golfers, that next shot will likely be a shank into the rough!  You outpaced your ability on the first three holes. It was only a matter of time before you got back to how you really play golf - terribly! The shank off the tee is your golfing ability reverting to your average.&lt;/p&gt;
+
+&lt;p&gt;In statistical terms, a linear regression is based on a reversion to the mean.  Just like a bad golfer shanking it off the tee after a few good shots, regression works on the theory that most things in life will return to normal.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;When you hear the word regression, you probably think of how extreme performance during an earlier period most likely gets closer to average during a later period. It’s difficult to sustain an outlier performance. &lt;a href=&quot;https://thepowerrank.com/2018/08/14/how-to-make-accurate-football-predictions-with-linear-regression/&quot;&gt;ThePowerRank.com.&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The goal of any forecasting or predictive system is as follows:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;How does a quantity in an earlier period predict the same quantity during a later period? Some quantities persist from the early to later period, which makes a prediction possible. For other quantities, measurements during the earlier period have no relationship to the later period. You might as well guess the mean, which corresponds to our intuitive idea of regression. &lt;a href=&quot;https://thepowerrank.com/2018/08/14/how-to-make-accurate-football-predictions-with-linear-regression/&quot;&gt;ThePowerRank.com.&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;mathematics-of-least-squares-regression&quot;&gt;Mathematics of Least Squares Regression&lt;/h4&gt;
+&lt;p&gt;Least squares regression seeks to minimize the error between a line of best fit and the measured data points on an x- and y-coordinate graph. Dependent variables are illustrated on the vertical y-axis, while independent variables are illustrated on the horizontal x-axis.  In linear regression, a line of best fit is generated by using the equation of a line:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;y = mx + b
+
+Where:
+
+- m = slope of the line
+- b = y-intercept
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://www.mathsisfun.com/data/images/least-squares2.svg&quot; alt=&quot;Example Line of Best Fit from MathIsFun.com&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you square the errors and add them all together, the line with the “minimum” or least total is the line of best fit. Hence, the “least squares error.”&lt;/p&gt;
+
+&lt;h4 id=&quot;r-squared&quot;&gt;R Squared&lt;/h4&gt;
+&lt;p&gt;Our hypothesis is that future period data can be predicted based on past period data. Later data then is &lt;em&gt;dependent&lt;/em&gt; on our past, &lt;em&gt;independent&lt;/em&gt; variable. The past data could be anything - margin of victory, relative strength, turnovers etc. We can then measure how well that independent data predicts future period data.&lt;/p&gt;
+
+&lt;p&gt;The error for each data point is the distance from the line of best fit. This error is then squared; for our purposes it doesn’t matter if the error is above or below the line. The minimum mean squared error can then be represented by the red boxes below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://thepowerrank.com/wp-content/uploads/2018/08/regress_learn_4.png&quot; alt=&quot;Visual Representation of Minimum Minimum Squared Error from ThePowerRank.com&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;How well does the red boxes explain the difference between the dependent variable and the independent variable?  The difference between the expected value and the mean squared error is called &lt;a href=&quot;https://en.wikipedia.org/wiki/Variance&quot;&gt;&lt;em&gt;variance&lt;/em&gt;.&lt;/a&gt;  In simpler terms, variance measures how far the predicted values are away from the mean.  The proportion of the variance that is explained by the model (the distance from the actual data point to the linear best fit line) is the measure of how well the model replicates actual data.  This measure is called R-squared.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;R-squared is a statistic that will give some information about the goodness of fit of a model. In regression, the R-squared coefficient of determination is a statistical measure of how well the regression predictions approximate the real data points. An R-squared of 1 indicates that the regression predictions perfectly fit the data. &lt;a href=&quot;https://en.wikipedia.org/wiki/Coefficient_of_determination&quot;&gt;Coefficient of Determination&lt;/a&gt; on Wikipedia.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Referring to the red boxes mentioned before on ThePowerRank.com, the model represented by the best fit and the red boxes (recall they are a visual representation of the minimum mean squared error) account for 70% of the variance.  In other words, the model &lt;em&gt;explains&lt;/em&gt; 70% of the difference between the model and the actual data points.  Note the original variance is illustrated by the blue boxes below and that the volume of the red boxes are 70% less than the blue boxes:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://thepowerrank.com/wp-content/uploads/2018/08/regress_learn_5.png&quot; alt=&quot;Visual Representation of the Variance and Model&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That still leaves 30% of the variance that the model does not explain.  The higher the R-squared value, the better the model illustrates and predicts real world data.&lt;/p&gt;
+
+&lt;h3 id=&quot;using-r-to-model-money-line-minimums&quot;&gt;Using R to Model Money Line Minimums&lt;/h3&gt;
+&lt;p&gt;Remember that Money Line winners are handicapped. A heavily favored team may have a Money line of -400 which means you are &lt;em&gt;laying&lt;/em&gt; 4 to 1 odds or betting $400 to win $100 if the team wins. Conversely, if a big underdog is listed at -600, you are getting 6 to 1 odds or betting $100 to win $600.&lt;/p&gt;
+
+&lt;p&gt;Many touts have systems that claim to predict the winner of a game with 70% accuracy. The system may be incredible if it hits on bets that have an implied probability of less than 70%.  It’s a terrible system if you only win bets that have an implied probability greater than 70%. The real question we need to answer is whether the system will still be profitable based on different money line odds? And what are the minimum or maximum money line odds to ensure a profitable system? While it is important to have a system that has a high winning percentage, it is equally important to know the Money Line odds required to ensure you have a profitable system. &lt;a href=&quot;https://wizardofodds.com/games/sports-betting/&quot;&gt;Sports Betting Basics.&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;modeling-nfl-money-line-implied-probability-minimums&quot;&gt;Modeling NFL Money Line Implied Probability Minimums&lt;/h4&gt;
+&lt;p&gt;Is a system with a 40% winning percentage high enough to be profitable &lt;em&gt;if&lt;/em&gt; the Money Line odds on all of the games it predicts average out to +125?  Or is a system that picks only big favorites profitable if the average money line odds are -200?&lt;/p&gt;
+
+&lt;p&gt;To answer these questions, I will initially look at actual  Money Line data for the National Football League (“NFL”) going back to the 2007-2008 season.  Then, I will model the implied probabilities for favorites and underdogs.&lt;/p&gt;
+
+&lt;h4 id=&quot;locating-and-preparing-the-money-line-data&quot;&gt;Locating and Preparing the Money Line Data&lt;/h4&gt;
+&lt;p&gt;Part of the challenge of any data science project is &lt;em&gt;getting the data&lt;/em&gt;.  Luckily, with enough poking around the internet, you can find just about anything.  I downloaded Excel files with historical odds data from the &lt;a href=&quot;https://www.sportsbookreviewsonline.com/scoresoddsarchives/nfl/nfloddsarchives.htm&quot;&gt;NFL Scores and Odds Archive&lt;/a&gt;.  These were then read into R and analyzed.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;temp = list.files(pattern = &quot;^nfl&quot;)
+
+NFL.Odds.Data &amp;lt;-
+    lapply(temp,function(x)(
+        read_excel(x,sheet = &quot;Sheet1&quot;)
+    ))
+
+NFL.Odds.Data &amp;lt;-
+  rbindlist(NFL.Odds.Data)
+
+NFL.Odds.Data$ML &amp;lt;- as.numeric(NFL.Odds.Data$ML)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This left me with data for approximately 9,100 teams that had money line info.  I then divided the money lines between positive (underdog team) and negative (favored team).  I also limited the upper and lower limits to only get Money Line information between -500 and 500.&lt;/p&gt;
+
+&lt;h4 id=&quot;calculating-average-implied-probability-and-expected-value-for-nfl-favorites-and-underdogs&quot;&gt;Calculating Average Implied Probability and Expected Value for NFL Favorites and Underdogs&lt;/h4&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NFL.Odds.Data.Positive &amp;lt;-
+  NFL.Odds.Data %&amp;gt;% select(ML) %&amp;gt;%
+    group_by(ML) %&amp;gt;%
+    filter(!is.na(ML),ML &amp;gt;= 10,ML &amp;lt;= 500)
+
+NFL.Odds.Data.Negative &amp;lt;-
+  NFL.Odds.Data %&amp;gt;% select(ML) %&amp;gt;%
+    group_by(ML) %&amp;gt;%
+    filter(!is.na(ML),ML &amp;gt;= -500,ML &amp;lt;= -10)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Both data sets were charted on a histogram and summarized.  A probability density function was overlaid on the histogram.  The vertical dashed red line on the graph represents the average.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/CH.NFL.Odds.Data.Positive.png&quot; alt=&quot;Positive Money Line - Favorites&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/CH.NFL.Odds.Data.Negative.png&quot; alt=&quot;Negative Money Line - Underdogs&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;summary(NFL.Odds.Data$ML)
+      Min.    1st Qu.     Median       Mean    3rd Qu.
+-105000.00    -200.00    -110.00     -47.39     170.00
+      Max.       NA's
+  35000.00        770
+&amp;gt; summary(NFL.Odds.Data.Positive$ML)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+  100.0   130.0   166.0   196.3   240.0   500.0
+&amp;gt; summary(NFL.Odds.Data.Negative$ML)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+   -500    -260    -180    -212    -141    -101
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Unsurprisingly, favorites are more expensive when compared with underdogs. On average, you would have to bet $212 on an NFL favorite to win $100, while a $100 bet on an average underdog pays out $196.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Convert American to Decimal Odds&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Positive Odds (+) = (MoneyLine/100) + 1
+Negative Odds (-) = (100/MoneyLine) + 1
+
+Average Underdog MoneyLine Decimal Odds (+) = 196.3/100 + 1 = 2.963
+Average Favorite MoneyLine Decimal Odds (-) = 100/212.0 + 1 = 1.471
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Convert Decimal Odds to Implied Probability&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Implied Probability = (1/ decimal odds) * 100
+
+Average Underdog MoneyLine Implied Probability (+) = (1/2.963) * 100 = 33.74%
+Average Favorite MoneyLine Implied Probability (-) = (1/1.471) * 100 = 67.98%
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Quick summary for what the odds imply for both the favorite and the underdog:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The odds imply a favorite wins 67.98% of the time; when this happens, you win $100 and when you lose, you lose $212.&lt;/li&gt;
+  &lt;li&gt;An underdog wins 33.7% of the time, and you win $196 when successful and lose $100 when you are not.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The implied probabilities can then be used to calculate the &lt;strong&gt;expected value&lt;/strong&gt; (“EV”) for both bets.  “Expected value is a predicted value of a variable, calculated as the sum of all possible values each multiplied by the probability of its occurrence.”  See &lt;a href=&quot;https://help.smarkets.com/hc/en-gb/articles/214554985-How-to-calculate-expected-value-in-betting&quot;&gt;How to calculate expected value in betting&lt;/a&gt;.  The &lt;a href=&quot;https://towardsdatascience.com/what-is-expected-value-4815bdbd84de&quot;&gt;Expected Value (EV)&lt;/a&gt; can be calculated as follows in R:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Pos.Expected.Value &amp;lt;-
+  (NFL.Odds.Data.Positive.Implied.Prob*mean(NFL.Odds.Data.Positive$ML)) -
+  ((1 - NFL.Odds.Data.Positive.Implied.Prob)* 100)
+
+Neg.Expected.Value &amp;lt;-
+  NFL.Odds.Data.Negative.Implied.Prob*100 -
+  (1 -NFL.Odds.Data.Negative.Implied.Prob)*abs(mean(NFL.Odds.Data.Negative$ML))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This results in an EV of close to $0 for both underdogs (positive (+) money line) and favorites (negative (-) money line).  This makes sense because the bookmaker’s goal is to have balanced action on both sides - equal money on favorites and underdogs.  Theoretically then, based only on the implied probabilities, betting on just the favorites or just the underdogs should not give you a profitable system.&lt;/p&gt;
+
+&lt;p&gt;But do the actual results support the expected results?  Since the odds imply a certain winning percentage, does the historical data match?  Turns out, favorites win 13% less than the odds imply and underdogs win about 9% more than the odds imply.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Implied Probability&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Actual Results&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Diff&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Underdog&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;33.74%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;36.82%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;+3.08%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Favorites&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;67.98%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;59.89%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;-8.09%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;The actual results support the conclusion that oddsmakers likely bias their lines against favorites because the betting public bet favorites a lot more than underdogs.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;In 2004, University of Chicago economist Steven Levitt identified the fact that point spreads aren’t set like typical market prices, by equating relative levels of supply and demand. Instead, bookmakers set the margin to make the chance of the favorite covering the spread to be roughly 50 percent. Levitt speculated that bookmakers substantially improve their profits by biasing the spread very slightly against the favorite. This approach is profitable for bookmakers in part because, despite facing virtually even odds, people are much more likely to bet on the favorite than the underdog. See &lt;a href=&quot;https://fivethirtyeight.com/features/why-people-bet-on-the-favorite-even-when-the-spread-favors-the-underdog/&quot;&gt;Why People Bet on the Favorite Even When the Spread Favors the Underdog&lt;/a&gt; on FiveThirtyEight.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The actual results show that betting $100 on all the underdogs would be a profitable approach:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/CH.PosML.Dogs.PL.png&quot; alt=&quot;Cumulative Profit and Loss for NFL Underdogs&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The actual results for favorites is not so great - betting $100 game results in a substantial loss!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/CH.NegML.Fav.PL.png&quot; alt=&quot;Cumulative Profit and Loss for NFL Underdogs&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;solving-for-the-required-system-winning-percentage-based-on-the-implied-money-line-odds&quot;&gt;Solving for the Required System Winning Percentage based on the Implied Money Line Odds&lt;/h4&gt;
+&lt;p&gt;Implied probabilities can then be modeled for all money lines.  Think of the implied probability as the minimum winning percentage for your betting system to be profitable.  For instance, if your system only bet on favorites at -200 to win, then you would be required to win more than 66.67% to be profitable.&lt;/p&gt;
+
+&lt;p&gt;The charts below show the minimum system probability percentage that you would need to be profitable.  Anything below the black line highlighted in red is non-profitable.  Anything above the line highlighted in green is profitable.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/CH.PosML.Dogs.Min.png&quot; alt=&quot;Implied Odds based on Positive Money Line&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/CH.NegML.Fav.Min.png&quot; alt=&quot;Implied Odds based on Negative Money Line&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;testing&quot;&gt;Testing&lt;/h2&gt;
+
+&lt;h3 id=&quot;an-overview-of-the-1976-system&quot;&gt;An Overview of the 1976 System&lt;/h3&gt;
+&lt;p&gt;The &lt;a href=&quot;https://www.researchgate.net/profile/Raymond_Stefani/publication/291588643_Football_and_basketball_predictions_using_least_squares/links/582648c808aecfd7b8be88a1/Football-and-basketball-predictions-using-least-squares.pdf?origin=publication_detail&quot;&gt;rating described in the 1976 paper&lt;/a&gt; (the “1976 System”) referenced in the title of this post relates previous outcomes to team ratings.  Ratings seek to analyze the results of the competition and provide an objective measure of a team’s capabilities.  &lt;a href=&quot;https://en.wikipedia.org/wiki/Sports_rating_system&quot;&gt;Sports Ratings System&lt;/a&gt; on Wikipedia.  In brief, the 1976 System’s team rating is defined as the average opponent rating plus the team’s average win margin.  More specifically, the ratings are found as the team’s average win margin plus the 1/(n(i)+1) times the sum of each opponents average win margin.  I will attempt to recreate this system using different packages within R.&lt;/p&gt;
+
+&lt;p&gt;Before we create our system, let’s chart the margin of victory distribution for our historical NFL data (note: margin of victory can be positive or negative - the winner is positive and the loser is negative).  It look’s roughly normally distributed.  The black curve in the chart below is a plot of the normal distribution, the bars are the actual margin of victory and the red is the average (which is zero).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/CH.Margin.Victory.png&quot; alt=&quot;Distribution of NFL Margin of Victory&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The main assumption that forms the basis of the least square rating system is that the difference in scores between the winning team and the losing team is directly proportional to the difference in the ratings of the two teams. Therefore, the least squares rating system attempts to express the margin of victory as a linear function of the strengths of the playing teams. &lt;a href=&quot;https://homepages.cwi.nl/~schaffne/projects/reports/JoostMarysiaSportRatings14.pdf&quot;&gt;Sports Ratings.&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;In other words, margin of victory in &lt;em&gt;past&lt;/em&gt; periods should predict margin of victory (and therefore a win or a loss) in &lt;em&gt;future&lt;/em&gt; periods.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-compres-and-comperank-packages&quot;&gt;The compres and comperank Packages&lt;/h3&gt;
+&lt;p&gt;To help organize and sort the game data, I will use two R packages:  (1) &lt;a href=&quot;https://cran.r-project.org/package=comperes&quot;&gt;comperes&lt;/a&gt; which is an R tool to store and manage competition results, and (2) the companion package to compres, &lt;a href=&quot;https://cran.r-project.org/package=comperank&quot;&gt;comperank&lt;/a&gt; which ranks and rates the data provided.&lt;/p&gt;
+
+&lt;h3 id=&quot;data-preparation-in-sample-and-out-of-sample-division&quot;&gt;Data Preparation: In-Sample and Out-Of Sample Division&lt;/h3&gt;
+&lt;p&gt;First, divide the data into an in-sample and out-of-sample portions with an 80%/20% ratio of in-sample to out-of-sample. Next, use the compres package to create a tibble of head-to-head matchups with the mean score difference, cumulative score difference and number of wins columns.  Then, remove all of the head-to-head matchups between a team (and itself).&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;q &amp;lt;- NFL.Odds.Data %&amp;gt;% select(Rot,Team,Final)
+names(q) &amp;lt;- (c(&quot;game&quot;,&quot;player&quot;,&quot;score&quot;))
+q1 &amp;lt;- rep(1:(length(q$game)/2),each = 2)
+q$game &amp;lt;- q1
+q &amp;lt;- q %&amp;gt;% filter(!is.na(score))
+q.in.sample &amp;lt;- q %&amp;gt;% subset(game &amp;lt;= length(q$game)/2*.8)
+q.out.sample &amp;lt;- q %&amp;gt;% subset(game &amp;gt; length(q$game)/2*.2)
+q3 &amp;lt;- q.in.sample %&amp;gt;% h2h_long(!!! h2h_funs)
+q3 &amp;lt;- q3 %&amp;gt;% filter(!is.na(num_wins),!is.na(mean_score_diff),player1 != player2)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;simple-linear-regression&quot;&gt;Simple Linear Regression&lt;/h3&gt;
+&lt;p&gt;The correlation matrix for the data is as follows:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;               mean_score_diff mean_score_diff_pos mean_score sum_score_diff sum_score_diff_pos sum_score num_wins num_wins2   num
+mean_score_diff                1.00                0.84       0.74           0.66               0.53      0.13     0.26      0.26  0.00
+mean_score_diff_pos            0.84                1.00       0.64           0.55               0.56     -0.01     0.11      0.11 -0.12
+mean_score                     0.74                0.64       1.00           0.49               0.38      0.13     0.16      0.16 -0.04
+sum_score_diff                 0.66                0.55       0.49           1.00               0.79      0.19     0.40      0.40  0.00
+sum_score_diff_pos             0.53                0.56       0.38           0.79               1.00      0.52     0.65      0.65  0.38
+sum_score                      0.13               -0.01       0.13           0.19               0.52      1.00     0.94      0.94  0.97
+num_wins                       0.26                0.11       0.16           0.40               0.65      0.94     1.00      1.00  0.89
+num_wins2                      0.26                0.11       0.16           0.40               0.65      0.94     1.00      1.00  0.89
+num                            0.00               -0.12      -0.04           0.00               0.38      0.97     0.89      0.89  1.00
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The average score difference for team 1 vs team 2 (referred to as “player 1” and “player 2” in the compres package) and the mean score of team 1 vs team 2 is positively correlated by 0.74.  For simple linear regression, the format for the lm() function is “YVAR ~ XVAR” where YVAR is the dependent, or predicted, variable and XVAR is the independent, or predictor, variable.  &lt;a href=&quot;https://www.r-bloggers.com/r-tutorial-series-simple-linear-regression/&quot;&gt;R Tutorial Series: Simple Linear Regression&lt;/a&gt;.  The hypothesis is that the average points scored by a given team in the past can predict the margin of victory in future matchups.  Our dependent or predicted y-variable then is “mean_score_diff” and our x-variable (the predictor variable) is “mean_score”.&lt;/p&gt;
+
+&lt;p&gt;A quick scatter plot of the in-sample data for “mean_score_diff” vs the “mean_score” shows a linear relationship between the two.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/CH.q5.png&quot; alt=&quot;Plot of Number of Wins vs Positive Score Difference&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A summary of the linear regression:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Call:
+lm(formula = q3$mean_score_diff ~ q3$mean_score)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-33.726  -3.755   0.236   3.734  20.483
+
+Coefficients:
+               Estimate Std. Error t value Pr(&amp;gt;|t|)
+(Intercept)   -24.54641    0.69118  -35.51   &amp;lt;2e-16 ***
+q3$mean_score   1.08181    0.02931   36.91   &amp;lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 6.397 on 1156 degrees of freedom
+Multiple R-squared:  0.5409,	Adjusted R-squared:  0.5405
+F-statistic:  1362 on 1 and 1156 DF,  p-value: &amp;lt; 2.2e-16
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The $R^2$ value represents the proportion of variability in the response variable that is explained by the explanatory variable. For this model, 54% of the variability in score differential is explained by the historical average score of team 1 vs team 2.&lt;/p&gt;
+
+&lt;p&gt;Based on the regression, the difference in team 1 score vs team 2 score is equal to:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mean_score_diff = -24.56 + 1.08181 * mean_score
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Using the predict() function, the mean squared error (“MSE”) for the in-sample data was 6.39 compared with an MSE of 7.53 for the out-of-sample data.&lt;/p&gt;
+
+&lt;p&gt;But recall - we are not concerned with &lt;em&gt;win or loss margin&lt;/em&gt; even though the model we just created attempts to predict it. Rather, we are looking for the predicted &lt;em&gt;winner&lt;/em&gt; of the game so that we can bet the Money Line.  How often does the model predict the positive/negative margin of victory then? For the in-sample data, the model predicted the correct positive/negative margin of victory correctly 78.50% of the time.  The out-of-sample data did not do as well - the model only predicted it 70.80% of the time!&lt;/p&gt;
+
+&lt;p&gt;But we are not concerned with the accuracy of the margin of victory OR how often it was predicted correctly.  When you drill down to wins and losses, the model predicted the Money Line winner 61.89% in-sample and 61.29% out-of-sample.  According to the original paper, they hit on winners in the NFL of 67.7%.  Based on the large difference between the two, our model needs a little work!&lt;/p&gt;
+
+&lt;h3 id=&quot;multiple-regression&quot;&gt;Multiple Regression&lt;/h3&gt;
+&lt;p&gt;One option to improve the model is to use multiple linear regression on the data.  In essence, we are adding more data to help project the outcome.  Our multiple linear regression model is:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;fit &amp;lt;- lm(q3$mean_score_diff~q3$mean_score_diff_pos+q3$mean_score+q3$sum_score_diff+q3$sum_score_diff_pos+q3$sum_score+q3$num_wins)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Does the extra data lead to better accuracy when predicting postive or negative margin of victory?  The $R^2$ value increased to 0.85, and the model predicted whether the whether the margin of victory would be positive or negative approximately 91% of the time for in-sample data, and 85.49% for the out-of-sample data.&lt;/p&gt;
+
+&lt;p&gt;The multiple regression also increased the accuracy for predicting Money Line winners (using the positive or negative approach).  In-sample accuracy increased to 65.81% and (curiously) out-of-sample data accuracy improved to 70.33%.&lt;/p&gt;
+
+&lt;h2 id=&quot;sources-and-notes&quot;&gt;Sources and Notes&lt;/h2&gt;
+&lt;h3 id=&quot;overview-of-predictive-systems-for-sports&quot;&gt;Overview of Predictive Systems for Sports&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.investopedia.com/terms/l/least-squares-method.asp&quot;&gt;Least Squares Method Definition on Investopedia&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.researchgate.net/profile/Raymond_Stefani/publication/291588643_Football_and_basketball_predictions_using_least_squares/links/582648c808aecfd7b8be88a1/Football-and-basketball-predictions-using-least-squares.pdf?origin=publication_detail&quot;&gt;Football and Basketball Predictions Using Least Squares&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://homepages.cae.wisc.edu/~dwilson/rsfc/rate/papers/bcs.pdf&quot;&gt;LEAST SQUARES MODEL FOR PREDICTING COLLEGE FOOTBALL SCORES&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://pdfs.semanticscholar.org/fe4f/123780e0eaf8418243e14d791d19c815ee50.pdf&quot;&gt;COLLEGE FOOTBALL: A MODIFIED LEAST SQUARES APPROACH TO RATING AND PREDICTION&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.1843magazine.com/features/the-daily/how-i-used-maths-to-beat-the-bookies&quot;&gt;How I Used Maths to Beat the Bookies&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.stats.com/wp-content/uploads/2018/09/2011.pdf&quot;&gt;The Problem with Win Probability&lt;/a&gt; - Paper from the MIT Sloan Sports Analytics Conference.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.masseyratings.com/theory/massey97.pdf&quot;&gt;Statistical Models Applied to the Rating of Sports Teams&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www3.nd.edu/~apilking/Math10170/Information/Lectures%202015/Topic%209%20Massey's%20Method.pdf&quot;&gt;Massey’s Method&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://omfgpwn3d.livejournal.com/5069.html&quot;&gt;Massey’s “Game Outcome Function”&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.thepredictiontracker.com/football.php&quot;&gt;Prediction Tracker Archive - Football&lt;/a&gt; on the Prediction Tracker.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://homepages.cae.wisc.edu/~dwilson/rsfc/rate/biblio.html&quot;&gt;Bibliography on College Football Ranking Systems&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;odds-implied-probability-and-margin&quot;&gt;Odds, Implied Probability and Margin&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://help.smarkets.com/hc/en-gb/articles/214058369-How-to-calculate-implied-probability-in-betting&quot;&gt;How to calculate implied probability in betting&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://help.smarkets.com/hc/en-gb/articles/214180145-How-to-calculate-betting-margins&quot;&gt;How to Calculate Betting Margin&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://help.smarkets.com/hc/en-gb/sections/360003674031-Trading-and-Betting-Basics&quot;&gt;Trading and Betting Basics&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Information on converting Decimal, Fractional and American Odds along with a odds calculator can be found here:  (1)  &lt;a href=&quot;http://www.betsmart.co/odds-conversion-formulas/#americantodecimal&quot;&gt;Odds Conversion Formulas&lt;/a&gt; on BetSmart.co; and (2) &lt;a href=&quot;https://help.smarkets.com/hc/en-gb/articles/214062929-How-to-convert-betting-odds&quot;&gt;How to Convert Betting Odds&lt;/a&gt; on Smarkets.com.&lt;/li&gt;
+  &lt;li&gt;For implied probability calculations, check out &lt;a href=&quot;https://help.smarkets.com/hc/en-gb/articles/214058369-How-to-calculate-implied-probability-in-betting&quot;&gt;How to calculate implied probability in betting&lt;/a&gt;.  You can use the implied probabilities to determine &lt;a href=&quot;https://help.smarkets.com/hc/en-gb/articles/214554985-How-to-calculate-expected-value-in-betting&quot;&gt;How to calculate expected value in betting&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.kaggle.com/c/mens-machine-learning-competition-2018/discussion/52253&quot;&gt;Historical Vegas Odds Discussion&lt;/a&gt; on Kaggle.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.sportsbookreviewsonline.com/scoresoddsarchives/nfl/nfloddsarchives.htm&quot;&gt;NFL Scores and Odds Archive&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;least-squares-and-regression&quot;&gt;Least Squares and Regression&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.mathsisfun.com/data/least-squares-regression.html&quot;&gt;Least Squares Regression&lt;/a&gt; on Math is Fun.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.investopedia.com/terms/l/least-squares-method.asp&quot;&gt;Least Squares Method Definition&lt;/a&gt; on Investopedia.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://r-statistics.co/Linear-Regression.html&quot;&gt;Linear Regression&lt;/a&gt; Overview by r-statistics.co&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.automatingthefuture.com/blog/2017/5/9/making-predictions-with-simple-linear-regression-models&quot;&gt;Making Predictions With Simple Linear Regression Models&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://rafalab.github.io/dsbook/linear-models.html#lse&quot;&gt;Introduction to Data Science Book - 19.3 Least Squared Estimates&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://medium.com/@andrew.chamberlain/the-linear-algebra-view-of-least-squares-regression-f67044b7f39b&quot;&gt;The Linear Algebra View of Least-Squares Regression&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.learnbymarketing.com/tutorials/linear-regression-in-r/&quot;&gt;Linear Regression Example in R using lm() Function&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.r-bloggers.com/ordinary-least-squares-ols-linear-regression-in-r/&quot;&gt;Ordinary Least Squares (OLS) Linear Regression in R&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://people.duke.edu/~rnau/regexbaseball.htm&quot;&gt;A simple regression example: predicting baseball batting averages&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://datascienceplus.com/linear-regression-from-scratch-in-r/&quot;&gt;Linear Regression from Scratch in R&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.rpubs.com/ajbayquen/176851&quot;&gt;Introduction to linear regression&lt;/a&gt; on RPubs.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.r-bloggers.com/r-tutorial-series-simple-linear-regression/&quot;&gt;R Tutorial Series: Simple Linear Regression&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://campus.datacamp.com/courses/machine-learning-toolbox/regression-models-fitting-them-and-evaluating-their-performance?ex=8&quot;&gt;Data Camp Tutorial on Predict() Function&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://csrgxtu.github.io/2015/03/20/Writing-Mathematic-Fomulars-in-Markdown/&quot;&gt;Writing Mathematic Fomulars in Markdown&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.statmethods.net/stats/regression.html&quot;&gt;Multiple (Linear) Regression&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;the-comperes-comprank-and-playerratings-packages&quot;&gt;The comperes, comprank and PlayerRatings Packages&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.r-bloggers.com/harry-potter-and-competition-results-with-comperes/&quot;&gt;Harry Potter and competition results with comperes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://cran.r-project.org/web/packages/comperank/vignettes/methods-overview.html&quot;&gt;comperes Vignette&lt;/a&gt; and &lt;a href=&quot;https://cran.r-project.org/web/packages/comperes/comperes.pdf&quot;&gt;comperes Manual&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://cran.r-project.org/web/packages/PlayerRatings/vignettes/AFLRatings.pdf&quot;&gt;PlayerRatings Vignette&lt;/a&gt; and &lt;a href=&quot;https://cran.r-project.org/web/packages/PlayerRatings/PlayerRatings.pdf&quot;&gt;PlayerRatings Manual&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Jake Stoetzner</name><email>Jake.stoetzner@gmail.com</email></author><category term="r" /><category term="sports-betting" /><summary type="html">Creating a sports betting system that beats the bookmaker is, to say the least, a challenge. In this post, I create a betting system using least squares regression that has an accuracy rate of up to 70% using out-of-sample data.</summary></entry><entry><title type="html">Monte Carlo Benchmarking for Trading Systems in R</title><link href="http://localhost:4000/r/backtesting/2019/10/01/Monte-Carlo-Benchmarking-for-Trading-Systems-in-R/" rel="alternate" type="text/html" title="Monte Carlo Benchmarking for Trading Systems in R" /><published>2019-10-01T00:00:00-05:00</published><updated>2019-10-01T00:00:00-05:00</updated><id>http://localhost:4000/r/backtesting/2019/10/01/Monte-Carlo-Benchmarking-for-Trading-Systems-in-R</id><content type="html" xml:base="http://localhost:4000/r/backtesting/2019/10/01/Monte-Carlo-Benchmarking-for-Trading-Systems-in-R/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Part of the challenge of backtesting is coming up with a repeatable framework to compare trading systems.  In this example, I will use Monte Carlo simulation in R as a way to measure whether or not a particular trading system is better than pure chance.
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;overview&quot;&gt;Overview&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#research&quot;&gt;Research&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#monte-carlo-methods&quot;&gt;Monte-Carlo Methods&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#coin-flip-systems-and-random-returns&quot;&gt;Coin Flip Systems and Random Returns&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#monte-carlo-simulations-of-the-coin-flip-system&quot;&gt;Monte Carlo Simulations of the Coin Flip System&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#a--slightly--more-complicated-trading-system--bollinger-band-strategy&quot;&gt;A (Slightly) More Complicated Trading System: Bollinger Band Strategy&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#monte-carlo-simulation-of-the-bollinger-band-strategy&quot;&gt;Monte Carlo Simulation of the Bollinger Band Strategy&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#conclusions&quot;&gt;Conclusions&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#research-and-notes&quot;&gt;Research and Notes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;research&quot;&gt;Research&lt;/h2&gt;
+
+&lt;h4 id=&quot;monte-carlo-methods&quot;&gt;Monte-Carlo Methods&lt;/h4&gt;
+&lt;p&gt;“Monte Carlo methods (or Monte Carlo experiments) are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results; typically one runs simulations many times over in order to obtain the distribution of an unknown probabilistic entity. The name comes from the resemblance of the technique to the act of playing and recording results in a real gambling casino. “ [Wikipedia.(http://en.wikipedia.org/wiki/Monte_Carlo_methods)&lt;/p&gt;
+
+&lt;p&gt;A trading system is nothing more than a collection of rules to enter a long (+1), short (-1) or neutral position (0) in a financial instrument.  “If the rule that determines the position to take each time a trading opportunity arises is an intelligent rule, the sum of the obtained returns will be larger than the sum that could be expected from a rule that assigns positions randomly.” &lt;a href=&quot;https://www.evidencebasedta.com/montedoc12.15.06.pdf&quot;&gt;See Monte-Carlo Evaluation of Trading Systems&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;At its core, Monte-Carlo simulation is a method that: (1) models a problem, (2) randomly simulates the outcome a large number of times, and (3) applies statistical analysis to the output to evaluate the model’s probabilistic characteristics. You can then compare the Monte-Carlo simulation to the trading system results to determine if they were obtained by luck or through a &lt;em&gt;real&lt;/em&gt; trading edge.&lt;/p&gt;
+
+&lt;p&gt;Whether a trading system has an edge or has attained its returns through randomness can be tested (relatively) easy in R.  In statistical terms, a Monte-Carlo simulation tests the null hypothesis that the pairing of long/short/neutral positions with raw returns is random.  &lt;a href=&quot;https://www.evidencebasedta.com/montedoc12.15.06.pdf&quot;&gt;See Monte-Carlo Evaluation of Trading Systems&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;A &lt;a href=&quot;https://stattrek.com/statistics/dictionary.aspx?definition=null_hypothesis&quot;&gt;Null Hypothesis&lt;/a&gt; is the hypothesis that sample observations result purely from chance.  The &lt;a href=&quot;https://stattrek.com/statistics/dictionary.aspx?definition=null_hypothesis&quot;&gt;Alternative Hypothesis&lt;/a&gt; “is the hypothesis that sample observations are influenced by some non-random cause.””&lt;/p&gt;
+
+&lt;p&gt;In trading terms, we are trying to determine whether the system is intelligently designed to produce superior returns (our &lt;em&gt;Alternative Hypothesis&lt;/em&gt;) as compared with a random benchmark (our &lt;em&gt;Null Hypothesis&lt;/em&gt;).&lt;/p&gt;
+
+&lt;p&gt;“A significance test is performed by assuming the so-called null hypothesis, which asserts that the measured effect occurs due to sampling error alone. If the null hypothesis is rejected, it’s concluded that the measured effect is due to something more than just sampling error (i.e., it’s significant). To determine whether the null hypothesis should be rejected, a significance or confidence level is chosen. For example, a significance level of 0.05 represents a confidence level of 95%. The so-called p-value is the probability of obtaining the measured statistic if the null hypothesis is true. The smaller the p-value the better. If the p-value is less than the significance level (e.g., p &amp;lt; 0.05), then the null hypothesis is rejected, and the test statistic is deemed to be statistically significant.”  See&lt;a href=&quot;http://www.adaptrade.com/Newsletter/NL-GoodOrLucky.htm&quot;&gt; Is That Back-Test Result Good or Just Lucky?&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;coin-flip-systems-and-random-returns&quot;&gt;Coin Flip Systems and Random Returns&lt;/h4&gt;
+&lt;p&gt;A completely random trading system enters and exits the market without regard to the past, current or the future or any outside indicators.&lt;/p&gt;
+
+&lt;p&gt;Assume we create a trading system that enters and exits an ETF at the end of each trading day based on the outcome of a flip of a coin.  We assume a fair coin and that a heads (a “1”) means we are long the market and a tails (a “-1”) means we are short the market.  We repeat this daily - going long or going short each day.  See &lt;a href=&quot;http://mindrighttrading.blogspot.com/2013/02/coin-flips-risk-to-reward-profile-and.html&quot;&gt;My Old Blog For More Information on This.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;We have two input time series for the trading system:  (1) the &lt;strong&gt;Rule Position&lt;/strong&gt; which is the coin flip entry rule be long or short; and (2) the &lt;strong&gt;Market&lt;/strong&gt; or &lt;strong&gt;Raw Return&lt;/strong&gt; which is the daily return of the financial instrument.  See&lt;a href=&quot;http://www.automated-trading-system.com/monte-carlo-permutation/&quot;&gt;Monte Carlo Permutation: Test your Back-Tests&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Our &lt;em&gt;Null Hypothesis&lt;/em&gt; is that half of the flips will be heads and half of the flips will be tails, i.e., we will be long half the time and short half the time.  Stated otherwise, the returns of the Coin Flip System are a randomly correlated to Market or Raw returns.  The &lt;em&gt;Alternative Hypothesis&lt;/em&gt; is that the Coin Flip System is a sample from a profitable population, and that the Rule Position is correlated to market returns.&lt;/p&gt;
+
+&lt;p&gt;Below is the code to simulate coin flips with a 50% probability of coming up with either heads or tails.  See &lt;a href=&quot;http://rstudio-pubs-static.s3.amazonaws.com/8492_b817c712a5f6456fb4c5932e3d957135.html#/1&quot;&gt;Simulating a Coin Flip in R.&lt;/a&gt; Note that we are flipping the coin a number of times equal to the number of trading days for QQQ.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sample.space &amp;lt;- c(-1,1)
+theta &amp;lt;- 0.5  ##this is a fair coin
+N &amp;lt;- length(Close[[1]]) ## match number of flips to total trading days
+
+flips &amp;lt;- sample(sample.space,
+                size = N,
+                replace = TRUE,
+                prob = c(theta, 1 - theta))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next, we apply the “coin flip” outcome (which is our Rule Position) to the daily returns of QQQ (which is our Raw or Market Return) and then plot the cumulative returns during the trading period.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Coin.Flip.System &amp;lt;-
+  all.stock.data[[1]] %&amp;gt;%
+    mutate(
+    daily.return = ifelse(row_number() == 1, 0, close / lag(close, 1) - 1),
+
+    signal.return = daily.return *  flips,
+
+    cum.return = cumprod(1+signal.return) - 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Using our coin-flip trading system, let’s apply it to the daily returns of the Nasdaq-100 based ETF &lt;a href=&quot;https://finance.yahoo.com/quote/QQQ/&quot;&gt;QQQ&lt;/a&gt;.  The chart below shows the cumulative daily returns of the Coin Flip System.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/Coin.Flip.1.png&quot; alt=&quot;Coin Flip System - One Iteration&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is only one iteration/run of our trading system.  What if we want to know &lt;strong&gt;all&lt;/strong&gt; of the possible paths the ETF could take?&lt;/p&gt;
+
+&lt;h4 id=&quot;monte-carlo-simulations-of-the-coin-flip-system&quot;&gt;Monte Carlo Simulations of the Coin Flip System&lt;/h4&gt;
+
+&lt;p&gt;Solve for the standard deviation and average return of the Coin Flip System, and then find the average daily return and the average standard deviation of these daily returns of the system.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MC.Coin.Flip.System &amp;lt;-
+  all.stock.data[[1]] %&amp;gt;%
+    mutate(
+    daily.return = ifelse(row_number() == 1, 0, close / lag(close, 1) - 1),
+
+    signal.return = daily.return *  flips,
+
+    cum.return = cumprod(1+signal.return) - 1,
+
+    sd = runSD(daily.return, n = 252)*sqrt(252),
+
+    sd.2 = runSD(daily.return))
+
+MC.Coin.Flip.System.sd &amp;lt;- mean(MC.Coin.Flip.System$sd.2, na.rm = T)
+
+MC.Coin.Flip.System.avg &amp;lt;- mean(MC.Coin.Flip.System$daily.return, na.rm = T)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next, we create a function that projects a &lt;a href=&quot;https://en.wikipedia.org/wiki/Normal_distribution&quot;&gt;normal distribution&lt;/a&gt; of the daily returns of the Coin Flip System.  We apply those different paths to the closing value of QQQ from the first date we evaluate the ETF (here it is 2016-01-03) to the final closing price.  Much of this code is taken from the post &lt;a href=&quot;https://www.countbayesie.com/blog/2015/3/3/6-amazing-trick-with-monte-carlo-simulations&quot;&gt;Monte Carlo Simulations in R&lt;/a&gt; on the incredible &lt;a href=&quot;https://www.countbayesie.com/&quot;&gt;Count Bayesie Blog.&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MC.Coin.Flip.System.generate.path &amp;lt;- function(){
+
+  MC.Coin.Flip.System.days &amp;lt;- length(Close[[1]])
+
+  MC.Coin.Flip.System.changes &amp;lt;-
+
+  rnorm(length(Close[[1]]),mean=(1+MC.Coin.Flip.System.avg),sd=MC.Coin.Flip.System.sd)
+
+  MC.Coin.Flip.System.sample.path &amp;lt;- cumprod(c(Open[[1]][[1]],MC.Coin.Flip.System.changes))
+
+  MC.Coin.Flip.System.closing.price &amp;lt;- MC.Coin.Flip.System.sample.path[days+1]
+
+  return(MC.Coin.Flip.System.closing.price/Open[[1]][[1]]-1)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now replicate the Coin Flip System path 100,000 times and then solve for the median value of the stock and the upper and lower 95th percentiles.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MC.Coin.Flip.System.runs &amp;lt;- 100000
+MC.Coin.Flip.System.closing &amp;lt;- replicate(runs,MC.Coin.Flip.System.generate.path())
+
+median(MC.Coin.Flip.System.closing)
+quantile(MC.Coin.Flip.System.closing,probs = c(0.05,0.95))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Repeat the Monte Carlo Simulation process for the underlying ETF by solving for the average daily return and standard deviation then simulate 100,000 different paths QQQ &lt;em&gt;could&lt;/em&gt; have taken.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Coin Flip System Return (%)&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;ETF Return (%)&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Median&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;385%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;386%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Mean&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;498%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;499%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;95th Percentile&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1307%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1310%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;5th Percentile&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;66.3%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;66.5%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;The similarities between the Coin Flip System and the market returns for the ETF are virtually the same.  Why?  Mainly because of the similarities between the average and standard deviation of the Coin Flip System and the ETF itself.  Sine the Coin Flip System is either long or short the underlying ETF, it was highly probable that the system and the ETF would have the same statistical characteristics.&lt;/p&gt;
+
+&lt;p&gt;The chart below models &lt;strong&gt;one&lt;/strong&gt; of the simulated returns for our Coin Flip System (in red) and &lt;strong&gt;one&lt;/strong&gt; of the simulated returns for the underlying QQQ ETF (in blue).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/Coin.Flip.2.png&quot; alt=&quot;Monte Carlo Simulation of Coin Flip System&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Comparing the median and confidence intervals of the Coin Flip System vs the random entry into the ETF, we cannot reject the Null Hypothesis that the Coin Flip System results were purely by chance.  From a practical standpoint, we knew this going in because the entry and exit &lt;em&gt;is purely random&lt;/em&gt; being entirely based on an equal (50/50 chance of either being long or short.&lt;/p&gt;
+
+&lt;p&gt;But what if you can’t use the “eye test” for evaluating whether or not the results were random?&lt;/p&gt;
+
+&lt;p&gt;“The p-value of the original back-testing sample can then be computed (it is equal to the fraction of random rule returns equal or greater to the back-tested rule return).”  &lt;a href=&quot;http://www.automated-trading-system.com/monte-carlo-permutation/&quot;&gt;Source.&lt;/a&gt;  In this example, the average ETF cumulative return is 499%.  The Null Hypothesis is that the cumulative return of the Coin Flip System in excess of the average ETF cumulative return are random.&lt;/p&gt;
+
+&lt;p&gt;Calculate the t-test distribution and the p-value in excess of the average return.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;t &amp;lt;- (mean(MC.Coin.Flip.System.closing,na.rm = T)-mean(mc.closing))/(sd(MC.Coin.Flip.System.closing)/sqrt(length(MC.Coin.Flip.System.closing)))
+
+p &amp;lt;- 2*pt(-abs(t),df=length(MC.Coin.Flip.System.closing)-1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;This results in a p-value for the Coin Flip System of 0.71.  This is well short of the statistical significance threshhold of 0.05 for a p-value (the null hypothesis would be rejected for any p-value less than 0.05).  We cannot reject the null hypothesis that the Coin Flip System cumulative return is not by chance.&lt;/p&gt;
+
+&lt;p&gt;Although it is likely self evident, you would not want to trade the Coin Flip System &lt;em&gt;even if&lt;/em&gt; you got a result showing that the system had a very positive return.  If you look at the chart above it appears that the Coin Flip System significantly outperforms being long the ETF.  This is a &lt;a href=&quot;https://www.stat.berkeley.edu/~aldous/157/Papers/harvey.pdf&quot;&gt;fluke&lt;/a&gt; - a false trading strategy that, in reality, was just one path the strategy could have taken.  I will discuss false trading strategies in a separate post.&lt;/p&gt;
+
+&lt;h4 id=&quot;a-slightly-more-complicated-trading-system-bollinger-band-strategy&quot;&gt;A (Slightly) More Complicated Trading System: Bollinger Band Strategy&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://school.stockcharts.com/doku.php?id=technical_indicators:bollinger_bands&quot;&gt;Bollinger Bands&lt;/a&gt; measure the historical volatility of an instrument above and below a simple moving average.  A simple Bollinger Bands system is a mean reverting strategy that would enter long when price crossed over the lower band and enter short when price crosses the upper band.  This simple strategy is always exposed to the market; it is never flat.&lt;/p&gt;
+
+&lt;p&gt;Although the &lt;a href=&quot;https://github.com/joshuaulrich/TTR&quot;&gt;TTR Package in R&lt;/a&gt; supports the use of Bollinger Bands, I will construct them from scratch.&lt;/p&gt;
+
+&lt;p&gt;First, assign the length for the simple moving average (the middle band) and the average for the upper and lower bands.  Here, I use the traditional SMA setting of 20 periods.&lt;/p&gt;
+
+&lt;p&gt;Assign the displacement for the upper and lower bands. I set the upper and lower bands 2 standard deviations above and below the simple moving average.&lt;/p&gt;
+
+&lt;p&gt;Using the OHLC from the ETF, set the rolling standard deviations and calculate the middle, upper and lower bands.  Our signal will enter long (+1) if the close is less than lower band and enter short (-1) if the close is greater than the upper band. Note that denoting a short as “-1” and then multiplying that by the daily return of the instrument, gives us the correct return.  For example, if the ETF is -1% for the day amd we are short, the end result is a gain of 1%.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;BBand.Avg.Length &amp;lt;- 20
+
+BBand.SD &amp;lt;- 2
+
+BBand.System &amp;lt;-
+  all.stock.data[[1]] %&amp;gt;%
+
+    select(date,open,high,low,close) %&amp;gt;%
+
+    mutate(
+      daily.return = ifelse(row_number() == 1, 0, close / lag(close, 1) - 1),
+
+      cum.daily.return =
+        (cumprod(1+daily.return)-1)*100,
+
+      sd = runSD(close),
+
+      middle.band = ifelse(row_number() &amp;gt;= BBand.Avg.Length,  rollmean(close, k = BBand.Avg.Length, fill = NA), 0),
+
+      upper.band = ifelse(row_number() &amp;gt;= BBand.Avg.Length,  rollmean(close, k = BBand.Avg.Length, fill = NA) + (BBand.SD * rollmean(sd, k = BBand.Avg.Length, fill = NA, 0)),0),
+
+      lower.band = ifelse(row_number() &amp;gt;= BBand.Avg.Length,  rollmean(close, k = BBand.Avg.Length, fill = NA) - (BBand.SD * rollmean(sd, k = BBand.Avg.Length, fill = NA, 0)),0),
+
+      signal =
+        ifelse(close &amp;lt; lower.band,1,
+          ifelse(close &amp;gt; upper.band,-1,NA)),
+
+      signal.2 =
+        na.locf(signal),
+
+      signal.return = daily.return *  signal.2,
+
+      cum.signal.return = (cumprod(1+signal.return) - 1)*100)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The chart below shows the comparison of the cumulative daily returns of QQQ (in red) vs the Bollinger Bands strategy (in blue).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/BBand.Ch.1.png&quot; alt=&quot;QQQ Returns vs Bollinger Bands Strategy Returns&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;monte-carlo-simulation-of-the-bollinger-band-strategy&quot;&gt;Monte Carlo Simulation of the Bollinger Band Strategy&lt;/h4&gt;
+&lt;p&gt;Analyzing the Bollinger Band Strategy as compared to being long the QQQ ETF, and assuming a 13.5 year holding period from 2006-01-01 to 2019-06-30, the results are as follows:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;BBands Strategy&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;QQQ ETF&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Average Daily Return&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.08%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;.05%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Average Standard Deviation&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1.13%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1.47%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Maximum Drawdown&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;-444.79%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;-324.67%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Average Sharpe Ratio&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1.14&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.73&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Cumulative Return&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1114.30%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;352.04%&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Annualized Return&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;20.30%&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;11.82%&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Using the same Monte Carlo Analysis above on the Bollinger Band Strategy and utilizing 100,000 runs, the median cumulative return for the Bollinger Bands strategy is 1195%, with a 95% confidence return between 340% to 3722%.&lt;/p&gt;
+
+&lt;p&gt;For the ETF, Monte Carlo Analysis returns a median cumulative return of 382%, average cumulative return of 499%, with a 95% confidence return between 62% to 1325%.&lt;/p&gt;
+
+&lt;p&gt;Solving for the t-distribution of the excess returns of the Bollinger Band Strategy versus the  ETF yields 267.90.  This yields an extremely small p-value; it is essentially zero, which means we can reject the null hypothesis.  In other words, it is likely that the Bollinger Band strategy provides an edge.  This is not a recommendation to trade this strategy.  More testing is needed to determine if this strategy is viable.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+&lt;p&gt;Monte Carlo methods are a good tool to have to determine if a given trading strategy is due to chance or (rather) from a statistically significant edge.  In future posts, I will examine other methods to determine if the strategy is tradeable.  These include &lt;a href=&quot;https://www.uvm.edu/~dhowell/StatPages/ResamplingWithR/BootstrappingR.html&quot;&gt;Bootstrapping&lt;/a&gt;, &lt;a href=&quot;http://en.wikipedia.org/wiki/Jackknife_resampling&quot;&gt;Jacknife&lt;/a&gt;, &lt;a href=&quot;http://www.springer.com/statistics/statistical+theory+and+methods/book/978-0-387-20279-2&quot;&gt;Permutation Testing&lt;/a&gt; and &lt;a href=&quot;http://en.wikipedia.org/wiki/Cross-validation_(statistics)&quot;&gt;Cross-Validation.&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;research-and-notes&quot;&gt;Research and Notes&lt;/h2&gt;
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;For an excellent read on how to construct your own “synthetic” security, check out &lt;a href=&quot;http://www.tvmcalcs.com/blog/comments/coin_tosses_and_stock_price_charts/&quot;&gt;Coin Tosses and Stock Price Charts&lt;/a&gt; by Timothy R. Mayes, Ph.D.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;A  Brief Overview of Bollinger Bands.  &lt;a href=&quot;https://school.stockcharts.com/doku.php?id=technical_indicators:bollinger_bands&quot;&gt;Stock Charts - Bollinger Bands.&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;An Overview of Using Moving Averages in R. &lt;a href=&quot;http://uc-r.github.io/ts_moving_averages#centered-moving-averages&quot;&gt;UC Business Analytics R Programming Guide - Moving Averages.&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Pitfalls of Using Monte Carlo Analysis.  &lt;a href=&quot;http://systemtradersuccess.com/fooled-monte-carlo-analysis/&quot;&gt;System Trader Success - Fooled by Monte Carlo Analysis.&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Trading System Evaluation.  &lt;a href=&quot;https://www.mesasoftware.com/papers/SystemEvaluation.pdf&quot;&gt;Evaluating Trading Systems By John Ehlers and Ric Way.&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;An incredible overview of Monte Carlo Analysis Permutation Usage when evaluating trading systems. &lt;a href=&quot;https://www.evidencebasedta.com/MonteDoc12.15.06.pdf&quot;&gt;Evidence Based Technical Analysis - Monte Carlo Permutation Evaluation of Trading Systems.&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Table of contents generator for &lt;a href=&quot;https://ecotrust-canada.github.io/markdown-toc/&quot;&gt;MarkDown.&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://mindrighttrading.blogspot.com/2013/02/coin-flips-risk-to-reward-profile-and.html&quot;&gt;Coin Flips, Risk to Reward Profile and Creating Your Own Synthetic Security&lt;/a&gt; from my old blog Mind Right Trading.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;An interesting paper on &lt;a href=&quot;https://www.stat.berkeley.edu/~aldous/157/Papers/harvey.pdf&quot;&gt;Evaluating Trading Strategies&lt;/a&gt;. The authors review several methods for calculating a t-statistic formula using the Sharpe Ratio of the trading strategy. This is calculated by multiplying the Sharpe Ratio times the square root of the number of years the strategy traded.  For instance, a t-statistic of 2.91 means that the observed profitability is three standard deviations from the null hypothesis of zero profitability.  The paper expands on this formula, covering the problems of multi-testing trading strategies by using the family-wise error rate (FWER) and the false discovery rate (FDR).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;2 great articles on the specifics of Monte Carlo Permutation when evaluating trading strategies:  (1) &lt;a href=&quot;http://www.automated-trading-system.com/monte-carlo-permutation/&quot;&gt;Monte Carlo Permutation: Test your Back-Tests&lt;/a&gt;; and (2) &lt;a href=&quot;http://www.adaptrade.com/Newsletter/NL-GoodOrLucky.htm&quot;&gt;Is That Back-Test Result Good or Just Lucky?&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;An intense and lengthy overview on StackExchange of &lt;a href=&quot;https://stats.stackexchange.com/questions/104040/resampling-simulation-methods-monte-carlo-bootstrapping-jackknifing-cross&quot;&gt;Resampling / simulation methods: monte carlo, bootstrapping, jackknifing, cross-validation, randomization tests, and permutation tests.&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://www.cyclismo.org/tutorial/R/pValues.html#the-easy-way&quot;&gt;Chapter 10&lt;/a&gt; of the very helpful &lt;a href=&quot;http://www.cyclismo.org/tutorial/R/&quot;&gt;R Tutorial&lt;/a&gt; shows several ways of calculating a p-value.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</content><author><name>Jake Stoetzner</name><email>Jake.stoetzner@gmail.com</email></author><category term="r" /><category term="backtesting" /><category term="Monte-Carlo" /><summary type="html">Introduction Part of the challenge of backtesting is coming up with a repeatable framework to compare trading systems. In this example, I will use Monte Carlo simulation in R as a way to measure whether or not a particular trading system is better than pure chance.</summary></entry><entry><title type="html">Testing the Bespoke Stock Scores in R</title><link href="http://localhost:4000/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R/" rel="alternate" type="text/html" title="Testing the Bespoke Stock Scores in R" /><published>2019-09-11T00:00:00-05:00</published><updated>2019-09-11T00:00:00-05:00</updated><id>http://localhost:4000/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R</id><content type="html" xml:base="http://localhost:4000/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R/">&lt;p&gt;I have been a subscriber to &lt;a href=&quot;https://www.bespokepremium.com&quot;&gt;Bespoke Premium&lt;/a&gt; for a long time.  Tuesdays are always a special day; that’s when Bespoke Members get a fresh copy of the Bespoke Stock Scores Report.  This is their proprietary blend of Technical, Fundamental and Sentiment Analysis that is derived down to a single, weighted score.  I have always wanted to backtest their recommendations.  So I decided to do so in R.
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;From their website:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;“The Bespoke Stock Scores are a complete proprietary ranking of a stock’s attractiveness made up of three categories - Fundamental, Technical, and Sentiment.
+The Fundamental Score is an overall measure of a stock’s key financial ratios including earnings, sales, growth, and yield.  In addition, we analyze each company’s debt and capital levels and compare these to their peers.
+The Technical Score analyzes and measures indicators related to a stock’s momentum, relative strength, trend, and volume.  Each stock is then compared to the market and its group.
+The Sentiment Score is derived by analyzing the actions of investors and analysts.  Sub categories include trends in institutional ownership, option activity, short interest, analyst sentiment, and seasonal performance patterns.
+The Total Score comprises a weighted average of the three main categories described above.  Our experience has shown that certain environments require different approaches.”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;A score over 70 indicates that the stock is a good candidate for a buy evaluation.&lt;/p&gt;
+
+&lt;p&gt;They publish all of the scores for all of the S&amp;amp;P 1500 stocks ranked accordingly.  They also publish a list of the Top 40 Stock Scores.  This report comes out weekly, generally on Tuesdays.&lt;/p&gt;
+
+&lt;h2 id=&quot;tools&quot;&gt;Tools&lt;/h2&gt;
+&lt;p&gt;I used R for the data analysis and &lt;a href=&quot;www.iqFeed.net&quot;&gt;iQFeed&lt;/a&gt; via the (QCollector Expert)[http://www.mechtrading.com/] for the historical stock prices.&lt;/p&gt;
+
+&lt;h2 id=&quot;goal&quot;&gt;Goal&lt;/h2&gt;
+&lt;p&gt;The goal of this test was to determine if the recommendations, specifically the Top 40 recommendations, give you a statistical edge over the rest of the stocks in the S&amp;amp;P 1500 and whether adapting a trading system using the Top 40 rankings is a reliable and profitable approach as compared to a “buy and hold” approach of the S&amp;amp;P 1500.&lt;/p&gt;
+
+&lt;h2 id=&quot;characteristics&quot;&gt;Characteristics&lt;/h2&gt;
+&lt;p&gt;I looked at 589 Excel files that each contained different lists of stock scores dating back to May 29, 2007.  Notably, I missed a few reports.  That’s as far back as I could find the Bespoke Stock Scores, although they may have some that are older.&lt;/p&gt;
+
+&lt;p&gt;From each file, I extracted the Top 40 stocks and the date they were recommended.  This totaled approximately 23,560 individual stock pick recommendations.  It is important to emphasize that Bespoke isn’t technically recommending these stocks (nor am I).  Rather, a score is a ranking relative to all of the remaining stocks in the S&amp;amp;P 1500.  For the purpose of this report, I am assuming that the stock is purchased at the open on the date it is recommended as a Top 40 stock (&lt;strong&gt;“Entry Date”&lt;/strong&gt;).&lt;/p&gt;
+
+&lt;p&gt;After all of the files were examined, there were 1587 different symbols – some that are no longer traded and some that have been recommended multiple times.&lt;/p&gt;
+
+&lt;p&gt;One of the challenges that I faced was that while the Bespoke Stock Scores gave me an easy entry rule (ie, enter on the date of the recommendation), there were no exit rules.&lt;/p&gt;
+
+&lt;p&gt;Thus, I came up with a few options to exit my position:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Exit after a given number of calendar days (not trading days) after the recommendation date.&lt;/strong&gt;  I referred to this in the code as &lt;strong&gt;“nDays”&lt;/strong&gt; and set it at 365 days.  I looked at holding the stock for 1 – 365 days after the Entry Date.  Because of the practicalities of reporting, I only show reports for 30, 90, 180 and 365 day holding periods.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Exit after some given profit target or stop loss was hit.&lt;/strong&gt;  For a couple of different reasons, I did not attempt to model this.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Exit after the Bespoke Stock Score fell below 70 after entry.&lt;/strong&gt; I discarded this idea because of the time between entry and a (possible) exit was, at a minimum, 1 week.  For example, a stock might get recommended on a Tuesday but by the following day, it might have fallen below 70.  You wouldn’t know this immediately because you have to wait until the following Tuesday for the next report to come out.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Don’t worry about the exit (so to speak) and evaluate each trade on a daily basis, evaluating the daily returns, maximum drawdown and the annualized return compared with the standard deviation of the daily returns (Sharpe Ratio).&lt;/strong&gt; Because nDays was set to 365 (one year) I could compare the annualized daily returns and risk of the system to the annualized risk/return of the benchmark.  Note:  for the purpose of this report, the risk-free rate for the Sharpe Ratio is set to zero.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;limitations&quot;&gt;Limitations&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Long 40 Stocks Weekly.&lt;/strong&gt;  It’s important to note that the way the system is designed for this report, you would be buying 40 stocks each week.  Sometimes a specific stock is recommended multiple weeks in a row.  That means that you could have a concentrated position in one single stock.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Holding Period is Important.&lt;/strong&gt; Under Exit #1 above (exit after nDays), you could potentially be in a position longer than 1 year.  This makes a comparison with other benchmarks a little more difficult.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Entry Values Not Included.&lt;/strong&gt; Since &lt;a href=&quot;www.bespokepremium.com&quot;&gt;Bespoke Premium&lt;/a&gt; is a paid service, I did not include any data related to their specific recommendations.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;process&quot;&gt;Process&lt;/h2&gt;
+&lt;p&gt;(Note:  if you aren’t interested in R or how to replicate this report, skip down to the next section.)&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;I had R create and read in a list of all 1587 stocks that were recommended.  I looked up the historical daily stock prices using &lt;a href=&quot;http://www.mechtrading.com/&quot;&gt;QCollector&lt;/a&gt; and saved those as .txt files of Open/High/Low/Close/Volume going back to January 1, 2007.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;I had R combine all of this history of all of the stocks, sorted by the stock symbol. In doing so, I extracted the entry date of the recommendation from the file name.  Each file was saved as some form of “BespokeStockScoresMMDDYY.xls.”  Each “MMDDYY” corresponded to the entry date of the recommendation.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;I found the entry value of the stock on the date of the recommendation.  Although this is given in each of the Bespoke Top 40 reports, I wanted to make sure that the system was using accurate historical prices (it was).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;I cycled through the recommendation lists at entry to find the value at exit from 1 to nDays days after each entry recommendation.  Much like the Entry Date, I assumed that the exit would happen on the Open at the nth day (&lt;strong&gt;“Exit Date”&lt;/strong&gt;).  I then calculated the cumulative percentage and point return gained for each recommendation for 1 - 365 days.  This strategy assumed that you entered &lt;strong&gt;EVERY&lt;/strong&gt; stock on the recommendation date regardless of your existing position.  For example, you would be long 40 different stocks every week.  Over the testing period, it means you would make 23,560 trades.  I will discuss the value of this approach and how it could be improved in the conclusions section below.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;I then created a table showing each stock and how many times each stock was recommended.  Below is a list of the Top 20 most recommended stocks.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/Top_20_Stocks.PNG&quot; alt=&quot;Top 20 Stocks By Times Recommended&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;I then separated the cumulative daily percent return for &lt;strong&gt;EACH STOCK&lt;/strong&gt; (rather than by recommendation date, as in Step 4 above).  This return was measured from the Entry Date. This allowed me to analyze the cumulative return of each stock recommendation from 1 to nDays. For example, ABM was recommended 49 times during the time period tested. The first time was on 2010-07-13, and on that date it opened at 21.56.  Below is the cumulative returns for the following 252 trading days.  As you can see, it performed rather well.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/img/Profit_Loss_ABM.png&quot; alt=&quot;Example Cumulative Return Graph&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;I also separated the daily percent return (day over day returns) for each stock from the date of the recommendation. This helped in evaluating the day-to-day performance of each recommendation.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;results&quot;&gt;Results&lt;/h2&gt;
+
+&lt;p&gt;Initially, it was difficult to measure the performance of the system against the S&amp;amp;P1500 benchmark.  Comparing the cumulative performance against a benchmark proved futile.  However, it was easier comparing the system on a day-to-day basis versus the benchmark.  I attempted to annualize the 30/90/180 day exit performance so as to compare that against the historical annualized performance of the S&amp;amp;P Composite 1500. Additionally, I was only able to obtain information on the S&amp;amp;P Composite 1500 dating back to August 31, 2009.  For that reason, relevant benchmark comparisons will ignore any recommendations prior to this date.&lt;/p&gt;
+
+&lt;h3 id=&quot;exit-after-30-calendar-days-from-entry-date&quot;&gt;Exit After 30 Calendar Days From Entry Date&lt;/h3&gt;
+
+&lt;h4 id=&quot;cumulative-percent-return-with-30-day-exit&quot;&gt;Cumulative Percent Return with 30 Day Exit&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/Profit_Loss_30.png&quot; alt=&quot;Profit &amp;amp; Loss Graph - Exit at Day 30&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Exiting at 30 days after recommendation provided an average return of .67%, a winning percentage of 56.12%, a profit factor (Average Win/Average Loss) of -.95 and a cumulative return of 10,838%.&lt;/p&gt;
+
+&lt;h4 id=&quot;benchmark-comparison-with-30-day-exit&quot;&gt;Benchmark Comparison with 30 Day Exit&lt;/h4&gt;
+&lt;p&gt;Since August 31, 2009, the 30 day exit strategy provided an annualized return of 12.58% with annualized volatility (risk) of 28.4% for a Sharpe Ratio of 0.44.&lt;/p&gt;
+
+&lt;p&gt;This compares unfavorably versus the S&amp;amp;P Composite 1500 - see the table below.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;Annualized Return (%)&lt;/th&gt;
+      &lt;th&gt;Annualized Risk (%)&lt;/th&gt;
+      &lt;th&gt;Sharpe Ratio&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;30 Day Strategy&lt;/td&gt;
+      &lt;td&gt;12.58&lt;/td&gt;
+      &lt;td&gt;28.49&lt;/td&gt;
+      &lt;td&gt;0.44&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Benchmark&lt;/td&gt;
+      &lt;td&gt;13.42&lt;/td&gt;
+      &lt;td&gt;12.77&lt;/td&gt;
+      &lt;td&gt;1.05&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Note:  see &lt;a href=&quot;https://www.barclayhedge.com/annualized-standard-deviation-of-monthly-quarterly-return/&quot;&gt;this link&lt;/a&gt; for calculating Annualized Standard Deviation of Monthly / Quarterly Return.&lt;/p&gt;
+
+&lt;h4 id=&quot;cumulative-percent-return-with-90-day-exit&quot;&gt;Cumulative Percent Return with 90 Day Exit&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/Profit_Loss_90.png&quot; alt=&quot;Profit &amp;amp; Loss Graph - Exit at Day 90&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Exiting at 90 days after recommendation provided an average return of 1.2%, a winning percentage of 55.7%, a profit factor (Average Win/Average Loss) of -.97 and a cumulative return of 17,646%.&lt;/p&gt;
+
+&lt;h4 id=&quot;benchmark-comparison-with-90-day-exit&quot;&gt;Benchmark Comparison with 90 Day Exit&lt;/h4&gt;
+&lt;p&gt;Since August 31, 2009, the 90 day exit strategy provided an annualized return of 9.8% with annualized volatility (risk) of 28.31% for a Sharpe Ratio of .35.&lt;/p&gt;
+
+&lt;p&gt;This is not as favorable to the benchmark - see table below.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;Annualized Return (%)&lt;/th&gt;
+      &lt;th&gt;Annualized Risk (%)&lt;/th&gt;
+      &lt;th&gt;Sharpe Ratio&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;90 Day Strategy&lt;/td&gt;
+      &lt;td&gt;9.8&lt;/td&gt;
+      &lt;td&gt;28.31&lt;/td&gt;
+      &lt;td&gt;0.35&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Benchmark&lt;/td&gt;
+      &lt;td&gt;13.42&lt;/td&gt;
+      &lt;td&gt;12.77&lt;/td&gt;
+      &lt;td&gt;1.05&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;cumulative-percent-return-with-180-day-exit&quot;&gt;Cumulative Percent Return with 180 Day Exit&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/Profit_Loss_180.png&quot; alt=&quot;Profit &amp;amp; Loss Graph - Exit at Day 180&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Exiting at 180 days after recommendation provided an average return of 2.8%, a winning percentage of 56.8%, a profit factor (Average Win/Average Loss) of -1.05 and a cumulative return of 39,545%.&lt;/p&gt;
+
+&lt;h4 id=&quot;benchmark-comparison-with-180-day-exit&quot;&gt;Benchmark Comparison with 180 Day Exit&lt;/h4&gt;
+&lt;p&gt;Since August 31, 2009, the 180 day exit strategy provided an annualized return of 10.17% with annualized volatility (risk) of 28.4% for a Sharpe Ratio of .35.&lt;/p&gt;
+
+&lt;p&gt;This is not as favorable to the benchmark - see table below.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;Annualized Return (%)&lt;/th&gt;
+      &lt;th&gt;Annualized Risk (%)&lt;/th&gt;
+      &lt;th&gt;Sharpe Ratio&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;180 Day Strategy&lt;/td&gt;
+      &lt;td&gt;10.17&lt;/td&gt;
+      &lt;td&gt;28.4&lt;/td&gt;
+      &lt;td&gt;0.35&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Benchmark&lt;/td&gt;
+      &lt;td&gt;13.42&lt;/td&gt;
+      &lt;td&gt;12.77&lt;/td&gt;
+      &lt;td&gt;1.05&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;cumulative-percent-return-with-365-day-exit&quot;&gt;Cumulative Percent Return with 365 Day Exit&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/Profit_Loss_365.png&quot; alt=&quot;Profit &amp;amp; Loss Graph - Exit at Day 365&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Exiting at 365 days after recommendation provided an average return of 8.3%, a winning percentage of 61.3%, a profit factor (Average Win/Average Loss) of -1.24 and a cumulative return of 116,981%.&lt;/p&gt;
+
+&lt;h4 id=&quot;benchmark-comparison-with-365-day-exit&quot;&gt;Benchmark Comparison with 365 Day Exit&lt;/h4&gt;
+&lt;p&gt;Since August 31, 2009, the 365 day exit strategy provided an annualized return of 11.9% with annualized volatility (risk) of 29.45% for a Sharpe Ratio of .40.&lt;/p&gt;
+
+&lt;p&gt;This is not as favorable to the benchmark - see table below.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;Annualized Return (%)&lt;/th&gt;
+      &lt;th&gt;Annualized Risk (%)&lt;/th&gt;
+      &lt;th&gt;Sharpe Ratio&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;365 Day Strategy&lt;/td&gt;
+      &lt;td&gt;11.9&lt;/td&gt;
+      &lt;td&gt;29.45&lt;/td&gt;
+      &lt;td&gt;.406&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Benchmark&lt;/td&gt;
+      &lt;td&gt;13.42&lt;/td&gt;
+      &lt;td&gt;12.77&lt;/td&gt;
+      &lt;td&gt;1.05&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Over each time period, the strategy had a lower risk-adjusted return as compared to the S&amp;amp;P Composite 1500 benchmark.  However, over the short-term, the Top 40 Bespoke Stock Scores significantly outperformed the benchmark on a pure, risk-unadjusted annualized return basis.  For instance, exiting at 10 days provided a 17.24% annualized return, exceeding the benchmark by more than 4 points.&lt;/p&gt;
+
+&lt;h2 id=&quot;notes--additional-research&quot;&gt;Notes &amp;amp; Additional Research&lt;/h2&gt;
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;See this excellent blog post on evaluating trading strategies in R.  &lt;a href=&quot;https://www.signalplot.com/how-to-measure-the-performance-of-a-trading-strategy/&quot;&gt;How to Measure the Performance of a Trading Strategy&lt;/a&gt;.  The author also includes a link to the R Code here:  &lt;a href=&quot;https://github.com/luyongxu/SignalPlot/blob/master/1.001%20Code/1.005%20Measuring%20Performance.R&quot;&gt;1.005 Measuring Performance.R&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The graphs on this report were created using the &lt;a href=&quot;https://bbc.github.io/rcookbook/&quot;&gt;BBC Visual and Data Journalism cookbook for R graphics&lt;/a&gt;.  You can find all of the R code to recreate the BBC style graphics at the &lt;a href=&quot;https://github.com/bbc/bbplot&quot;&gt;BBC Github Repository&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;S&amp;amp;P 1500 historical performance was obtained from the &lt;a href=&quot;https://us.spindices.com/indices/equity/sp-composite-1500&quot;&gt;S&amp;amp;P Composite 1500 Page&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;“Annualized Return is the constant annual return applied to each period in arrays that would result in the actual compounded return over that range. An Annualized Return is a special case of a Geometric Average Return where the time periods are expressed in terms of years.” See &lt;a href=&quot;http://www.crsp.com/products/documentation/crsp-calculations&quot;&gt;CRSP Calculations&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</content><author><name>Jake Stoetzner</name><email>Jake.stoetzner@gmail.com</email></author><category term="r" /><category term="backtesting" /><category term="Bespoke" /><summary type="html">I have been a subscriber to Bespoke Premium for a long time. Tuesdays are always a special day; that’s when Bespoke Members get a fresh copy of the Bespoke Stock Scores Report. This is their proprietary blend of Technical, Fundamental and Sentiment Analysis that is derived down to a single, weighted score. I have always wanted to backtest their recommendations. So I decided to do so in R.</summary></entry></feed>

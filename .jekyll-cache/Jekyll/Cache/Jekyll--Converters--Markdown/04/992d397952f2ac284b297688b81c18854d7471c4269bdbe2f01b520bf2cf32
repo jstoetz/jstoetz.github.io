@@ -1,0 +1,8 @@
+I"Ð<h2 id="naming-conventions">Naming Conventions</h2>
+
+<p><strong>ticker</strong> refers to a vector of one or more stocks, options, ETFs or other financial instruments.</p>
+
+<p><strong>signal</strong> an indicator to enter a position, exit a position or remain flat.  Signals can be long (represented by a 1), short (represented by -1) or flat (represented by a 0).</p>
+
+<p><strong>position</strong> represents the current or past signal of the trading system.</p>
+:ET

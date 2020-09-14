@@ -1,7 +1,11 @@
 ---
+layout: default
 title: About
 permalink: /about/
 ---
+<h2>{{- site.description | escape -}}</h2>
+
+## About
 
 Jake Stoetzner loves talking about himself in the third person. He grew up in Austin, TX. He played football at the University of Tulsa where he met his brilliant wife, Dr. Kelli Henderson. They have three boys - Cooper, Parker and Greyson - and currently live in Lawrence, KS.
 

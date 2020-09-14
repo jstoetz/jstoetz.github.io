@@ -16,32 +16,18 @@ minima:
     twitter: jstoetz
     github:  jstoetz
     rss: rss
-    # dribbble: jekyll
     facebook: jstoetz
-    # flickr:   jekyll
-    # instagram: jekyll
-    # linkedin: jekyll
-    # pinterest: jekyll
-    # youtube: jekyll
-    # youtube_channel: UC8CXR0-3I70i1tfPg1PAE1g
-    # youtube_channel_name: CloudCannon
     telegram: jstoetz
-    # googleplus: +jekyll
-    # microdotblog: jekyll
-    # keybase: jekyll
-
-    # Mastodon instances
-    # mastodon:
-    # - username: jekyll
-    #   instance: example.com
-    # - username: jekyll2
-    #   instance: example.com
 
 # If you want to link only specific pages in your header, uncomment
 # this and add the path to the pages in order as they should show up
 header_pages:
-- blog.html
+#- blog.html
+#- code.md
 - about.md
+- rbasics.html
+- resources.html
+- rstyleguide.html
 
 # Build settings
 theme: minima
@@ -52,11 +38,16 @@ permalink: pretty
 # How many blog posts to show
 paginate: 5
 
-#
 collections:
-    r_basics:
-      output: true
-      permalink: /:collection/:name
+  resources:
+    output: true
+    permalink: /:collection/:name
+  rbasics:
+    output: true
+    permalink: /:collection/:name
+  rstyleguide:
+    output: true
+    permalink: /:collection/name
 
 # production_url : http://jstoetz.github.io/
 # BASE_PATH : https://jstoetz.github.io/

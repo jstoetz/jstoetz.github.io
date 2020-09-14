@@ -1,0 +1,11 @@
+---
+layout: default
+---
+
+{% for resources in site.resources %}
+  <h2>
+    <a href="{{ resources.url }}">
+      {{ resources.title }}
+    </a>
+  </h2>
+{% endfor %}

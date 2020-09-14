@@ -1,0 +1,190 @@
+I"l4<p>Backtesting possible short positions by examining stocks that miss EPS and revenue estimates and lower forward guidance reveals that the behavior of these <strong>Triple Miss</strong> stocks offers a profitable opportunity over the short-term.</p>
+
+<ul>
+  <li><a href="#goal">Goal</a></li>
+  <li><a href="#get-the-data">Get the Data</a>
+    <ul>
+      <li><a href="#extract-the-stock-symbols-and-dates-of-each-triple-miss">Extract the Stock Symbols and Dates of Each Triple Miss</a></li>
+      <li><a href="#get-historical-stock-data">Get Historical Stock Data</a></li>
+      <li><a href="#filter-out-data-prior-to-triple-miss">Filter Out Data Prior to Triple Miss</a></li>
+      <li><a href="#examine-the-aggregate-stock-data">Examine the Aggregate Stock Data</a></li>
+      <li><a href="#examine-the-aggregate-stock-data-1--5-and-10-days-after-triple-miss">Examine the Aggregate Stock Data 1, 5 and 10 Days After Triple Miss</a></li>
+    </ul>
+  </li>
+  <li><a href="#conclusion">Conclusion</a></li>
+  <li><a href="#notes---research">Notes &amp; Research</a></li>
+</ul>
+
+<h2 id="goal">Goal</h2>
+<p><a href="www.bespokepremium.com">Bespoke Investment Group</a> offers a stock screen feature that “allows users to run in-depth earnings report screens and easily filter more than 150,000 individual quarterly reports for US stocks since 2001.”</p>
+
+<p>They also offer a report showing what they have termed an <strong>Earnings Triple Play</strong> - that is a stock that “beats consensus analyst EPS estimates, beats revenue estimates, and raises forward guidance.”  The term has become so well known that <a href="https://www.investopedia.com/terms/t/triple-play.asp">none other than Investopedia have given Bespoke credit for it.</a>  These stocks are the best candidates for long-term buy opportunities.</p>
+
+<p>But is the opposite also true?  Does a stock that <em>misses</em> consensus analyst EPS estimates, <em>misses</em> revenue estimates and <em>lowers</em> forward guidance a terrible long-term buy opportunity and a possible short opportunity?  We can refer to these stocks in this category as a <strong>Triple Miss</strong>.</p>
+
+<p>The goal is to quantify whether a Triple Miss makes a good short opportunity starting the day after the announcement.</p>
+
+<h2 id="get-the-data">Get the Data</h2>
+<h3 id="extract-the-stock-symbols-and-dates-of-each-triple-miss">Extract the Stock Symbols and Dates of Each Triple Miss</h3>
+<p>Using the aforementioned stock screener, I researched Triple Miss stocks in 2018, and downloaded a .csv file of the data.  Turns out there were 132 Triple Miss instances (with 104 different stocks - some companies were listed more than once!) in 2018.  On an aggregate basis, this was the return:</p>
+
+<p><img src="/assets/img/2018.Triple.Miss.Stats.png" alt="Aggregate Stats of Triple Miss Stocks" /></p>
+
+<p>After reading in the data in R, I extracted the symbols and dates of each Triple Miss.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#create a list of symbols that can be read in
+symbols &lt;- unlist(temp$ticker)
+ticker &lt;- as.character(unlist(temp$ticker))
+
+#get list of dates of triple miss dates
+date &lt;- as.Date(unlist(temp$date))
+</code></pre></div></div>
+
+<p>Once this was created, I tried to use the quantmod() package to look-up the historical data.  quantmod() is wonderful for looking up individual stocks and analyzing them, but it is a challenge to deal with multiple stocks on varying dates of interest.</p>
+
+<h3 id="get-historical-stock-data">Get Historical Stock Data</h3>
+
+<p>Enter the batchgetsymbols() package.</p>
+
+<p>As the <a href="https://cran.r-project.org/web/packages/BatchGetSymbols/vignettes/BatchGetSymbols-vignette.html">creator of the package lamented</a>:</p>
+<blockquote>
+  <p>In the past I have used function GetSymbols from the CRAN package quantmod in order to download end of day trade data for several stocks in the financial market. The problem in using GetSymbols is that it does not aggregate or clean the financial data for several tickers. In the usage of GetSymbols, each stock will have its own xts object with different column names and this makes it harder to store data from several tickers in a single dataframe.  Package BatchGetSymbols is my solution to this problem. Based on a list of tickers and a time period, BatchGetSymbols will download price data from yahoo finance and organize it so that you don’t need to worry about cleaning it yourself.</p>
+</blockquote>
+
+<p>The batchgetsymbols() package worked beautifully to download all of the historical data for each stock going back to 2018 and return it in one giant, clean dataframe.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#&lt;-----TRIPLE MISS ANALYSIS -----&gt;
+#Batch download symbols - change type.return to "log" for log
+l.out   &lt;-  BatchGetSymbols(tickers   = ticker,
+                         first.date   = start.data,
+                         last.date    = end.data,
+                         type.return  = "arit",
+                         freq.data    = freq.data)
+
+#get a list of tickers that were downloaded
+all.ticker &lt;- l.out$df.control$ticker
+</code></pre></div></div>
+
+<h3 id="filter-out-data-prior-to-triple-miss">Filter Out Data Prior to Triple Miss</h3>
+<p>After getting the dataframe set-up, I used the dplyr() package to filter out data prior to the Triple Miss announcement.  This was required because I only wanted to look at the performance of the stock <em>after</em> the date of the Triple Miss. I then created a new data frame to hold this data using the bind_rows() function.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#filter out all data before entry date by ticker
+b &lt;- mapply(function(a,b)(l.out$df.tickers %&gt;% filter(ref.date &gt; a, ticker == b)),date,ticker,SIMPLIFY = F)
+
+#create new df without the post entry date data
+b1 &lt;- bind_rows(b)
+summary(b1$ret.closing.prices)
+</code></pre></div></div>
+
+<h3 id="examine-the-aggregate-stock-data">Examine the Aggregate Stock Data</h3>
+<p>Interestingly, the average cumulative daily return for each stock measured from the date of the Triple Miss to the date of this post has been 4.28% - that means an average annual return of 1.36%.  The average daily return is .005%.  On an annualized basis, this is a Sharpe Ratio (return/volatility) of 0.59 - clearly a lot of volatility for not a whole lot of return!</p>
+
+<p><img src="/assets/img/ch.All.png" alt="Individual Triple Miss Stocks Cumulative Return All Days" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>b2 &lt;- b1 %&gt;%
+  select(ref.date,ticker,ret.closing.prices) %&gt;%
+    group_by(ticker) %&gt;%
+      summarise(Mean_Daily_Return = mean(ret.closing.prices,na.rm = TRUE)*100, Cum_Daily_Return = sum(ret.closing.prices,na.rm = TRUE)*100) %&gt;%         arrange(Cum_Daily_Return)
+
+&gt; mean(b2$Cum_Daily_Return)
+[1] 4.281108
+&gt; mean(b2$Mean_Daily_Return)
+[1] 0.00539823
+&gt; mean(b2$Mean_Daily_Return)/sd(b2$Mean_Daily_Return)*sqrt(252)
+[1] 0.5942328
+</code></pre></div></div>
+
+<h3 id="examine-the-aggregate-stock-data-1-5-and-10-days-after-triple-miss">Examine the Aggregate Stock Data 1, 5 and 10 Days After Triple Miss</h3>
+<p>What if we shortened the window for analyzing the returns of all of the Triple Miss Stocks?  Do the effects of the Triple Miss “wear off” at a certain point or do they continue?</p>
+
+<p>The Triple Miss stocks are very negative - below is a chart with the cumulative return from 1 to 10 days after each Triple Miss.</p>
+
+<p><img src="/assets/img/ch.10days.all.png" alt="All Triple Miss Stocks Cumulative Return Day 1 to 10" /></p>
+
+<p>On an individual basis, you can see the downward trend each stock exhibits post-Triple Miss.</p>
+
+<p><img src="/assets/img/ch.10days.png" alt="Individual Triple Miss Stocks Cumulative Return Day 1 to 10" /></p>
+
+<p>On an aggregate basis after 10 days:</p>
+<ul>
+  <li>71 out of the 113 stocks (approximately 63%) had a negative cumulative daily return 10 days after the Triple Miss,</li>
+  <li>each stock had an average daily return of -0.58% and cumulatively lost 4.55% in value by day 10, and</li>
+  <li>had an average Sharpe Ratio (average daily return divided by average standard deviation of the daily returns) of -5.57.</li>
+</ul>
+
+<p>In short, the returns were <strong>less</strong> than spectacular.</p>
+
+<p>Over 5 days, returns were even worse:</p>
+<ul>
+  <li>66 out of the 113 stocks (approximately 58%) had a negative cumulative daily return 5 days after the Triple Miss,</li>
+  <li>each stock had an average daily return of -1.46% and cumulatively lost 5.26% in value by day 5, and</li>
+  <li>had an average Sharpe Ratio of -6.50.</li>
+</ul>
+
+<p><img src="/assets/img/ch.5days.all.png" alt="All Triple Miss Stocks Cumulative Return Day 1 to 5" /></p>
+
+<p>And the day after a Triple miss?  95 of 113 (84%) were down day-over-day by an average of 6.86% with a Sharpe Ratio of -10.62.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>It seems clear that Triple Miss stocks would be a good place to start when looking for stocks to short over the near-term.  Obviously, this is not a recommendation to buy or sell; you would need to do your own research and make your own decision to determine that.  But the Triple Miss stocks might be a good filter to start looking for opportunities.</p>
+
+<h2 id="notes--research">Notes &amp; Research</h2>
+<ul>
+  <li><a href="https://towardsdatascience.com/analyzing-stocks-using-r-550be7f5f20d">Analyzing Stocks Using R</a></li>
+  <li><a href="https://ntguardian.wordpress.com/2017/03/27/introduction-stock-market-data-r-1/">An Introduction to Stock Market Data Analysis with R (Part 1)</a></li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>[getSymbols Extra</td>
+          <td>R-bloggers](https://www.r-bloggers.com/getsymbols-extra/)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li><a href="https://www.quantmod.com/examples/data/">quantmod: examples :: data</a></li>
+  <li><a href="https://programmingforfinance.com/2017/10/different-ways-to-obtain-and-manipulate-stock-data-in-r-using-quantmod/">Different Ways to Obtain and Manipulate Stock Data In R Using quantmod – Programming For Finance</a></li>
+  <li><a href="https://srdas.github.io/MLBook/MoreDataHandling.html#using-the-apply-class-of-functions">Data Science: Theories, Models, Algorithms, and Analytics</a></li>
+  <li><a href="https://cran.r-project.org/web/packages/tidyquant/vignettes/TQ02-quant-integrations-in-tidyquant.html#performanceanalytics-functionality">R Quantitative Analysis Package Integrations in tidyquant</a></li>
+  <li><a href="https://bookdown.org/sstoeckl/Tidy_Portfoliomanagement_in_R/s-4portfolios.html">Tidy Portfoliomanagement in R</a></li>
+  <li><a href="http://rstudio-pubs-static.s3.amazonaws.com/288218_117e183e74964557a5da4fc5902fc671.html#first-order-of-business---basic-manipulations">Manipulating Time Series Data in R with xts &amp; zoo</a></li>
+  <li><a href="https://s3.amazonaws.com/assets.datacamp.com/production/course_1127/slides/chapter_4.pdf">chapter4.key</a></li>
+  <li><a href="https://www.msperlin.com/pafdR/Financial-data.html">Processing and Analyzing Financial Data with R</a></li>
+  <li><a href="https://faculty.washington.edu/ezivot/econ424/Working%20with%20Time%20Series%20Data%20in%20R.pdf">Working with Time Series Data in R</a></li>
+  <li><a href="http://statmath.wu.ac.at/~hornik/QFS1/quantmod-vignette.pdf">quantmod-vignette.pdf</a></li>
+  <li><a href="https://stackoverflow.com/questions/26640795/using-lapply-on-quantmod-get-straight-to-xts-object">r - Using lapply on quantmod, get straight to xts object? - Stack Overflow</a></li>
+  <li><a href="https://cran.r-project.org/web/packages/BatchGetSymbols/vignettes/BatchGetSymbols-vignette.html">Using BatchGetSymbols to download financial data for several tickers</a></li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>[Easy multi-panel plots in R using facet_wrap() and facet_grid() from ggplot2</td>
+          <td>Technical Tidbits From Spatial Analysis &amp; Data Science](http://zevross.com/blog/2019/04/02/easy-multi-panel-plots-in-r-using-facet_wrap-and-facet_grid-from-ggplot2/)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li><a href="http://www.sthda.com/english/articles/17-tips-tricks/57-dplyr-how-to-add-cumulative-sums-by-groups-into-a-data-framee/">dplyr: How to Add Cumulative Sums by Groups Into a Data Frame? - Articles - STHDA</a></li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>[Make Beautiful Tables with the Formattable Package</td>
+          <td>R-bloggers](https://www.r-bloggers.com/make-beautiful-tables-with-the-formattable-package/)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li><a href="http://www.sthda.com/english/wiki/ggplot2-barplots-quick-start-guide-r-software-and-data-visualization">ggplot2 barplots : Quick start guide - R software and data visualization - Easy Guides - Wiki - STHDA</a></li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>[Make Beautiful Tables with the Formattable Package</td>
+          <td>Displayr](https://www.displayr.com/formattable/)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+:ET

@@ -1,0 +1,13 @@
+---
+layout: default
+
+permalink: /rbasics/
+---
+
+{% for rbasics in site.rbasics %}
+  <h2>
+    <a href="{{ rbasics.url }}">
+      {{ rbasics.title }}
+    </a>
+  </h2>
+{% endfor %}
