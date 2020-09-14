@@ -1,6 +1,7 @@
 title: jstoetz
-author: Jake Stoetzner
-email: Jake.stoetzner@gmail.com
+author:
+  name: Jake Stoetzner
+  email: Jake.stoetzner@gmail.com
 description: > # this means to ignore newlines until "show_excerpts:"
   Adventures in R programming and data science for stocks, ETFs and options, as well as commercial real estate and sports gambling.
 show_excerpts: false # set to true to show excerpts on the homepage
@@ -57,6 +58,10 @@ collections:
       output: true
       permalink: /:collection/:name
 
+# production_url : http://jstoetz.github.io/
+# BASE_PATH : https://jstoetz.github.io/
+
 plugins:
  - jekyll-feed
  - jekyll-seo-tag
+ - jekyll-paginate
