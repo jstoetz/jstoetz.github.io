@@ -1,0 +1,179 @@
+I"�<h2 id="overview">Overview</h2>
+<p>Few things in this life cause more headaches than performance metric calculations.  Ask 10 different financial firms how to calculate an <em>annualized yield</em> and you may get 10 different answers.</p>
+
+<p>That being said it is important to set your own standard so that you have an apples-to-apples comparison among different systems.</p>
+
+<h2 id="toc">TOC</h2>
+<ul>
+  <li><a href="#h1">Single-Period Return Metrics</a>
+    <ul>
+      <li><a href="#h1.1">Periodical Return</a></li>
+      <li><a href="#h1.2">Annual Return</a></li>
+    </ul>
+  </li>
+  <li><a href="#h2">Multi-Period Return Metrics</a>
+    <ul>
+      <li><a href="#h2.1">Total or Cumulative Return</a></li>
+      <li><a href="#h2.2">Arithmetic Returns</a></li>
+      <li><a href="#h2.3">Geometric Returns</a></li>
+    </ul>
+  </li>
+  <li><a href="#h3">Multi-Asset, Single-Period Return Metrics</a></li>
+  <li><a href="#h4">Multi-Asset, Multi-Period Return Metrics</a></li>
+  <li><a href="#h5">Logarithmic Returns</a></li>
+</ul>
+
+<h3 id="functions-mentioned">Functions Mentioned</h3>
+
+<h3 id="packages-mentioned">Packages Mentioned</h3>
+<ul>
+  <li><a href="https://cran.r-project.org/web/packages/PerformanceAnalytics/index.html">Performance Analytics</a></li>
+</ul>
+
+<h2 id="single-period-return-metrics"><a name="h1"></a>Single-Period Return Metrics</h2>
+
+<h3 id="periodical-return"><a name="h1.1"></a>Periodical Return</h3>
+<p>The percentage change in the value of an asset or investment, including reinvestment of income, from the beginning to the end of a period, assuming no contributions or disbursements.</p>
+
+<p>r = FV/PV - 1</p>
+
+<p>FV = the future value of a sum of money
+PV = the present value of the same amount
+r = the periodical return, or the growth rate per period</p>
+
+<p>For periodical returns calculated over more than one period:</p>
+
+<p>r = (FV/PV)^(1/n) - 1</p>
+
+<p>n = number of periods of growth</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># - this functions takes in a starting and ending value and provides the return over n number of periods
+
+fn.periodical.return &lt;- function(FV, PV, n){
+  a = ((FV/PV)^(1/n)) - 1
+  return(a)
+}
+</code></pre></div></div>
+<h3 id="annual-return"><a name="h1.2"></a>Annual Return</h3>
+<p>“Annualized returns are useful for comparing two assets. To do so, you must scale your observations
+to an annual scale by raising the compound return to the number of periods in a year, and taking the
+root to the number of total observations.” <a href="https://cran.r-project.org/web/packages/PerformanceAnalytics/PerformanceAnalytics.pdf">Source:  Performance Analytics Manual</a></p>
+
+<p>Usually, you are transforming another type of return to an annualized return.  Converting daily, weekly, monthly or quarterly data to an annual return requires some assumptions.</p>
+
+<p>In the financial world, it is (mostly) universally accepted that there are:</p>
+<ul>
+  <li>252 days in a year,</li>
+  <li>52 weeks in a year,</li>
+  <li>12 months in a year, and</li>
+  <li>4 quarters in a year.</li>
+</ul>
+
+<p>Given a future value and a present value over a given scale that is <em>less than a year</em> (ie, daily, weekly etc.), then what is the annualized return?</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fn.annualize.return &lt;- function(FV, PV, scale = c('hourly','daily', 'weekly', 'monthly', 'quarterly')){
+  a &lt;- scale
+  b &lt;- c(6048, 252, 52, 12, 4)
+  c &lt;- c('hourly','daily', 'weekly', 'monthly', 'quarterly')
+  d &lt;- b[c == a]
+  e &lt;- (FV/PV-1)*d
+  return(e)
+}
+
+# input a vector of values and returns annualized return
+fn.annualize.return.values &lt;- function(df, scale = c('hourly','daily', 'weekly', 'monthly', 'quarterly')){
+  a &lt;- scale
+  b &lt;- c(6048, 252, 52, 12, 4)
+  c &lt;- c('hourly','daily', 'weekly', 'monthly', 'quarterly')
+  d &lt;- b[c == a]
+  df &lt;- as.vector(df)
+  e &lt;- length(df)
+  f &lt;- df/lag(df, n = 1)-1
+  f[1] &lt;- 0
+  g &lt;- sum(f, na.rm = T)/e*d
+  return(g)
+}
+</code></pre></div></div>
+
+<h2 id="returns-over-multiple-holding-periods"><a name="h2"></a>Returns over Multiple Holding Periods</h2>
+
+<p>Things get more complicated when comparing multiple returns with differing holding periods.</p>
+
+<h3 id="total-or-cumulative-return"><a name="h2.1"></a>Total or Cumulative Return</h3>
+<p>Is Stock A with a 7% annual returns over 8 years a better investment (in this case, a higher total return) than Stock B that returned 10% over 5 years?</p>
+
+<p>You can revert back to time value of money basics for this question.</p>
+
+<p>Total Return = (1 + r)^n - 1</p>
+
+<p>r = the periodical return, or the growth rate per period
+n = total number of periods <em>of equal length</em></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fn.total.return &lt;- function(r, n){
+  a = (1 + r)^n - 1
+  return(a)
+}
+
+&gt; fn.total.return(.07, 8)
+[1] 0.7181862
+&gt; fn.total.return(.1, 5)
+[1] 0.61051
+</code></pre></div></div>
+
+<h3 id="arithmetic-returns"><a name="h2.2"></a>Arithmetic Returns</h3>
+<p>Arithmetic returns are the typical calculation of the mean.  Take the sum of all returns for each equal period and divide by the total number of periods.</p>
+
+<p>Arithmetic returns assume <em>no</em> compounding or re-investment of capital.</p>
+
+<p>For example, compare 2 stocks with the following returns (assume the length of each return period for each stock is equal):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stock_a &lt;- c(.1,-.1,.2,.4,.5,-.2,.5,-.8)
+stock_b &lt;- c(.4,-.5,.6,-.75)
+</code></pre></div></div>
+
+<p>We can figure out the average of all of these returns fairly easily.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># accepts a numeric vector of percent returns
+fn.arithmetic.return &lt;- function(r, n){
+  a &lt;- sum(r, na.rm = T)
+  b &lt;- a/n
+  return(b)
+}
+
+fn.arithmetic.return(stock_a,length(stock_a))
+#[1] 0.075
+fn.arithmetic.return(stock_b,length(stock_b))
+#[1] -0.0625
+</code></pre></div></div>
+
+<p>But what does it <em>mean</em> that stock_a has an arithmetic return of .075?</p>
+
+<p>Arithmetic returns assume that the same investment is made at the beginning of each period.  This means that arithmetic are <em>discrete</em> returns - they have no memory of prior periods.</p>
+
+<p>If stock_a was worth $100 at the beginning of all periods, then the total value of the stock at the end can be found by (1) multiplying the vector of the returns times the starting value, (2) summing those returns, and (3) adding the sum to the beginning value of stock_a.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>100*stock_a
+#[1]  10 -10  20  40  50 -20  50 -80
+sum(100*stock_a)
+#[1] 60
+sum(100*stock_a)+100
+#[1] 160
+</code></pre></div></div>
+
+<p>So then the arithmetic return <em>means</em> that you could have invested $100 each period at .075, taken your returns off the table (ie, not reinvested them) and started again with the same $100 on the next period. At the end of 8 periods, you would have your original $100 plus the sum of each invested amount.  It can (clumsily) be shown by:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sum(100*(rep(.075,8)))+100
+#[1] 160
+</code></pre></div></div>
+
+<h3 id="geometric-returns"><a name="h2.3"></a>Geometric Returns</h3>
+<p>Geometric returns (ie, “compound returns”) reflect that the increase or decrease in value is re-invested each period.</p>
+
+<p>One thing to note about arithmetic returns is that they do not reflect volatility accurately.</p>
+
+<p>Geometric returns, on the other hand,</p>
+
+<h2 id="multi-asset-single-period-return-metrics"><a name="h3"></a>Multi-Asset, Single-Period Return Metrics</h2>
+<h2 id="multi-asset-multi-period-return-metrics"><a name="h4"></a>Multi-Asset, Multi-Period Return Metrics</h2>
+<h2 id="logarithmic-returns"><a name="h5"></a>Logarithmic Returns</h2>
+:ET

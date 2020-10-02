@@ -1,0 +1,39 @@
+I"¬<p><a href="https://github.com/jstoetz/R_Code" class="button">All GitHub Repositories for the Blog</a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Blog No.</th>
+      <th style="text-align: center">Post Link</th>
+      <th style="text-align: center">GitHub Repository Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center"><a href="https://jstoetz.github.io/r/backtesting/2019/09/11/Testing-the-Bespoke-Stock-Scores-in-R.html">Testing the Bespoke Stock Scores in R</a></td>
+      <td style="text-align: center"><a href="https://github.com/jstoetz/R_Code/blob/master/Blog_Post_1">Code on Github</a></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center"><a href="https://jstoetz.github.io/r/backtesting/2019/10/01/Monte-Carlo-Benchmarking-for-Trading-Systems-in-R.html">Monte Carlo Benchmarking for Trading Systems in R</a></td>
+      <td style="text-align: center"><a href="https://github.com/jstoetz/R_Code/blob/master/Blog_Post_2">Code on Github</a></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center"><a href="https://jstoetz.github.io/r/sports-betting/2019/10/24/Recreating-a-1976-Least-Squares-Betting-System-in-R.html">Recreating a 1976 Least Squares Betting System in R</a></td>
+      <td style="text-align: center"><a href="https://github.com/jstoetz/R_Code/blob/master/Blog_Post_3">Code on Github</a></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center"><a href="https://jstoetz.github.io/r/backtesting/2019/11/04/Bespoke-Triple-Play-Analysis.html">Backtesting Triple Miss Stocks in R</a></td>
+      <td style="text-align: center"><a href="https://github.com/jstoetz/R_Code/blob/master/Blog_Post_4">Code on Github</a></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">5</td>
+      <td style="text-align: center"><a href="">Random Everything - Testing What is Really Important</a></td>
+      <td style="text-align: center"><a href="https://github.com/jstoetz/R_Code/blob/master/Blog_Post_5">Code on Github</a></td>
+    </tr>
+  </tbody>
+</table>
+:ET

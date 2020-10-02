@@ -1,0 +1,32 @@
+I"Å<h2 id="using-github-pages-and-jekyll">using github pages and Jekyll</h2>
+<ul>
+  <li><a href="https://docs.github.com/en/github/working-with-github-pages/testing-your-github-pages-site-locally-with-jekyll">Testing your GitHub Pages site locally with Jekyll</a></li>
+</ul>
+
+<h3 id="building-a-site-locally">building a site locally</h3>
+
+<ol>
+  <li>Open Terminal.</li>
+  <li>Navigate to the folder where the source for the site is.</li>
+  <li>Run the Jekyll site locally.</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ bundle exec jekyll serve
+&gt; Configuration file: /Users/octocat/my-site/_config.yml
+&gt;            Source: /Users/octocat/my-site
+&gt;       Destination: /Users/octocat/my-site/_site
+&gt; Incremental build: disabled. Enable with --incremental
+&gt;      Generating...
+&gt;                    done in 0.309 seconds.
+&gt; Auto-regeneration: enabled for '/Users/octocat/my-site'
+&gt; Configuration file: /Users/octocat/my-site/_config.yml
+&gt;    Server address: http://127.0.0.1:4000/
+&gt;  Server running... press ctrl-c to stop.
+</code></pre></div></div>
+
+<ol>
+  <li>To preview your site, in your web browser, navigate to <code class="language-plaintext highlighter-rouge">http://localhost:4000</code>.</li>
+</ol>
+
+<h3 id="minima-theme-on-github"><a href="https://github.com/jekyll/minima">Minima Theme on Github</a></h3>
+:ET

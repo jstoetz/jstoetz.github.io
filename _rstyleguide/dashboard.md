@@ -1,6 +1,6 @@
 ---
 layout: collection
-title: overview of R style guidelines
+title: dashboard for r style guide
 ---
 For formulas, all percentage should be calculated without multiplying by 100.
 
@@ -36,7 +36,7 @@ The information herein incorporates many different sources but it is primarily b
   ### Research
   ### Copying and Pasting
 
-## Files
+## [Files](/filenames.md)
   ### Types
       #### Data Files
       #### R files
@@ -71,5 +71,9 @@ The information herein incorporates many different sources but it is primarily b
 ## Pipes
 
 ## Graphing
+
+## Markdown
+
+## R Markdown & Knitr
 
 ## Notes & Research

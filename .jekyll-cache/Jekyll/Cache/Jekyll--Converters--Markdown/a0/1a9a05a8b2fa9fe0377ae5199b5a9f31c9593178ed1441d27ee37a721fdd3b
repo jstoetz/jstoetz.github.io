@@ -1,0 +1,37 @@
+I"¶<h2 id="task-views">task views</h2>
+<ul>
+  <li><a href="https://cran.r-project.org/view=Finance">CRAN Task View:  Empirical Finance</a></li>
+  <li><a href="https://cran.r-project.org/web/views/TimeSeries.html">CRAN Task View:  Time Series Analysis</a></li>
+</ul>
+
+<h2 id="packages">packages</h2>
+
+<h3 id="data">data</h3>
+<ul>
+  <li><a href="https://github.com/tidyverse/dplyr/blob/master/vignettes/dplyr.Rmd">dplyr</a> is an R package that helps you manipulate and translate data.  Of all of the packages in R, dplyr is the one I use the most.</li>
+</ul>
+
+<h3 id="data-management">data management</h3>
+
+<h3 id="risk-management">risk management</h3>
+
+<h3 id="finance">finance</h3>
+
+<h3 id="time-series">time series</h3>
+<ul>
+  <li><a href="https://cran.r-project.org/web/packages/zoo/index.html">zoo</a></li>
+  <li><a href="https://cran.r-project.org/web/packages/xts/index.html">xts</a></li>
+</ul>
+
+<h3 id="design">design</h3>
+<ul>
+  <li><a href="">knitr</a></li>
+  <li><a href="">rmarkdown</a></li>
+  <li><a href="">markdown</a></li>
+</ul>
+
+<h3 id="reporting">reporting</h3>
+<ul>
+  <li><a href="https://cran.r-project.org/web/packages/PerformanceAnalytics/index.html">Performance Analytics</a></li>
+</ul>
+:ET

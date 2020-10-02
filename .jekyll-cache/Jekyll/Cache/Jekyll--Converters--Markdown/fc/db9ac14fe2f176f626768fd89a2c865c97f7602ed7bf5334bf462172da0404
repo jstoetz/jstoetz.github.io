@@ -1,0 +1,675 @@
+I"h�<h2 id="overview">Overview</h2>
+<p>I often hear that the “best traders” can take a random entry and profit by simply managing the trade and applying appropriate account management principles.  Through Monte Carlo analysis, I try to prove whether this is true or not.
+<!--more--></p>
+
+<h2 id="toc">TOC</h2>
+<ul>
+  <li><a href="#h1">Research: Randomness Be Thy Name</a>
+    <ul>
+      <li><a href="#h1.1">Types of Entry and Exit</a></li>
+      <li><a href="#h1.2">A Non-Random Fight Over Randomness</a></li>
+      <li><a href="#h1.3">Research Framework</a></li>
+    </ul>
+  </li>
+  <li><a href="#h2">Coin-Flip Stock Tests</a>
+    <ul>
+      <li><a href="#h2.1">Test 1: Random Entry/Random Exit for Coin-Flip Stock</a></li>
+      <li><a href="#h2.2">Test 2: Random Entry/Stop-Loss or Profit Target Exit for Coin-Flip Stock</a></li>
+      <li><a href="#h2.3">Test 3: Random Entry/Trailing Stop (%) Exit for Coin-Flip Stock</a></li>
+      <li><a href="#h2.4">Test 4: Random Entry/Trailing Stop (%) or Profit-Target(%) Exit for Coin-Flip Stock</a></li>
+    </ul>
+  </li>
+  <li><a href="#h3">Actual Stock Data Tests</a>
+    <ul>
+      <li><a href="#h3.1">Test 1: Random Entry/Random Exit for Actual Stock Data</a></li>
+      <li><a href="#h3.2">Test 2: Random Entry/Stop-Loss or Profit Target Exit for Actual Stock Data</a></li>
+      <li><a href="#h3.3">Test 3: Random Entry/Trailing Stop (%) Exit for Actual Stock Data</a></li>
+      <li><a href="#h3.4">Test 4: Random Entry/Trailing Stop (%) or Profit-Target(%) Exit for Actual Stock Data</a></li>
+    </ul>
+  </li>
+  <li><a href="#h4">Heading 4</a>
+    <ul>
+      <li><a href="#h4.1">Sub-Heading 4.1</a></li>
+      <li><a href="#h4.2">Sub-Heading 4.2</a></li>
+      <li><a href="#h4.3">Sub-Heading 4.3</a></li>
+    </ul>
+  </li>
+  <li><a href="#h5">Heading 5</a>
+    <ul>
+      <li><a href="#h5.1">Sub-Heading 5.1</a></li>
+      <li><a href="#h5.2">Sub-Heading 5.2</a></li>
+      <li><a href="#h5.3">Sub-Heading 5.3</a></li>
+    </ul>
+  </li>
+  <li><a href="#h6">Heading 6</a>
+    <ul>
+      <li><a href="#h6.1">Sub-Heading 6.1</a></li>
+      <li><a href="#h6.2">Sub-Heading 6.2</a></li>
+      <li><a href="#h6.3">Sub-Heading 6.3</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="functions-mentioned">Functions Mentioned</h3>
+
+<h3 id="packages-mentioned">Packages Mentioned</h3>
+
+<h2 id="research-randomness-be-thy-name"><a name="h1"></a>Research: Randomness Be Thy Name</h2>
+
+<h3 id="types-of-entries-and-exits"><a name="h1.1"></a>Types of Entries and Exits</h3>
+<p>Entering a trade (either by buying to open or selling short to open) or exiting a trade (selling to close or buying to cover to close) means that the trader is initiating a position in a financial instrument.  For ease of reference, “entry” or “entering” a position will be used for buy to open or sell short to open, and “exit” or “exiting” will be used for sell to close or buy to cover.</p>
+
+<p>To simplify, entries and exits can categorized as follows (Note: I am leaving a lot of entry and exit options out - this is not meant to be an exhaustive list):</p>
+
+<ul>
+  <li>Random
+    <ul>
+      <li><strong>Example</strong>:  buy to open/sell short to open at random and sell to close/buy to cover at random</li>
+    </ul>
+  </li>
+  <li>Time Based
+    <ul>
+      <li><strong>Example</strong>:  buy to open/sell short to open at 09:30:00 a.m. and sell to close/buy to cover at 10:00:00 a.m.</li>
+      <li>The underlying “reason” for the time based entry or exit is inconsequential.  Choosing to enter/exit a position at a given time might be based on a random signal, an indicator or for some other reason.  Regardless, the time is what determines exit and entry.</li>
+    </ul>
+  </li>
+  <li>Price Based (amt or % or indicator)
+    <ul>
+      <li><strong>Example</strong>:  buy to open at $249.</li>
+    </ul>
+  </li>
+  <li>Volume Based (amt or % or indicator)
+    <ul>
+      <li><strong>Example</strong>:  sell short to open after 5M shares have traded.  Buy to cover if SMA20 of volume crosses below 3.5M shares.</li>
+    </ul>
+  </li>
+  <li>Stop or Stop-Limit ($ or % or indicator)
+    <ul>
+      <li><strong>Example</strong>: buy to open/sell short to open at $248.50 stop when the stock is trading at $249.00.  The counterpart is to sell to close/buy to cover at $248.50 when you are currenly long or short the stock and the stock is trading at $249.  A stop could also be triggered based on an indicator i.e. buy to open stop $248.50 if SMA 50 greater than SMA 200.</li>
+      <li>For our purposes a stop and a stop-limit order are the same since we are backtesting the strategy and can’t distinguish a stop “buy at market” or a stop-limit “buy at x price or better.”</li>
+    </ul>
+  </li>
+  <li>Profit Target ($ or % or indicator)
+    <ul>
+      <li><strong>Example</strong>: sell to close if profit is equal to $1000.</li>
+      <li>Note that profit target must take into account the current position (or non-position)</li>
+    </ul>
+  </li>
+  <li>Trailing Stop ($ or % or indicator)
+    <ul>
+      <li><strong>Example</strong>: exit the position if the open of the next bar is below 1% of the cumulative maximum.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>All of the categories above can <em>all</em> be combined together to create a trading strategy.  Assuming this is true, that gives 3.556874e+14 possible combinations for just the buy side (and that doesn’t calculate the endless array of indicators you could appy).  However, some of these are clearly not useful, and for the sake of keeping things simple, I will look at the following:</p>
+
+<ol>
+  <li>Random Entry/Random Exit</li>
+  <li>Random Entry/Profit Target(%) Exit</li>
+  <li>Random Entry/Trailing Stop(%) Exit</li>
+  <li>Random Entry/Profit Target or Trailing Stop(%) Exit</li>
+</ol>
+
+<h3 id="a-non-random-fight-over-randomness"><a name="h1.2"></a>A Non-Random Fight Over Randomness</h3>
+<p>“In probability theory, a random walk is a stochastic process in which the change in the random variable is uncorrelated with past changes. Hence the change in the random variable cannot be forecasted. For a random walk, there is no pattern to the changes in the random variable, as the existence of any pattern would mean that the changes can be forecasted.” <a href="https://www.albany.edu/~bd445/Economics_466_Financial_Economics_Slides_Spring_2014/Random_Walk.pdf">Source</a></p>
+
+<p>If you ever want to start a fight, try to go into a room full of financial advisors and tell them that you can predict the market.  The <a href="https://en.wikipedia.org/wiki/Random_walk_hypothesis">random walk hypothesis</a> states that stock prices are (you guessed it) random and that they cannot be predicted.  <a href="https://www.chicagobooth.edu/~/media/34F68FFD9CC04EF1A76901F6C61C0A76.PDF">Entire industries and careers</a> are predicated on the fact that you can’t predict the market.  The simplified theory is that any outperformance - Alpha or whatever you call it - is only by chance</p>
+
+<p>Conversely, their are also <a href="https://www.pewresearch.org/2007/11/19/tracking-the-traders/">entire industries and careers</a> that are based on the fact that the market is not random and can therefore be predicted by trends, patterrns and historical price and volume action.</p>
+
+<p>Both sides have their proponents:  “[p]assive investments such as index funds and exchange-traded funds control about 60% of the equity assets, while quantitative funds, those which rely on trend-following models instead of fundamental research from humans, now account for 20% of the market share…”  <a href="https://www.cnbc.com/2019/06/28/80percent-of-the-stock-market-is-now-on-autopilot.html">Source</a></p>
+
+<p>For a short list of interesting articles on the Notes and Research Section at the end of this post.</p>
+
+<p>Which side is right?  Who cares, really.  The key is <em>you need to decide for yourself</em>, and what better way to do that than some good ol’ fashioned statistical and Monte Carlo analysis.</p>
+
+<p>And what if whether or not the stock market is random or not is the wrong answer to be asking?  The sole aim of a trader is to extract as much money from the market as his/her account will allow (I’ll add that such extraction <em>should</em> be in an “ethical” manner but you make that decision for yourself).  Why does it matter then if market movement is random or not?  Something makes prices move and you should be agnostic about your belief in <em>why</em> the price moves.  Your only job is to profit off it.  A short passage from <a href="http://mitp-content-server.mit.edu:18180/books/content/sectbyfn?collid=books_pres_0&amp;id=3909&amp;fn=9780262521161_sch_0001.pdf">Technical Analysis and Random Walks</a> struck me as relevant:</p>
+
+<p>“The term random has some unfortunate connotations. Random events are often believed to be in some sense “un-caused.” This belief is partly due to misleading comparisons that are sometimes drawn between stock price changes and the behavior of a roulette wheel. The problem is liable to be translated into a philosophical one, but there is nothing mystical or unnatural about the process that generates stock price changes. It is not governed by some frolicsome gremlin.  The random movement of stock prices simply results from competition between a large number of skilled and acquisitive investors.”</p>
+
+<h3 id="research-framework"><a name="h1.3"></a>Research Framework</h3>
+<p>First, I attempt to answer the question of whether or not an edge is <em>required</em> to be profitable.</p>
+
+<p>I will test the 4 random entry and exit rules on a few different “securities.”  In essence, the random entry portion should (hypothetically) remove any “edge” that you have.  I anticipate that the profit target, trailing stop and indicator will act as the “edge” that may ultimately be profitable.</p>
+
+<p>The first security to test on is a “coin-flip” stock.  The coin-flop stock is a synthetic security that has a normally distributed (ie, 50-50) chance of increasing or decreasing from one  period to the next. The coin-flip stock has a lognormal distribution of returns.</p>
+
+<p>The second security will be actual daily stock data for the S&amp;P 500.  I will mass download the stock data, calculate the periodical returns and use Monte Carlo analysis to see whether the 4 random entry and exit rules are profitable.</p>
+
+<p>Note that all tests in the first part will assume an equal amount of a hypothetical cash account is allocated to each test (ie, no compounding of the account).</p>
+
+<p>The second part of the research will involve adding in account and position management rules.  That is, adding in compounding to max geometric mean returns for each security.  I will also include the Kelly Criterior and Optimal f to see if either has a meaningful effect.</p>
+
+<h2 id="coin-flip-stock"><a name="h2"></a>Coin-Flip Stock</h2>
+<p>Assume for a second we have a purely “coin flip” stock.  Whether the stock is positive or negative during a given period is 50/50.  This is a Bernoulli distribution where <a href="https://www.stat.purdue.edu/~jtroisi/STAT350Spring2015/lectures/discDist.pdf">one trial of an experiment yields either a success or a failure</a>.  I will ignore that a stock can remain flat (neither positive nor negative) from one period to the next.  The distribution of returns for the “coin flip stock” is <a href="https://www.investopedia.com/articles/investing/102014/lognormal-and-normal-distribution.asp">lognormal</a> with a mean return of 0 and a standard deviation of 0.005.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set.seed(123)
+
+# - normal distribution of positive or negative
+p.sample.signal &lt;- c(-1,1)
+p.prob &lt;- 0.5 #percent of times
+p.periods &lt;- 200 #number of periods
+
+coin.flips &lt;- sample(p.sample.signal,
+                size = p.periods,
+                replace = TRUE,
+                prob = c(p.prob, 1 - p.prob))
+
+# - lognormal distribution of returns
+p.mean.log &lt;- 0
+p.sd.log &lt;- .005
+coin.returns &lt;- rlnorm(n=p.periods,
+                  meanlog = p.mean.log,
+                  sdlog = p.sd.log)
+
+# - position
+coin.position &lt;- (coin.returns-1)*coin.flips
+
+</code></pre></div></div>
+
+<h3 id="test-1--random-entryrandom-exit-for-coin-flip-stock"><a name="h2.1"></a>Test 1:  Random Entry/Random Exit for Coin-Flip Stock</h3>
+<p>Now I can build a function that finds the cumulative sum of the returns over a given number of periods.  We can replicate this function hundreds of thousands of times.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fn.coin.flip &lt;- function(
+                  p.prob = 0.5,
+                  p.periods = 200,
+                  p.mean.log = 0,
+                  p.sd.log = .005)
+    {
+    a &lt;- sample(c(-1,1),p.periods,replace = TRUE, prob = c(p.prob, 1 - p.prob))
+    b &lt;- rlnorm(p.periods, p.mean.log, p.sd.log)
+    c &lt;- (b-1)*a
+    return(c)
+  }
+
+fn.final.coin.flip &lt;- function(){
+  a &lt;- sum(fn.coin.flip(),na.rm = T)
+  return(a)
+}
+
+# - find the final value of the coin flip stock 100,000 times
+mc.coin.flip &lt;- replicate(100000, fn.final.coin.flip())
+
+# - output a summary of the monte carlo simulation and a histogram
+round(summary(mc.coin.flip),5)
+#     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+# -0.30376 -0.04810 -0.00009 -0.00001  0.04829  0.29403
+
+hist(mc.coin.flip,breaks = 100)
+</code></pre></div></div>
+
+<p>The results are what is to be expected: (1) 100,000 tests of the cumulative value of the returns after 200 periods averages 0, (2) the max return in all of the 100,000 tests is 29.4% and the minimum return is -30.4%, (3) the histogram looks roughly normal.</p>
+
+<p><img src="/assets/img/20200928_coin_flip_hist.png" alt="" /></p>
+
+<p>The conclusion? If we enter our coin flip stock at random and exit at random, over 100,000 returns, the average is zero.  There is no edge in random entries and random exits for our coin-flip stock.</p>
+
+<h3 id="test-2-random-entrystop-loss-or-profit-target-exit-for-coin-flip-stock"><a name="h2.2"></a>Test 2: Random Entry/Stop-Loss or Profit Target Exit for Coin-Flip Stock</h3>
+<p>The second test is to enter the coin-flip stock at random and then exit if either a profit target or a stop-loss is reached.</p>
+
+<p>For the fixed stop-loss and profit target calculation, I will be using a modified function from the <a href="https://github.com/systematicinvestor/SIT/blob/master/pkg/R/bt.stop.test.r">Systematic Investor Toolbox</a>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	fn.fixed.stop.fixed.pt &lt;- function(weight, price, tstart, tend, pstop, pprofit) {
+		index = tstart : tend
+		if(weight &gt; 0){
+			temp = price[ index ] &lt; (1 - pstop) * price[ tstart ]
+
+      # profit target
+			temp = temp | price[ index ] &gt; (1 + pprofit) * price[ tstart ]
+
+    } else{
+
+			temp = price[ index ] &gt; (1 + pstop) * price[ tstart ]
+
+      # profit target
+			temp = temp | price[ index ] &lt; (1 - pprofit) * price[ tstart ]
+    }
+	}
+</code></pre></div></div>
+
+<p>Then put together a function that returns the simulated path of the coin-flip stock and the % return when either the stop-loss or the fixed profit-target fires.  Notice that the default function reflects a 2:1 ratio of win to losses.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fn.fixed.stop.fixed.pt.coin.flip &lt;- function(
+                            start.value = 100,
+                            p.periods = 200,
+                            positive.percent.stop = .01,
+                            p.prob = .5,
+                            p.profit = .02)
+  {
+  a &lt;- fn.coin.flip(p.prob)           # - vector of returns at p.prob
+  b &lt;- cumprod(c(start.value, a + 1)) # - vector of stock prices based on those returns
+  c &lt;- first(which(fn.fixed.stop.fixed.pt(1, b, 1, p.periods, positive.percent.stop, p.profit))) # - find the index of the first instance where the trail stop fires
+  c.1 &lt;- ifelse(is.na(c) == TRUE, p.periods, c)
+  d &lt;- b[c.1] # - return the value of the index
+  e &lt;- d/start.value-1 # - exit over entry
+  return(e)
+}
+</code></pre></div></div>
+
+<p>Replicate the function 100,000 times and analyze the results using the <code class="language-plaintext highlighter-rouge">summary()</code> function and plotting a histogram of the results.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mc.fixed.stop.fixed.pt.coin.flip &lt;- replicate(100000,fn.fixed.stop.fixed.pt.coin.flip())
+round(summary(mc.fixed.stop.fixed.pt.coin.flip),5)
+#    Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+# -0.02965 -0.01296 -0.01085 -0.00010  0.02122  0.03993
+hist(mc.fixed.stop.fixed.pt.coin.flip)
+</code></pre></div></div>
+
+<p><img src="/assets/img/20200928_fixed_stop_coin_flip_hist.png" alt="" /></p>
+
+<p>What about changing the risk to reward ratio?  Say setting the stop-loss at 0.5% and really cranking the profit target up to 5%?  Or taking smaller wins at the risk of larger losses - a 5% stop-loss and a 1% profit target?  I won’t run it but I’ll save you the suspense; over a larger number of trades, the mean is essentially zero.</p>
+
+<h3 id="-test-3-random-entrytrailing-stop--exit-for-coin-flip-stock"><a name="h2.3"></a> Test 3: Random Entry/Trailing Stop (%) Exit for Coin-Flip Stock</h3>
+<p>What about using a percent trailing stop?  Does that improve returns? It seems intuitive that a trailing-stop(%) would be profitable (“you lose at most 1% AND your upside is unlimited!”).  But does this apply in a random market?</p>
+
+<p>I am going to use the trailing stop function from the <a href="https://github.com/systematicinvestor/SIT/blob/master/R/bt.stop.r">Systematic Investor Toolbox</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># ----- trailing stop: exit trade once price falls below % from max price since start of trade
+fn.trailing.stop.long &lt;- function(weight = 1, price, tstart, tend, positive.percent.stop) {
+    index = tstart : tend
+    if(weight &gt; 0)
+        price[ index ] &lt; (1 - positive.percent.stop) * cummax(price[ index ])
+    else
+        price[ index ] &gt; (1 + positive.percent.stop) * cummin(price[ index ])
+}
+</code></pre></div></div>
+
+<p>The trailing stop function acts to track the cumulative max over the given number of periods (for my purposes, it will be the <code class="language-plaintext highlighter-rouge">p.periods</code> argument from the <code class="language-plaintext highlighter-rouge">fn.coin.flip()</code> function).  It compares the cumulative max to the change in the current price.  If the percent change of the current price divided by the cumulative max is <strong>less</strong> than the <code class="language-plaintext highlighter-rouge">positive.percent.stop</code> then it returns “false”.  If the percent change of the current price divided by the cumulative max is <strong>more</strong> than the <code class="language-plaintext highlighter-rouge">positive.percent.stop</code> then it returns “false”.</p>
+
+<p>The “random entry” is the first value calculated by our <code class="language-plaintext highlighter-rouge">fn.coin.flip()</code> function.</p>
+
+<p>The “trailing stop (%)” is then the first value of the index of returns that satisfies the <code class="language-plaintext highlighter-rouge">fn.trailing.stop.long</code> function.  Since the <code class="language-plaintext highlighter-rouge">fn.trailing.stop.long</code> was created to accept a vector of stock prices, you can use the <code class="language-plaintext highlighter-rouge">cumprod()</code> function combined with <em>any</em> starting stock value as the index of stock prices to look at.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fn.trail.stop.coin.flip &lt;- function(
+                            start.value = 100,
+                            p.periods = 200,
+                            positive.percent.stop = .01,
+                            p.prob = .5)
+  {
+  a &lt;- fn.coin.flip(p.prob) # - vector of returns at p.prob
+  b &lt;- cumprod(c(start.value, a + 1)) # - vector of stock prices based on those returns
+  c &lt;- first(which(fn.trailing.stop.long(1, b, 1, p.periods,positive.percent.stop ))) # - find the index of the first instance where the trail stop fires
+  c.1 &lt;- ifelse(is.na(c) == TRUE, p.periods, c)
+  d &lt;- b[c.1] # - return the value of the index
+  e &lt;- d/start.value-1 # - exit minus entry
+  return(e)
+}
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">fn.trail.stop.coin.flip()</code> function returns the percentage return for the trade.</p>
+
+<p>The results aren’t too promising with the trailing stop set at 1%.  Again, the mean is near zero indicating that, on average, we don’t make a huge amount money over a large sample by “letting our profits run and cutting our losses short”.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mc.trail.stop.coin.flip &lt;- replicate(100000,fn.trail.stop.coin.flip())
+round(summary(mc.trail.stop.coin.flip),5)
+# Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+# -0.27392 -0.04873 -0.00243 -0.00015  0.04605  0.40692
+hist(mc.trail.stop.coin.flip,breaks = 100)
+</code></pre></div></div>
+<p><img src="/assets/img/20200928_trail_stop_coin_flip_hist.png" alt="" /></p>
+
+<p>So no real difference than random entry/random exit.  Maybe 1% is too tight of a stop?  What about a “looser” stop of 5%?</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mc.trail.stop.coin.flip.5 &lt;- replicate(100000,fn.trail.stop.coin.flip(positive.percent.stop = .05))
+round(summary(mc.trail.stop.coin.flip.5),5)
+
+# Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+# -0.27392 -0.04873 -0.00243 -0.00015  0.04605  0.40692
+hist(mc.trail.stop.coin.flip.5,breaks = 100)
+</code></pre></div></div>
+
+<p>The 5% trailing stop didn’t really improve performance.  It basically stayed the same.</p>
+
+<h3 id="test-4-random-entrytrailing-stop--or-profit-target-exit-for-coin-flip-stock"><a name="h2.4"></a>Test 4: Random Entry/Trailing Stop (%) or Profit-Target(%) Exit for Coin-Flip Stock</h3>
+<p>Not to spoil the surprise, but by now you should know the result of this test before it is run.  The code and results are below.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fn.trailing.stop.profit.target &lt;- function(weight, price, tstart, tend, positive.percent.stop, p.profit) {
+		index = tstart : tend
+		if(weight &gt; 0) {
+			temp = price[ index ] &lt; (1 - positive.percent.stop) * cummax(price[ index ])
+
+			# profit target
+			temp = temp | price[ index ] &gt; (1 + p.profit) * price[ tstart ]
+		} else {
+			temp = price[ index ] &gt; (1 + positive.percent.stop) * cummin(price[ index ])
+
+			# profit target
+			temp = temp | price[ index ] &lt; (1 - p.profit) * price[ tstart ]		
+		}
+		return( temp )
+	}
+
+fn.trail.stop.prof.targ.coin.flip &lt;- function(
+                            start.value = 100,
+                            p.periods = 200,
+                            positive.percent.stop = .01,
+                            p.prob = .5,
+                            p.profit = .02)
+  {
+  a &lt;- fn.coin.flip(p.prob) # - vector of returns at p.prob
+  b &lt;- cumprod(c(start.value, a + 1)) # - vector of stock prices based on those returns
+  c &lt;- first(which(fn.trailing.stop.profit.target(1, b, 1, p.periods,positive.percent.stop, p.profit))) # - find the index of the first instance where the trail stop fires
+  c.1 &lt;- ifelse(is.na(c) == TRUE, p.periods, c)
+  d &lt;- b[c.1] # - return the value of the index
+  e &lt;- d/start.value-1 # - exit minus entry
+  return(e)
+}
+
+mc.trail.stop.prof.targ.coin.flip &lt;- replicate(100000,fn.trail.stop.prof.targ.coin.flip())
+round(summary(mc.trail.stop.prof.targ.coin.flip),5)
+#    Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+#-0.02863 -0.01087 -0.00501 -0.00001  0.00669  0.04056
+hist(mc.trail.stop.prof.targ.coin.flip,breaks = 100)
+</code></pre></div></div>
+
+<p><img src="/assets/img/20200928_trail_stop_fixed_profit_coin_flip_hist.png" alt="" /></p>
+
+<h3 id="conclusions-for-coin-flip-stocks"><a name="h2.5"></a>Conclusions for Coin Flip Stocks</h3>
+<p>Coin flip returns are always going to even out to zero over the long term.  That is, if the market is 100% random and never trends and you have no ability to identify when the market may go up so you can enter (ie, have an edge), then there is no advantage to adding a profit-target, stop-loss or trailing-stop loss.  If a market is random and you are successful  with any of these implements, then it can be attributed  to luck.  You just happened to pick the right stretch of numbers.</p>
+
+<p>But what if you can <em>skew</em> the coin flip in your favor - say you can guess the correct flip of the coin 53 times out of 100.  What’s the effect on the coin-flip stock then?</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mc.trail.stop.coin.flip.skew &lt;- replicate(100000,fn.trail.stop.coin.flip(p.prob = .47))
+round(summary(mc.trail.stop.coin.flip.skew),5)
+
+#    Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+#
+-0.26530 -0.04847 -0.00219  0.00035  0.04635  0.33444
+sum(unlist(mc.trail.stop.coin.flip.skew))
+# [1] 34.67538
+</code></pre></div></div>
+
+<p>It’s a significant effect - the mean is now .03% per trade - put another way, if you traded 100,000 times, your total return would be 3467% or if you traded 100 times, you would average a total return of 3.47%.  And recall that this is merely with random entries and random exits.</p>
+
+<p>Having an “edge” then would seem to be important.  SMB Training put it better than I could (and although it name-checks trailing-stops, I would also add profit-targets and stop losses to the statement below):</p>
+
+<blockquote>
+  <p>“…[T]he bottom line is if you do not have an edge in the market, you cannot make money. Period. A trailing stop is not an edge in itself (I am aware of the studies in a well-known trading book that show a profitable trading system with random entries and trailing stops. The key is that the markets tested were not random (they were real futures markets), and the exits were not random (they were a good trailing stop system). If markets were random you could not make money trading, and, if you are not convinced of that, you are missing a key piece of the intuition behind understanding price action.” <a href="https://www.smbtraining.com/blog/finding-an-edge-in-random-markets">Finding an edge in random markets</a></p>
+</blockquote>
+
+<p>So if the each of the 4 random entry tests don’t add any value to a purely random stock, then the same theory should also apply to actual stock returns if the random walk theory is correct.  Their should be no additional return provided by adding the profit target or trailing stop.  “An implication of the efficient market/random-walk theory is that no trading rule will yield an economic profit.”  <a href="https://www.albany.edu/~bd445/Economics_466_Financial_Economics_Slides_Spring_2014/Testinge_Random-Walk_Theory.pdf_th">Testing the Random-Walk Theory</a>.  You can test this by looking at the probability distribution of the profit from a trading rule - if the random-walk theory is correct, then the probability of profit should be random.  Stated otherwise, you should have just “bought-and-hold” because all of the entry and exit were unecessary.</p>
+
+<h2 id="testing-on-actual-stock-data"><a name="h3"></a>Testing on Actual Stock Data</h2>
+<p>The first step is to download historical data for the last 90 days of historical data for all of the stocks in the S&amp;P 500.  To do this, use the excellent <code class="language-plaintext highlighter-rouge">BatchGetSymbols</code> package.  It makes <a href="https://cran.r-project.org/web/packages/BatchGetSymbols/vignettes/BatchGetSymbols-vignette.html">quick work of downloading, organizing and saving all the data in one big data frame</a>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library(BatchGetSymbols)
+
+# set dates
+first.date &lt;- Sys.Date() - 360
+last.date &lt;- Sys.Date()
+freq.data &lt;- 'daily'
+
+# set tickers
+df.SP500 &lt;- GetSP500Stocks()
+tickers &lt;- df.SP500$Tickers
+
+l.out &lt;- BatchGetSymbols(tickers = tickers,
+                         first.date = first.date,
+                         last.date = last.date)
+
+l.out.grouped &lt;- l.out$df.tickers %&gt;% group_by(ticker)
+</code></pre></div></div>
+
+<h3 id="test-1-random-entryrandom-exit-for-actual-stock-data"><a name="h3.1"></a>Test #1: Random Entry/Random Exit for Actual Stock Data</h3>
+<p>The function is below for entering and exiting at random.</p>
+
+<p>A few key issues:</p>
+
+<ol>
+  <li>
+    <p>Since I am testing individual stocks (and not a portfolio of multiple stocks) I need to group each of the stocks individually when identifying returns. In Test #1 on actual data, I allow the individual to limit it to only entering and exiting the same ticker by setting the argument <code class="language-plaintext highlighter-rouge">same.ticker = TRUE</code>.  For instance, if you enter one stock long, you must sell the stock before entering another stock.  If <code class="language-plaintext highlighter-rouge">same.ticker = FALSE</code> then the function is ignorant of which stock you enter and which stock you exit; they do not have to be the same.</p>
+  </li>
+  <li>
+    <p>There is also a maximum holding period argument.  The <code class="language-plaintext highlighter-rouge">max.periods</code> argument defines the highest number of periods to hold the stock.</p>
+  </li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fn.rand.exit.actual.data &lt;- function(data = l.out$df.tickers,
+                                    max.periods = 100,
+                                    same.ticker = TRUE)
+                                    {
+  a &lt;- round(runif(1, min = 1, max = length(data$price.open))) # - random entry index
+  b &lt;- round(runif(1, min = a, max = length(data$price.open))) # - random exit index after entry
+  c &lt;- first(which(data$ticker[a:b] != lag(data$ticker[a:b],1))) # - where stock data changes
+  d &lt;- min(c,max.periods)
+  e &lt;- ifelse(same.ticker == TRUE,
+        ifelse(data$ticker[a] == data$ticker[b], # - if ticker is the same for both
+          sum(data$ret.closing.prices[a:b], na.rm = T), # - sum of all returns
+          sum(data$ret.closing.prices[a:(a+d)], na.rm = T)
+        ),
+        sum(data$ret.closing.prices[a:b], na.rm = T)
+      )
+  return(e)
+}
+
+mc.rand.exit.actual.data &lt;- replicate(10000,fn.rand.exit.actual.data())
+
+round(summary(mc.rand.exit.actual.data),5)
+#   Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+#-1.60247 -0.09857  0.00590  0.01060  0.12949  1.58080
+
+# - add in a custom function that plots a uniform distribution over the actual histogram
+fn.uniform.hist &lt;- function(data,
+                    breaks, xlab = "Percent Return", main = "Frequency of Returns")
+    {
+  h &lt;- hist(data, breaks = breaks, density = breaks, col = "gray", xlab = xlab, main = main)
+  xfit &lt;- seq(min(data), max(data), length = breaks)
+  yfit &lt;- dnorm(xfit, mean = mean(data), sd = sd(data))
+  yfit &lt;- yfit * diff(h$mids[1:2]) * length(data)
+  lines(xfit, yfit, col = "black", lwd = 2)
+}
+</code></pre></div></div>
+
+<p><img src="/assets/img/20200928_rand_exit_actual_data_hist.png" alt="" /></p>
+
+<p>The histogram looks fairly close to a normal distribution - except notice the frequency is greater in the middle and at both ends (a “fat tail”)</p>
+
+<p>Reduce the max holding period argument to 10:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mc.rand.exit.actual.data.10 &lt;- replicate(10000,fn.rand.exit.actual.data(max.periods = 10))
+
+round(summary(mc.rand.exit.actual.data.10),5)
+#     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.
+# -1.09355 -0.02947  0.01046  0.00505  0.05168  0.68247
+
+fn.uniform.hist(mc.rand.exit.actual.data.10, breaks = 200, xlab = "Percent Return", main = "Frequency of Returns - Actual Data | Random Exit | Max Hold 10")
+</code></pre></div></div>
+
+<p><img src="/assets/img/20200928_rand_exit_10max_actual_data_hist.png" alt="" /></p>
+
+<p>This does little to help the mean return.  It actually decreased with a shorter time frame. This may lead you to explore whether longer holding times increase returns.</p>
+
+<h3 id="test-2-random-entry-stop-loss--or-profit-target--exit-for-actual-stock-data"><a name="h3.2"></a>Test #2: Random Entry/ Stop-Loss (%) or Profit-Target (%) Exit for Actual Stock Data</h3>
+
+<p>Below is the modified code for the random entry and stop-loss percentage or profit-target percentage for actual stock data.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fn.fixed.stop.fixed.pt.actual.data &lt;- function(data = l.out$df.tickers,
+                                    max.periods = 1000,
+                                    same.ticker = TRUE,
+                                    positive.percent.stop = .025,
+                                    p.profit = .05){
+  a &lt;- round(runif(1, min = 1, max = length(data$price.open))) # - random entry index
+
+  b &lt;- length(data$price.open) # - end of the data vector
+
+  c &lt;- first(which(data$ticker[a:b] != lag(data$ticker[a:b],1))) # - where stock ticker changes as measured from the random entry
+
+  d &lt;- min(c,max.periods, na.rm = T) # - return length lesser of stock ticker change OR max hold periods
+
+  a.1 &lt;- first(which(fn.fixed.stop.fixed.pt(1, data$price.open, a, (a+d), positive.percent.stop, p.profit ))) # - return index of where stop loss or profit target fired, as measured from random entry to lesser of stock ticker change OR max hold periods
+
+  a.2 &lt;- min((a + a.1), min((a+d), b),na.rm = T) # - min exit index from entry (trail.stop, change of ticker, max.periods, full length of vector)
+
+  #e &lt;- data$price.open[[a.2]]/data$price.open[[a]]-1
+
+  e &lt;- sum(data$ret.closing.prices[a:a.2], na.rm = T) # - sum of all returns
+
+  return(e)
+}
+
+# - mc analysis with max.periods at 1000, stop at 2.5% and profit target at 5%
+mc.fixed.stop.fixed.pt.actual.data &lt;- replicate(10000,fn.fixed.stop.fixed.pt.actual.data())
+
+round(summary(mc.trail.stop.actual.data),5)
+
+fn.uniform.hist(mc.fixed.stop.fixed.pt.actual.data, breaks = 200, xlab = "Percent Return", main = "Frequency of Returns - Actual Data | Stop Loss and Profit Target")
+</code></pre></div></div>
+
+<p><img src="/assets/img/20200928_profit_targ_stop_loss_actual_data_hist.png" alt="" /></p>
+
+<p>Profit target and stop loss with a 2:1 ratio didn’t return a significant non-zero mean.  Again, feel free to change the parameters but the ultimate results will likely be the same.</p>
+
+<h3 id="test-3-random-entrytrailing-stop-exit-on-actual-stock-data"><a name="h3.3"></a>Test #3: Random Entry/Trailing Stop Exit on Actual Stock Data</h3>
+
+<p>A few notes:</p>
+
+<ol>
+  <li>
+    <p>The default <code class="language-plaintext highlighter-rouge">max.periods</code> argument is now 1000 periods.  The thinking is that the trailing stop should fire well before the <code class="language-plaintext highlighter-rouge">max.periods</code> limit fires.</p>
+  </li>
+  <li>
+    <p>The default <code class="language-plaintext highlighter-rouge">positive.percent.stop</code> argument is now 10%.</p>
+  </li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fn.trail.stop.actual.data &lt;- function(data = l.out$df.tickers,
+                                    max.periods = 1000,
+                                    same.ticker = TRUE,
+                                    positive.percent.stop = .1){
+  a &lt;- round(runif(1, min = 1, max = length(data$price.open))) # - random entry index
+
+  b &lt;- length(data$price.open) # - end of the vector
+
+  c &lt;- first(which(data$ticker[a:b] != lag(data$ticker[a:b],1))) # - where stock ticker changes as measured from the random entry
+
+  d &lt;- min(c,max.periods, na.rm = T)
+
+  a.1 &lt;- first(which(fn.trailing.stop.long(1, data$price.open, a, (a+d), positive.percent.stop ))) # - find the index of the first instance where the trail stop fires a measured from rand entry to lesser of where stock ticker changes or the max hold period
+
+  a.2 &lt;- min((a + a.1), min((a+d), b),na.rm = T) # - min exit index (trail.stop, change of ticker, max.periods, full length)
+
+  #e &lt;- data$price.open[[a.2]]/data$price.open[[a]]-1
+
+  e &lt;- sum(data$ret.closing.prices[a:a.2], na.rm = T) # - sum of all returns
+
+  return(e)
+}
+
+# - mc analysis with max.periods at 1000 and positive.percent.stop at 5%
+mc.trail.stop.actual.data &lt;- replicate(10000,fn.trail.stop.actual.data(max.periods = 1000, positive.percent.stop = .05))
+
+round(summary(mc.trail.stop.actual.data),5)
+#    Min.  1st Qu.   Median     Mean  3rd Qu. Max.
+#-0.86470 -0.05280 -0.01199  0.00024  0.04396 0.88775
+
+# - mc analysis 10k runs - max.periods at 20 and positive.percent.stop at 5%
+mc.trail.stop.actual.data.20 &lt;- replicate(10000,fn.trail.stop.actual.data(max.periods = 20, positive.percent.stop = .05))
+round(summary(mc.trail.stop.actual.data.20),5)
+Min.  1st Qu.   Median     Mean  3rd Qu.    Max.
+-0.86470 -0.04641  0.00070  0.00383  0.05030 0.60548
+
+# - mc analysis 100k runs - with max.periods at 100 and positive.percent stop at 5%
+# - to compare with mc.random.exit.actual.data
+mc.trail.stop.actual.data.comp &lt;- replicate(100000,fn.trail.stop.actual.data(max.periods = 100, positive.percent.stop = .05))
+
+round(summary(mc.trail.stop.actual.data.comp),5)
+#   Min.  1st Qu.   Median     Mean  3rd Qu.     Max.     NA's
+#-0.97897 -0.05634 -0.01834  0.02345  0.03922 48.93818       21
+
+mc.trail.stop.actual.data.comp2 &lt;- replicate(10000,fn.trail.stop.actual.data(max.periods = 100, positive.percent.stop = .01))
+
+round(summary(mc.trail.stop.actual.data.comp2),5)
+
+</code></pre></div></div>
+<p>Comparing the trailing stop (%) exit to the</p>
+
+<h3 id="test-4-random-entrytrailing-stop--or-profit-target--exit-on-actual-stock-data"><a name="h3.4"></a>Test #4: Random Entry/Trailing Stop (%) or Profit-Target (%) Exit on Actual Stock Data</h3>
+
+<h2 id="other-tests-and-research"><a name="h4"></a>Other Tests And Research</h2>
+<h3 id="momentum-runs-and-random-walk-theory"><a name="h4.1"></a>Momentum, Runs and Random-Walk Theory</h3>
+<h3 id="correlation-of-returns"><a name="h4.2"></a>Correlation of Returns</h3>
+<h3 id="sub-heading-43"><a name="h4.3"></a>Sub-Heading 4.3</h3>
+
+<h2 id="finding-an-edge"><a name="h5"></a>Finding an Edge</h2>
+<h3 id="how-to-know-when-it-is-non-random"><a name="h5.1"></a>How to Know When it is Non-Random</h3>
+<h3 id="sub-heading-52"><a name="h5.2"></a>Sub-Heading 5.2</h3>
+<h3 id="sub-heading-53"><a name="h5.3"></a>Sub-Heading 5.3</h3>
+
+<h2 id="account-management-and-compounding-returns"><a name="h6"></a>Account Management and Compounding Returns</h2>
+<h3 id="sub-heading-61"><a name="h6.1"></a>Sub-Heading 6.1</h3>
+<h3 id="sub-heading-62"><a name="h6.2"></a>Sub-Heading 6.2</h3>
+<h3 id="sub-heading-63"><a name="h6.3"></a>Sub-Heading 6.3</h3>
+
+<p>What can you quarrel with?  Not enough data? Not enough permutations?</p>
+
+<p>Accept the inevitable conclusion that you can’t improve performance by predicting the direction of the stock market.  Past results do not predict future performance.  They say luck is what happens when preparation meets opportunity.  So is the key to accept that you need to stay in the game long enough to put yourself in a position to make money?  Is leverage and compounding returns the best way to</p>
+
+<h2 id="notes-and-research">Notes and Research</h2>
+<ul>
+  <li>Support for the Random Walk Theory.
+    <ul>
+      <li>Fama, Eugene F. “The behavior of stock-market prices.” The journal of Business 38.1 (1965): 34-105. <a href="https://d1wqtxts1xzle7.cloudfront.net/19110451/the_behavior_of_stock-market_prices__fama__1965.pdf?1340047562=&amp;response-content-disposition=inline%3B+filename%3DThe_behavior_of_stock_market_prices.pdf&amp;Expires=1601394260&amp;Signature=L7zNRwuwdl8Ige5xFb2s28xFDL0t1qPR9opMAJM1Gs54rn8tpQygsvCsYrCNNkl7V7nmWnY1Huv9szdS20uyAqiUffGvT7SmwUdEHMnDh~sASbhA7HEMltr0RBn48ZghrmR4f4JO8tJP7kOEMft3k6mZ~dm6XQxntByQywUqlXwIWs8XLH8a7P76f6xMS8EB0waI67Km7n2Lg3yb0cO1gKzE2OtKGHzfQcEMKmYZdSNV4XJZIgcZWu38EWcbbEiSwQJ0IdHcuzOtnvAn2ZJDHge51~D5WIL-JvKQrJZQduuU1DojdAfNGVHoBp~xOgj3g2c1MupLmsOVvmFWMBXjvg__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA">PDF Link</a></li>
+      <li>Fama, Eugene F. “Random walks in stock market prices.” Financial analysts journal 51.1 (1995): 75-80. <a href="https://s3.eu-central-1.amazonaws.com/z3r2zxopa4uuqpw5a4ju/devriesinvestment/files/Random%20Walk%20in%20Stock%20Market%20Prices.pdf">PDF Link</a></li>
+      <li>Pinches, George E. “The random walk hypothesis and technical analysis.” Financial Analysts Journal 26.2 (1970): 104-110. <a href="https://www.tandfonline.com/doi/abs/10.2469/faj.v26.n2.104?journalCode=ufaj20">Link</a>.</li>
+    </ul>
+  </li>
+  <li>Support for the Non-Random Walk Theory.
+    <ul>
+      <li>Lo, Andrew W., and A. Craig MacKinlay. A non-random walk down Wall Street. Princeton University Press, 2011. <a href="http://kadamaee.ir/payesh/books-tank/17/Lo%20&amp;%20MacKinlay%20-%20A%20Non-Random%20Walk%20Down%20Wall%20Street%20(1999).pdf">PDF Link</a></li>
+      <li>Hood, Donald C., Paul Andreassen, and Stanley Schachter. “II. Random and non-random walks on the New York stock exchange.” Journal of Economic Behavior &amp; Organization 6.4 (1985): 331-338. <a href="https://www.sciencedirect.com/science/article/pii/0167268185900022">Link</a></li>
+      <li>Gup, Benton E. “A note on stock market indicators and stock prices.” Journal of Financial and Quantitative Analysis (1973): 673-682. <a href="https://www.jstor.org/stable/2329832">Link</a></li>
+      <li>(“STOCK MARKET PRICES DO NOT FOLLOW RANDOM WALKS: EVIDENCE FROM A SIMPLE SPECIFICATION TEST”)[https://www.nber.org/papers/w2168.pdf]</li>
+    </ul>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>[PROBABILITIES AND DISTRIBUTIONS</td>
+          <td>R LEARNING MODULES](https://stats.idre.ucla.edu/r/modules/probabilities-and-distributions/)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li><a href="http://rstudio-pubs-static.s3.amazonaws.com/8492_b817c712a5f6456fb4c5932e3d957135.html#/3">Simulating a Coin Flip in R</a></li>
+  <li><a href="https://masterr.org/r/calculate-mortgage-payment-schedule/">How to Calculate Mortgage Payment Schedule in R – Become Great at R</a></li>
+  <li><a href="https://faculty.ucr.edu/~tgirke/Documents/R_BioCond/My_R_Scripts/mortgage.R">https://faculty.ucr.edu/~tgirke/Documents/R_BioCond/My_R_Scripts/mortgage.R</a></li>
+  <li><a href="https://www.cfainstitute.org/-/media/documents/code/gips/2020-gips-standards-asset-owners.ashx">2020-gips-standards-asset-owners.ashx</a></li>
+  <li><a href="https://financetrain.com/lessons/introduction-gips/">Introduction - GIPS - Finance Train</a></li>
+  <li><a href="https://financetrain.com/how-to-calculate-annualized-returns/">How to Calculate Annualized Returns - Finance Train</a></li>
+  <li><a href="https://www.scranton.edu/faculty/hussain/teaching/mba503c/MBA503C02.pdf">MBA503C02.pdf</a></li>
+  <li><a href="https://www.quantmod.com/documentation/periodReturn.html">R: Calculate Periodic Returns</a></li>
+  <li><a href="https://www.firstlinks.com.au/why-you-should-know-the-difference-between-arithmetic-and-geometric-investment-returns">The difference between arithmetic and geometric investment returns</a></li>
+  <li><a href="https://financeformulas.net/Geometric_Mean_Return.html">Geometric Mean Return Formula (with Calculator)</a></li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>[Probabilities and Distributions</td>
+          <td>R Learning Modules](https://stats.idre.ucla.edu/r/modules/probabilities-and-distributions/)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li><a href="https://cran.r-project.org/web/packages/BatchGetSymbols/vignettes/BatchGetSymbols-vignette.html">Using BatchGetSymbols to download financial data for several tickers</a></li>
+  <li><a href="https://github.com/systematicinvestor/SIT/blob/master/pkg/R/bt.stop.test.r">SIT/bt.stop.test.r at master · systematicinvestor/SIT</a></li>
+  <li><a href="https://www.albany.edu/~bd445/Economics_466_Financial_Economics_Slides_Spring_2014/Testing_the_Random-Walk_Theory.pdf">Testing the Random-Walk Theory</a></li>
+  <li><a href="https://www.albany.edu/~bd445/Economics_466_Financial_Economics_Slides_Spring_2014/">Slides, Economics 466, Financial Economics</a></li>
+  <li><a href="https://www.albany.edu/~bd445/Economics_466_Financial_Economics_Slides_Spring_2014/Random_Walk.pdf">Random Walk</a></li>
+  <li><a href="https://www.albany.edu/~bd445/Economics_466_Financial_Economics_Slides_Spring_2014/The_Weakness_of_the_Efficient-Market_Theory.pdf">The Weakness of the Efficient-Market Theory</a></li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>[Are Stock Returns Normally Distributed?</td>
+          <td>by Tony Yiu</td>
+          <td>Towards Data Science](https://towardsdatascience.com/are-stock-returns-normally-distributed-e0388d71267e)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li><a href="https://klementoninvesting.substack.com/p/the-distribution-of-stock-market#:~:text=We%20all%20know%20that%20stock,happen%20more%20frequently%20than%20expected">The distribution of stock market returns - Klement on Investing</a>.&amp;text=As%20you%20can%20see%2C%20on,the%20normal%20distribution%20relatively%20well.)</li>
+  <li><a href="https://www.datamentor.io/r-programming/examples/random-number/">R Program to Generate Random Number from Standard Distributions</a></li>
+</ul>
+:ET

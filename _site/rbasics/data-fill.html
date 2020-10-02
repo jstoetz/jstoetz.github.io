@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Data Basics - Filling Missing Data and NA Values | jstoetz</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Data Basics - Filling Missing Data and NA Values" />
+<meta name="author" content="Jake Stoetzner" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Filling Data in Columns" />
+<meta property="og:description" content="Filling Data in Columns" />
+<link rel="canonical" href="http://localhost:4000/rbasics/data-fill" />
+<meta property="og:url" content="http://localhost:4000/rbasics/data-fill" />
+<meta property="og:site_name" content="jstoetz" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-02T12:00:01-05:00" />
+<script type="application/ld+json">
+{"description":"Filling Data in Columns","headline":"Data Basics - Filling Missing Data and NA Values","dateModified":"2020-10-02T12:00:01-05:00","datePublished":"2020-10-02T12:00:01-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/rbasics/data-fill"},"url":"http://localhost:4000/rbasics/data-fill","author":{"@type":"Person","name":"Jake Stoetzner"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="jstoetz" /></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">jstoetz</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Data Basics - Filling Missing Data and NA Values</h1>
+  </header>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <nav style="display: inline-block;">
+    
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+
+
+
+
+  <a href="/">Home</a>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+
+
+
+
+  <a href="/rbasics/">rbasics</a>
+
+<strong>Data Basics - Filling Missing Data and NA Values</strong>
+  </nav>
+
+
+
+  <div class="post-content">
+    <h2 id="filling-data-in-columns">Filling Data in Columns</h2>
+
+<p>Filling values <em>down</em> or <em>up</em> a column is a necessary part of managing our time series data.  It is also a crucial decision to make regarding how you will handle financial time series data.</p>
+
+<h3 id="functions-mentioned">Functions Mentioned</h3>
+<p>na.locf(), fill_(), na.fill(), merge(), merge.xts(), getSymbols(), na.omit(), na.approx(), na_locf()</p>
+
+<h3 id="packages-mentioned">Packages Mentioned</h3>
+<p><a href="https://cran.r-project.org/web/packages/zoo/index.html">zoo</a>, tidyr, QuantTools, quantmod</p>
+
+<h3 id="filling-down-a-column-with-nalocf---first-rows-equal-to-na">Filling Down a Column With <code class="language-plaintext highlighter-rouge">na.locf()</code> - First Rows Equal to NA</h3>
+
+<p>The easiest example of when this comes in handy is when matching up two data frames where one data frame has more rows with values than the other.  NA values generally appear when doing calculations on columns of data where a look back period is in place.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library(zoo)
+df1 &lt;- data.frame(
+  "series_1" = c(1:10),
+  "series_2" = c(NA,NA,3:10)
+  )
+
+df1
+#   series_1 series_2
+#1         1       NA
+#2         2       NA
+#3         3        3
+#4         4        4
+#5         5        5
+</code></pre></div></div>
+
+<p>If you are comparing <code class="language-plaintext highlighter-rouge">df$series_1</code> with <code class="language-plaintext highlighter-rouge">df$series_2</code>, you may end up with errors due to the NA values in the first 2 rows.</p>
+
+<p>One solution is to use the <code class="language-plaintext highlighter-rouge">na.locf()</code> function in the <code class="language-plaintext highlighter-rouge">zoo()</code> package.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>na.locf(df1, fromLast = TRUE)
+#   series_1 series_2
+#1         1        3
+#2         2        3
+#3         3        3
+#4         4        4
+#5         5        5
+</code></pre></div></div>
+
+<p>Setting <code class="language-plaintext highlighter-rouge">fromLast = TRUE</code> fills from the bottom up; that is, it tells the <code class="language-plaintext highlighter-rouge">na.locf()</code> function to start from the bottom of the column, look for the last non-NA value and then use that value (in this case, the “3”) to fill <em>up</em> for all of the NA values.</p>
+
+<h3 id="filling-down-a-column-with-nalocf---interior-rows-equal-to-na">Filling Down a Column With <code class="language-plaintext highlighter-rouge">na.locf()</code> - Interior Rows Equal to NA</h3>
+
+<p>Consider a case where you have missing values in <em>interior</em> rows of the data frame.  This usually arises when matching two data series.  For instance, comparing a 1-minute chart of a stock with a 1-minute chart of an ATM option.  The option (in general) will have far fewer entries because it trades less frequently than the underlying stock.  Thus, there will be several minutes that will not have data.  A simple example of interior row NAs:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df2 &lt;- data.frame(
+  "series_1" = c(1:10),
+  "series_2" = c(1, 2, NA,NA,5:10)
+  )
+
+df2
+#   series_1 series_2
+#1         1        1
+#2         2        2
+#3         3       NA
+#4         4       NA
+#5         5        5
+</code></pre></div></div>
+
+<p>Rows 3 and 4 have missing values which are represented by NA.  We want to get rid of those values and carry the last non-NA value down (ie, carry the number “2” down into row 3 and 4).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>na.locf(df2, fromLast = FALSE)
+#   series_1 series_2
+#1         1        1
+#2         2        2
+#3         3        2
+#4         4        2
+#5         5        5
+</code></pre></div></div>
+
+<h3 id="filling-down-a-column-with-nalocf---last-rows-equal-to-na">Filling Down a Column With <code class="language-plaintext highlighter-rouge">na.locf()</code> - Last Rows Equal to NA</h3>
+
+<p>By now you can easily figure out how to replace the last 2 NA values filling <em>down</em>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df3 &lt;- data.frame(
+  "series_1" = c(1:5),
+  "series_2" = c(1:3, NA, NA)
+  )
+
+df3
+#  series_1 series_2
+#1        1        1
+#2        2        2
+#3        3        3
+#4        4       NA
+#5        5       NA
+
+na.locf(df3, fromLast = FALSE)
+#  series_1 series_2
+#1        1        1
+#2        2        2
+#3        3        3
+#4        4        3
+#5        5        3
+</code></pre></div></div>
+
+<h3 id="filling-down-a-column-with-fill_">Filling Down a Column With <code class="language-plaintext highlighter-rouge">fill_()</code></h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">tidyr</code> package offers <code class="language-plaintext highlighter-rouge">fill_()</code> to handle NA values in the first row, interior rows or at the end.  Instead of the <code class="language-plaintext highlighter-rouge">fromLast</code> argument in <code class="language-plaintext highlighter-rouge">na.locf()</code> you input <code class="language-plaintext highlighter-rouge">.direction</code> as either <code class="language-plaintext highlighter-rouge">c('up', 'down')</code>.  You can also specify columns with the <code class="language-plaintext highlighter-rouge">fill_cols</code> argument.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library(tidyr)
+# NA values at the beginning
+df1 &lt;- data.frame(
+    "series_1" = c(1:10),
+    "series_2" = c(NA,NA,3:10)
+)
+
+fill_(df1, fill_cols = "series_2", .direction = "up")
+#   series_1 series_2
+#1         1        3
+#2         2        3
+#3         3        3
+#4         4        4
+#5         5        5
+
+# NA values in interior rows
+df2 &lt;- data.frame(
+    "series_1" = c(1:10),
+    "series_2" = c(1:2,NA,NA,5:10)
+)
+
+fill_(df2, fill_cols = "series_2", .direction = "down")
+#  series_1 series_2
+#1         1        1
+#2         2        2
+#3         3        2
+#4         4        2
+#5         5        5
+
+# NA values at the end of the column
+df3 &lt;- data.frame(
+    "series_1" = c(1:5),
+    "series_2" = c(1:3,NA,NA)
+)
+
+fill_(df3, fill_cols = "series_2", .direction = "down")
+#  series_1 series_2
+#1        1        1
+#2        2        2
+#3        3        3
+#4        4        3
+#5        5        3
+</code></pre></div></div>
+
+<h3 id="filling-down-multiple-columns-using-fill_">Filling Down Multiple Columns Using <code class="language-plaintext highlighter-rouge">fill_()</code></h3>
+
+<p>Most times there is more than one column of data you need to fill up or down.  Use <code class="language-plaintext highlighter-rouge">fill_()</code> and set <code class="language-plaintext highlighter-rouge">fill_cols</code> argument to return the <code class="language-plaintext highlighter-rouge">names()</code> of the data frame.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library(tidyr)
+df &lt;- fill_(df, fill_cols = names(df))
+head(df)
+#   col1 col2 col3
+#1    1   NA    b
+#2    1    3    b
+#3    2    4    a
+#4    2    4    a
+#5    2    1    a
+#6    3    4    a
+</code></pre></div></div>
+
+<p>Alternatively, you can use <code class="language-plaintext highlighter-rouge">fill_()</code> with the <code class="language-plaintext highlighter-rouge">everything()</code> command.  For example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df %&gt;% fill(everything()) %&gt;% fill(everything(), .direction = 'up')
+</code></pre></div></div>
+
+<p>Changing the <code class="language-plaintext highlighter-rouge">.direction</code> argument to <code class="language-plaintext highlighter-rouge">up</code> will copy values from the bottom up, rather than top down.</p>
+
+<h3 id="filling-multiple-columns---na-values-at-the-beginning-middle-and-end">Filling Multiple Columns - NA Values At the Beginning, Middle and End</h3>
+
+<p>Often times you have a <code class="language-plaintext highlighter-rouge">data.frame</code> with NA values mixed in at random.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df4 &lt;- data.frame(
+  "series_1" = c(NA, 2, 2, NA, NA, 3, NA, 4, NA, NA),
+  "series_2" = c(2, NA, 1, 1, NA, 2, NA, 5, 7, NA))
+
+df4
+#   series_1 series_2
+#1        NA        2
+#2         2       NA
+#3         2        1
+#4        NA        1
+#5        NA       NA
+#6         3        2
+#7        NA       NA
+#8         4        5
+#9        NA        7
+#10       NA       NA
+</code></pre></div></div>
+
+<p>If you set the <code class="language-plaintext highlighter-rouge">.direction</code> argument to <code class="language-plaintext highlighter-rouge">"down"</code> it will carry the last observation forward.  This would fix <code class="language-plaintext highlighter-rouge">series_2</code> column but not the <code class="language-plaintext highlighter-rouge">series_1</code> column since it <em>starts</em> with an NA value.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fill_(df4, fill_cols = names(df4), .direction = "down")
+#   series_1 series_2
+#1        NA        2
+#2         2        2
+#3         2        1
+#4         2        1
+#5         2        1
+#6         3        2
+#7         3        2
+#8         4        5
+#9         4        7
+#10        4        7
+</code></pre></div></div>
+
+<p>If you set the <code class="language-plaintext highlighter-rouge">.direction</code> argument to <code class="language-plaintext highlighter-rouge">"up"</code> it will carry the first observation backward.  This would not fix <code class="language-plaintext highlighter-rouge">series_1</code> column or the <code class="language-plaintext highlighter-rouge">series_2</code> column since they both <em>end</em> with an NA value.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fill_(df4, fill_cols = names(df4), .direction = "up")
+#   series_1 series_2
+#1         2        2
+#2         2        1
+#3         2        1
+#4         3        1
+#5         3        2
+#6         3        2
+#7         4        5
+#8         4        5
+#9        NA        7
+#10       NA       NA
+</code></pre></div></div>
+
+<p>The solution is provided by the <code class="language-plaintext highlighter-rouge">fill_()</code> function.  In addition to <code class="language-plaintext highlighter-rouge">up</code> and <code class="language-plaintext highlighter-rouge">down</code>, you can also set the <code class="language-plaintext highlighter-rouge">.direction</code> argument to either <code class="language-plaintext highlighter-rouge">downup</code> or <code class="language-plaintext highlighter-rouge">updown</code>.  <code class="language-plaintext highlighter-rouge">downup</code> first carries the last observation forward then the first observation backward. Conversely, <code class="language-plaintext highlighter-rouge">updown</code> does the opposite; it first carries the first observation backward then the last observation forward.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fill_(df4, fill_cols = names(df4), .direction = "downup")
+#   series_1 series_2
+#1         2        2
+#2         2        2
+#3         2        1
+#4         2        1
+#5         2        1
+#6         3        2
+#7         3        2
+#8         4        5
+#9         4        7
+#10        4        7
+
+fill_(df4, fill_cols = names(df4), .direction = "updown")
+#   series_1 series_2
+#1         2        2
+#2         2        1
+#3         2        1
+#4         3        1
+#5         3        2
+#6         3        2
+#7         4        5
+#8         4        5
+#9         4        7
+#10        4        7
+</code></pre></div></div>
+
+<p>Results are different in each case so choose between <code class="language-plaintext highlighter-rouge">"updown"</code> and <code class="language-plaintext highlighter-rouge">"downup"</code> carefully.</p>
+
+<h2 id="filling-down-data-for-financial-and-time-series-applications">Filling Down Data for Financial and Time-Series Applications</h2>
+
+<p>For most financial and stock applications, you want to follow the “carry forward” rule.  This means that you always carry the last observation forward since this helps you avoid “predicting the future”.  In terms of <code class="language-plaintext highlighter-rouge">na.locf()</code> that means that you want to set <code class="language-plaintext highlighter-rouge">.direction = "downup"</code>.  This will ensure that the data frame object is filled with future</p>
+
+<p>To illustrate the “carry forward” concept at work, consider stock data that has been merged with an ATM option.  In this example, the underlying stock will likely have more periods and fewer gaps than the option (this is not always the case).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library(quantmod)
+
+# download the underlying stock data
+getSymbols("AAPL",
+  from = "2020/01/01",
+  to = "2020/09/22",
+  periodicity = "daily")
+
+getSymbols("AAPL200925P00115000",
+  from = "2020/01/01",
+  to = "2020/09/22",
+  periodicity = "daily")
+</code></pre></div></div>
+
+<p>Comparing the length of each object reveals the difference in the number of periods that the stock has versus the option.  This makes sense though - weekly options are generally not issued until 5-6 weeks prior to expiration - so there should be multiple dates prior to the option issue that the stock traded.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; length(AAPL$AAPL.Open)
+[1] 182
+&gt; length(AAPL200925P00115000$AAPL200925P00115000.Open)
+[1] 18
+</code></pre></div></div>
+
+<p>Any periods (after the option is issued) where the option did not trade is represented by an NA in the OHLC data for the option.  The most conservative approach is to roll the closing price from the prior period forward.  This assumes (sometimes incorrectly) that the option <em>would have</em> traded for the closing price the following period.  Whether or not this is true is up to the technician.  A good rule of thumb is that the <em>shorter</em> the period, the more likely it is that the carry forward value is going to be accurate.  Rolling forward 1-minute data will likely be more accurate than rolling forward daily data, especially if the underlying stock trades overnight.</p>
+
+<p>Other approaches to filling in the missing gaps include: (1) approximating the value between the 2 known values (either by an average or some other means) by interpolating a value, and (2) just simply omitting any gaps in the data.  <code class="language-plaintext highlighter-rouge">zoo::na.approx()</code> does a good job of approximating by using the time series data to interpolate a missing value.  <code class="language-plaintext highlighter-rouge">data.table::na.omit()</code> does a good job getting rid of unnecessary NA values.</p>
+
+<h3 id="filling-in-values-other-than-na-with-nafill">Filling in Values Other than NA with <code class="language-plaintext highlighter-rouge">na.fill()</code></h3>
+
+<p>Sometimes you don’t want to fill NA values with the previous or future observation.  Sometimes you <em>know</em> what value should be there, and you would like to replace the NA accordingly.  That is where <code class="language-plaintext highlighter-rouge">na.fill()</code> comes in.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>df5 &lt;-
+  data.frame(
+    "series_1" = c(NA, 2, 2, NA, NA, 3, NA, 4, NA, NA),
+    "series_2" = c(2, NA, 1, 1, NA, 2, NA, 5, 7, NA)
+  )
+
+data.frame(na.fill(df5, fill = 0))
+#   series_1 series_2
+#1         0        2
+#2         2        0
+#3         2        1
+#4         0        1
+#5         0        0
+#6         3        2
+#7         0        0
+#8         4        5
+#9         0        7
+#10        0        0
+</code></pre></div></div>
+
+<p>Anything passed into the <code class="language-plaintext highlighter-rouge">fill</code> argument will be substituted for NA in the data frame.  This could be a <code class="language-plaintext highlighter-rouge">list</code> of items as well (in the form of <code class="language-plaintext highlighter-rouge">c(a, b, c)</code>.  Anything unused in the <code class="language-plaintext highlighter-rouge">list</code> will be recycled.</p>
+
+<h3 id="financial-and-stock-focused-fill-functions">Financial and Stock-Focused <code class="language-plaintext highlighter-rouge">fill()</code> Functions</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">QuantTools</code> package has a useful function for financial time-series data called <code class="language-plaintext highlighter-rouge">na_locf(x, na = NA)</code>.  It has two arguments:  (1) <code class="language-plaintext highlighter-rouge">x</code> is a list or vector to roll through, and (2) <code class="language-plaintext highlighter-rouge">na</code> tells the function what to do with leading NA - it defaults to leaving them as NA or you can choose to change it to 0 (so that it represents something like <code class="language-plaintext highlighter-rouge">na.fill()</code>.)</p>
+
+<h2 id="notes-and-research">Notes and Research</h2>
+<ul>
+  <li><a href="https://cran.r-project.org/package=zoo">zoo: S3 Infrastructure for Regular and Irregular Time Series (Z’s Ordered Observations)</a></li>
+  <li>See <a href="https://stackoverflow.com/questions/37648980/r-fill-down-multiple-columns">R: fill down multiple columns - Stack Overflow</a></li>
+  <li>See <a href="https://stackoverflow.com/questions/42915636/forward-and-backward-fill-data-frame-in-r">Forward and backward fill data frame in R</a></li>
+  <li>See <a href="https://stackoverflow.com/questions/7735647/replacing-nas-with-latest-non-na-value">Replacing NAs with latest non-NA value</a></li>
+  <li>For more information on how Yahoo notates their option symbols, check out <a href="https://uk.help.yahoo.com/kb/option-symbol-sln13884.html">How to read an option symbol</a>.  “The components of an options symbol are:  Root symbol (ticker symbol) + Expiration Year (yy) + Expiration Month (mm) + Expiration Day (dd) + Call/Put Indicator (C or P) + Strike Price.”  The decimal point for the strike price falls 3 places from the right in the options symbol: 00000.000.  Thus, an option symbol with a $123 strike price would be written as 00123000.  The option symbol leaves out the decimal point BUT you still have to include the trailing 3 zeroes to the right.</li>
+</ul>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      <div class="social-links"><ul class="social-media-list"><li><a href="https://www.facebook.com/jstoetz" title="jstoetz"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#facebook"></use></svg></a></li><li><a href="https://github.com/jstoetz" title="jstoetz"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a href="https://twitter.com/jstoetz" title="jstoetz"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li><li><a href="https://t.me/jstoetz" title="jstoetz"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#telegram"></use></svg></a></li><li><a href="/feed.xml" title="rss"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#rss"></use></svg></a></li></ul>
+</div>
+    </div>
+
+  </div>
+
+</footer>
+<script>
+    $( document ).ready(function() {
+        $('a').each( function() {
+            if ($(this).text().match("^\\[") && $(this).text().match("\\]$")) {
+                $(this).addClass('btn').addClass('btn-1');
+                $(this).text($(this).text().substring(1, $(this).text().length-1));
+            }
+        });
+    });
+</script>
+
+
+  </body>
+
+</html>

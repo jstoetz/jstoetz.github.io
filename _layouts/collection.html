@@ -8,6 +8,8 @@ layout: default
     <h1 class="post-title">{{ page.title | escape }}</h1>
   </header>
 
+  {% include breadcrumbs.html omit_date=true %}
+
   <div class="post-content">
     {{ content }}
   </div>

@@ -1,0 +1,25 @@
+I"›<h2 id="cheatsheets">Cheatsheets</h2>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td><a href="https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf">The R Markdown Cheatsheet</a></td>
+          <td><a href="/assets/img/rmarkdown-cheatsheet-2.0.pdf">PDF</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td><a href="https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">The R Markdown Reference Guide</a></td>
+          <td><a href="/assets/img/rmarkdown-reference.pdf">PDF</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+:ET
