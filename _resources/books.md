@@ -4,6 +4,22 @@ title: Books on R
 ---
 
 ## basics
+- [R: A Language and Environment for Statistical Computing](https://cran.r-project.org/doc/manuals/fullrefman.pdf) - [PDF](https://cran.r-project.org/doc/manuals/fullrefman.pdf) - Date Read: -  [Notes]() - [Dropbox](https://www.dropbox.com/s/ogx1xjl4703g1y2/R_A%20Language%20and%20Environment%20for%20Statistical%20Computing.pdf?dl=0)
+
+- [Econometrics in R](https://cran.r-project.org/doc/contrib/Farnsworth-EconometricsInR.pdf) [PDF](https://cran.r-project.org/doc/contrib/Farnsworth-EconometricsInR.pdf)- Date Read: -  [Notes]() - [Dropbox](https://www.dropbox.com/s/kt6mmluuh6va906/Farnsworth-EconometricsInR.pdf?dl=0)
+
+- [R FAQ](https://cran.r-project.org/doc/manuals/R-FAQ.html) - Date Read: - [Notes]() - [PDF Link](https://www.dropbox.com/s/g2hpoaddgyhbiev/R%20FAQ.pdf?dl=0) - [URL Link](https://cran.r-project.org/doc/manuals/R-FAQ.html)
+
+- R Installation and Administration - [Dropbox Link](https://www.dropbox.com/s/y76p9497fjvlbu0/R%20Installation%20and%20Administration.pdf?dl=0) - [URL Link](https://cran.r-project.org/doc/manuals/R-admin.html)
+
+- [R Data Import/Export](https://cran.r-project.org/doc/manuals/R-data.html) - [PDF](https://cran.r-project.org/doc/manuals/R-data.pdf) - Date Read: - [Notes]() - [Dropbox Link](https://www.dropbox.com/s/4h7j6ncn3kxthp9/R%20Data%20Import%3AExport.pdf?dl=0) 
+
+- [Writing R Extensions](https://cran.r-project.org/doc/manuals/R-data.pdf). - [PDF]() - Date Read: -  [Notes]() - [Dropbox]()
+
+- [An Introduction to R](https://cran.r-project.org/doc/manuals/R-intro.html) - [PDF]()- Date Read: - [Notes]() - [Dropbox](https://www.dropbox.com/s/agxo539mdo9xojb/An%20Introduction%20to%20R.pdf?dl=0)
+
+- [R Internals](https://cran.r-project.org/doc/manuals/R-ints.html) - [PDF]() - Date Read: - [Notes]() - [Dropbox Link](https://www.dropbox.com/s/ybkno0t7zklwde7/R%20Internals.pdf?dl=0) 
+
 - [icebreakeR](https://cran.r-project.org/doc/contrib/Robinson-icebreaker.pdf) - [PDF](https://cran.r-project.org/doc/contrib/Robinson-icebreaker.pdf) - Date Read: - [My Notes]() - [Dropbox](https://www.dropbox.com/s/ljgyo9d8t4rju9h/Robinson-icebreaker.pdf?dl=0)
 
 - [A Student's Guide to R](https://cran.r-project.org/doc/contrib/Horton+Pruim+Kaplan_MOSAIC-StudentGuide.pdf). - [PDF](https://cran.r-project.org/doc/contrib/Horton+Pruim+Kaplan_MOSAIC-StudentGuide.pdf) - Date Read: -  [Notes]() - [Dropbox](https://www.dropbox.com/s/htsebghs1ctnup7/A%20Students%20Guide%20to%20R.pdf?dl=0)
