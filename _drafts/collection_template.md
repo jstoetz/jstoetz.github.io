@@ -5,7 +5,7 @@ title:  collection template
 
 ## Overview/Summary
 
-## <a name="toc></a>TOC
+## <a name="toc"></a>TOC
 - [Heading 1](#h1)
   - [Sub-Heading 1.1](#h1.1)
   - [Sub-Heading 1.2](#h1.2)
