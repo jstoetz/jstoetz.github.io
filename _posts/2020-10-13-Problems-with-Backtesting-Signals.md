@@ -50,11 +50,11 @@ A lagged ```signal``` will generally always be your most accurate option, but th
 ### <a name"lagged-signals-for-positions">Lagged ```signal```s for ```position```s
 Assume you have the following OHLC data for a 1-minute bar:
 
-![](/assets/img/20201013_ohlc_data_table.png)
+![](/assets/img/20201013_ohlc_data_table.PNG)
 
 You have a strategy that has a long ```signal``` based on some unknown function.  I added the ```signal``` column to the dataframe:
 
-![](/assets/img/20201013_ohlc_data_table_signal.png)
+![](/assets/img/20201013_ohlc_data_table_signal.PNG)
 
 The poorly-drawn red arrow indicates a long ```signal``` at ```09:40:00 am```.  You can't go long at that time since the ```signal``` fired then. You can only enter long at some point after that signal.
 
@@ -63,7 +63,7 @@ I added a column using the ```lag()``` function that essentially looks back ```n
 ```
 position = lag(signal, n = 1, default = 0)
 ```
-![](/assets/img/20201013_ohlc_data_table_position.png)
+![](/assets/img/20201013_ohlc_data_table_position.PNG)
 
 ### <a name="position-value-percentages-and-points">```position``` Value: Percentages and Points
 
@@ -75,13 +75,13 @@ The ```signal``` fired +1 at ```09:40:00 am```, the ```position``` went long at 
 
 The normal way to solve for returns is to add a column showing the percent or point returns from the ```open``` of the current bar back to the ```open``` of the prior bar.  For example, the ```percent return``` at bar 9 is the ```open``` of bar 9 minus the ```open``` of bar 8 minus 1 (which is 0.53/0.56 - 1 = -8.7%). I added a column with percent returns and point returns:
 
-![](/assets/img/20201013_ohlc_data_table_pct.png)
+![](/assets/img/20201013_ohlc_data_table_pct.PNG)
 
 Point returns are similar.  At bar 9, the change in value from bar 8 was -0.02 points.
 
 The issue with using the 1-bar look back point and percent returns is that **it tells us nothing about what is happening from the position entry at the open on bar 10 to the position exit at the open on bar 15**.
 
-![](/assets/img/20201013_ohlc_data_table_wrong.png)
+![](/assets/img/20201013_ohlc_data_table_wrong.PNG)
 
 The sum of the ```point.return``` from bar 10 to bar 15 are
 ```
@@ -100,7 +100,7 @@ pct.return.lead = lead(open, n = 1, default = 0)/open - 1
 pt.return.lead = lead(open, n = 1, default = 0) - open
 ```
 
-![](/assets/img/20201013_ohlc_data_table_lead.png)
+![](/assets/img/20201013_ohlc_data_table_lead.PNG)
 
 Now adding the ```point.return.lead``` from row 10 to row 15 gives us the correct answer:
 

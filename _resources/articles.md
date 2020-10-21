@@ -11,6 +11,10 @@ title: Articles on R
 
 - [Data Science Essentials in R](https://uvastatlab.github.io/phdplus/index.html).  "A  six-session series to build data analysis, wrangling, and visualization skills."
 
+## webscraping
+
+[Web Scraping with R - RCpedia - visit rcpedia.stanford.edu](https://sites.google.com/a/stanford.edu/rcpedia/screen-scraping/web-scraping-with-r) - [PDF]() - Date Read: - [Notes]() - [Dropbox Link](https://www.dropbox.com/s/4goegyyjl879zct/Web%20Scraping%20with%20R%20-%20RCpedia%20-%20%E2%9A%A0%EF%B8%8Fvisit%20rcpedia.stanford.edu.pdf?dl=0) 
+
 
 ## data management
 
@@ -30,3 +34,5 @@ title: Articles on R
 
 -  [Overview of Randomization Tests
 ](http://www.uvm.edu/~dhowell/StatPages/Randomization%20Tests/RandomizationTestsOverview.html#Lunneborg)
+
+- [The Standard Deviation](https://www.le.ac.uk/oerresources/ssds/numeracyskills/page_17.htm) - [PDF]() - Date Read: - [Notes]() - [Dropbox Link](https://www.dropbox.com/s/k4sweiy26bozrub/The%20Standard%20Deviation.pdf?dl=0) 
