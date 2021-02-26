@@ -55,6 +55,8 @@ title: Books on R
 
 - [Multivariate Time Series Analysis With R and Financial Applications](https://www.wiley.com/en-us/Multivariate+Time+Series+Analysis%3A+With+R+and+Financial+Applications-p-9781118617908). - [PDF]() - Date Read: -  [Notes]() - [Dropbox](https://www.dropbox.com/s/ifomfi9jfdveoiy/Multivariate%20Time%20Series%20Analysis%20With%20R%20and%20Financial%20Applications%20by%20Ruey%20S.%20Tsay%20%28z-lib.org%29.pdf?dl=0)
 
+- [Introductory Time Series With R](https://link.springer.com/book/10.1007/978-0-387-88698-5). - [PDF](https://www.researchgate.net/publication/221936126_Introductory_Time_Series_With_R) - Date Read: -  [Notes]() - [Dropbox]()
+
 ## R Markdown
 - [R Markdown from R Studio](https://rmarkdown.rstudio.com/lesson-1.html).   - [PDF]() - Date Read: -  [Notes]() - [Dropbox]()
 
