@@ -74,6 +74,8 @@ title: Books on R
 
 - [A Non-Random Walk Down Wall Street](https://press.princeton.edu/books/paperback/9780691092560/a-non-random-walk-down-wall-street). - [PDF](http://kadamaee.ir/payesh/books-tank/17/Lo%20&%20MacKinlay%20-%20A%20Non-Random%20Walk%20Down%20Wall%20Street%20(1999).pdf) - Date Read: -  [Notes]() - [Dropbox](https://www.dropbox.com/s/u8c9ar27a2552dv/Lo%20%26%20MacKinlay%20-%20A%20Non-Random%20Walk%20Down%20Wall%20Street%20%281999%29.pdf?dl=0)
 
+- [Data Science: Theories, Models, Algorithms, and Analytics](https://srdas.github.io/MLBook/IntroductoryRprogamming.html#regression) - [DB](https://www.dropbox.com/s/mo91sqbbjptpmi9/Data%20Science%3A%20Theories%2C%20Models%2C%20Algorithms%2C%20and%20Analytics.pdf?dl=0)
+
 ## Footnotes / Style
 
 ### Link Template

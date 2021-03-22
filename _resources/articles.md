@@ -13,7 +13,11 @@ title: Articles on R
 
 ## webscraping
 
-[Web Scraping with R - RCpedia - visit rcpedia.stanford.edu](https://sites.google.com/a/stanford.edu/rcpedia/screen-scraping/web-scraping-with-r) - [PDF]() - Date Read: - [Notes]() - [Dropbox Link](https://www.dropbox.com/s/4goegyyjl879zct/Web%20Scraping%20with%20R%20-%20RCpedia%20-%20%E2%9A%A0%EF%B8%8Fvisit%20rcpedia.stanford.edu.pdf?dl=0) 
+- [Web Scraping with R - RCpedia - visit rcpedia.stanford.edu](https://sites.google.com/a/stanford.edu/rcpedia/screen-scraping/web-scraping-with-r) - [PDF]() - Date Read: - [Notes]() - [Dropbox Link](https://www.dropbox.com/s/4goegyyjl879zct/Web%20Scraping%20with%20R%20-%20RCpedia%20-%20%E2%9A%A0%EF%B8%8Fvisit%20rcpedia.stanford.edu.pdf?dl=0)
+
+- [Reading Web Pages with R | Department of Statistics](https://statistics.berkeley.edu/computing/faqs/reading-web-pages-r) - [DB](https://www.dropbox.com/s/ag9pq7bm1pma1ot/Reading%20Web%20Pages%20with%20R%20%7C%20Department%20of%20Statistics.pdf?dl=0)
+
+- [RCrawler: An R package for parallel web crawling and scraping - ScienceDirect](https://www.sciencedirect.com/science/article/pii/S2352711017300110) - [DB](https://www.dropbox.com/s/klth9i8nxgi87iv/RCrawler%3A%20An%20R%20package%20for%20parallel%20web%20crawling%20and%20scraping%20-%20ScienceDirect.pdf?dl=0)
 
 
 ## data management
@@ -35,4 +39,27 @@ title: Articles on R
 -  [Overview of Randomization Tests
 ](http://www.uvm.edu/~dhowell/StatPages/Randomization%20Tests/RandomizationTestsOverview.html#Lunneborg)
 
-- [The Standard Deviation](https://www.le.ac.uk/oerresources/ssds/numeracyskills/page_17.htm) - [PDF]() - Date Read: - [Notes]() - [Dropbox Link](https://www.dropbox.com/s/k4sweiy26bozrub/The%20Standard%20Deviation.pdf?dl=0) 
+- [The Standard Deviation](https://www.le.ac.uk/oerresources/ssds/numeracyskills/page_17.htm) - [PDF]() - Date Read: - [Notes]() - [Dropbox Link](https://www.dropbox.com/s/k4sweiy26bozrub/The%20Standard%20Deviation.pdf?dl=0)
+
+- [Normal Distribution Calculator](https://onlinestatbook.com/2/calculators/normal_dist.html) - [DB](https://www.dropbox.com/s/3mdmnbut8rososm/Normal%20Distribution.pdf?dl=0)
+
+- [Chapter 4 Modeling Basics in R | R for Statistical Learning](https://daviddalpiaz.github.io/r4sl/modeling-basics-in-r.html) - [DB](https://www.dropbox.com/s/ek2342euh361pb5/Chapter%204%20Modeling%20Basics%20in%20R%20%7C%20R%20for%20Statistical%20Learning-2.pdf?dl=0)
+
+## gambling and betting
+
+- [Excess Heads Over Tails](http://www.math.unl.edu/~sdunbar1/ProbabilityTheory/Lessons/BernoulliTrials/ExcessHeads/excessheads.shtml) - [DB](https://www.dropbox.com/s/jrixt4v555n3hwf/PDF%20document.pdf?dl=0)
+
+- [Gambling mathematics - Wikipedia](https://en.m.wikipedia.org/wiki/Gambling_mathematics) - [DB](https://www.dropbox.com/s/au7g4fx458gz8fz/Gambling%20mathematics%20-%20Wikipedia.pdf?dl=0)
+
+## system trading
+
+- [Analyzing Stocks Using R](https://towardsdatascience.com/analyzing-stocks-using-r-550be7f5f20d)
+
+- [How to Build an Automated Trading System using R](https://towardsdatascience.com/how-to-build-an-automated-trading-system-using-r-34892b6d3320)
+
+## machine learning in R
+
+- [RPubs - Datacamp R - Supervised Learning in R: Regression [updated]](https://rpubs.com/AIventurer/datacamp_r_regr)
+
+- 
+

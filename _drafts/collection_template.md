@@ -28,9 +28,8 @@ title:  collection template
   - [Sub-Heading 5.3](#h5.3)
 - [Notes and Research](#notes)
 
-### Functions Mentioned
-
-### Packages Mentioned
+[Link to all R Code](https://jstoetz.github.io/code/)
+[Link to all Presets, Functions and Packages]()
 
 ## <a name="h1"></a><!-- Heading 1 -->
 <sub>[jump back to top](#toc)</sub>
