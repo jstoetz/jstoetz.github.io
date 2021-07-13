@@ -9,6 +9,10 @@ title: CheatSheets and Reference Master List
 
 -  [The R Markdown Reference Guide](https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf) | [PDF](/assets/img/rmarkdown-reference.pdf)
 
+- [dplyr and tidyr CheatSheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) | [PDF](/assets/img/data-wrangling-cheatsheet.pdf)
+
+- [ggplot CheatSheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf) | [PDF](/assets/img/data-visualization-2.1.pdf)
+
 ## CBOE Expiration Calendar
 
 -  [2013 CBOE Option Expiration Calendar](https://www.dropbox.com/s/40vm57896g1prk1/Cboe2013OPTIONSCalendar.pdf?dl=0)
@@ -28,5 +32,3 @@ title: CheatSheets and Reference Master List
 -  [2020 CBOE Options Expiration Calendar](https://www.dropbox.com/s/bgnyynwoejqx9v9/Cboe2020OPTIONSCalendar.pdf?dl=0)
 
 -  [2021 CBOE Options Expiration Calendar](
-
-

@@ -74,6 +74,8 @@ The information herein incorporates many different sources but it is primarily b
 
 ## Markdown
 
-## R Markdown & Knitr
+## [R Markdown](/rmarkdown.md)
+
+## Knitr
 
 ## Notes & Research
