@@ -32,17 +32,17 @@ Below are some links that I found interesting and/or instructive last week. Enjo
 
 [Payroll tax relief for employers impacted by COVID-19](https://rsmus.com/what-we-do/services/tax/compensation-and-benefits/payroll-tax-relief-for-employers-impacted-by-covid-19.html) - [DB](https://www.dropbox.com/s/9y9nyc882a2nern/Payroll%20tax%20relief%20for%20employers%20impacted%20by%20COVID-19.pdf?dl=0)
 
-[1120 C Corporation Tax Return Checklist | Tax Document Checklist](https://www.taxact.com/tax-information/tax-planning-and-checklists/1120) - [DB](https://www.dropbox.com/s/dpm0vv8l8jxdatz/1120%20C%20Corporation%20Tax%20Return%20Checklist%20%7C%20Tax%20Document%20Checklist.pdf?dl=0)
+[1120 C Corporation Tax Return Checklist - Tax Document Checklist](https://www.taxact.com/tax-information/tax-planning-and-checklists/1120) - [DB](https://www.dropbox.com/s/dpm0vv8l8jxdatz/1120%20C%20Corporation%20Tax%20Return%20Checklist%20%7C%20Tax%20Document%20Checklist.pdf?dl=0)
 
 ## Items to Add to (this) Website
 
-[Writing reproducible manuscripts in R | Shilaan Alzahawi](https://shilaan.rbind.io/post/writing-reproducible-manuscripts-in-r/) - [DB](https://www.dropbox.com/s/v215g7dkllhc13a/Writing%20reproducible%20manuscripts%20in%20R%20%7C%20Shilaan%20Alzahawi.pdf?dl=0)
+[Writing reproducible manuscripts in R - Shilaan Alzahawi](https://shilaan.rbind.io/post/writing-reproducible-manuscripts-in-r/) - [DB](https://www.dropbox.com/s/v215g7dkllhc13a/Writing%20reproducible%20manuscripts%20in%20R%20%7C%20Shilaan%20Alzahawi.pdf?dl=0)
 
 [create_project](https://cran.r-project.org/web/packages/starter/vignettes/create_project.html) - [DB](https://www.dropbox.com/s/2l3toe9mc5x0oeq/create_project.pdf?dl=0)
 
 [Using parse data to analyze R code - Kun Ren's Blog Posts](https://renkun.me/2020/11/08/using-parse-data-to-analyze-r-code/) - [DB](https://www.dropbox.com/s/p7401pggopsmdfi/Using%20parse%20data%20to%20analyze%20R%20code%20-%20Kun%20Ren%27s%20Blog%20Posts.pdf?dl=0)
 
-[Cyberduck | Libre server and cloud storage browser for Mac and Windows with support for FTP, SFTP, WebDAV, Amazon S3, OpenStack Swift, Backblaze B2, Microsoft Azure & OneDrive, Google Drive and Dropbox](https://cyberduck.io/)
+[Cyberduck - Libre server and cloud storage browser for Mac and Windows with support for FTP, SFTP, WebDAV, Amazon S3, OpenStack Swift, Backblaze B2, Microsoft Azure & OneDrive, Google Drive and Dropbox](https://cyberduck.io/)
 
 ## Book down to ePub
 
@@ -54,11 +54,11 @@ Below is research for a function to transform a bookdown site to ePub, HTmL or P
 
 [Output Formats](https://rmarkdown.rstudio.com/lesson-9.html) - [DB](https://www.dropbox.com/s/x7qhn8t01sycoo1/Output%20Formats.pdf?dl=0)
 
-[Chapter 2 htmltools overview | Outstanding User Interfaces with Shiny](https://unleash-shiny.rinterface.com/htmltools-overview.html?) - [DB](https://www.dropbox.com/s/bc3obwiuza1cn54/Chapter%202%20htmltools%20overview%20%7C%20Outstanding%20User%20Interfaces%20with%20Shiny.pdf?dl=0)
+[Chapter 2 htmltools overview - Outstanding User Interfaces with Shiny](https://unleash-shiny.rinterface.com/htmltools-overview.html?) - [DB](https://www.dropbox.com/s/bc3obwiuza1cn54/Chapter%202%20htmltools%20overview%20%7C%20Outstanding%20User%20Interfaces%20with%20Shiny.pdf?dl=0)
 
-[7 Blogdown | Big Book of R](https://www.bigbookofr.com/blogdown.html#create-publish-and-analyze-personal-websites-using-r-and-rstudio) - [DB](https://www.dropbox.com/s/2wu1jsoeskscwj8/7%20Blogdown%20%7C%20Big%20Book%20of%20R.pdf?dl=0)
+[7 Blogdown - Big Book of R](https://www.bigbookofr.com/blogdown.html#create-publish-and-analyze-personal-websites-using-r-and-rstudio) - [DB](https://www.dropbox.com/s/2wu1jsoeskscwj8/7%20Blogdown%20%7C%20Big%20Book%20of%20R.pdf?dl=0)
 
-[3.3 E-Books | bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/e-books.html) - [DB](https://www.dropbox.com/s/9cb525i8benmsy5/3.3%20E-Books%20%7C%20bookdown%3A%20Authoring%20Books%20and%20Technical%20Documents%20with%20R%20Markdown.pdf?dl=0)
+[3.3 E-Books - bookdown: Authoring Books and Technical Documents with R Markdown](https://bookdown.org/yihui/bookdown/e-books.html) - [DB](https://www.dropbox.com/s/9cb525i8benmsy5/3.3%20E-Books%20%7C%20bookdown%3A%20Authoring%20Books%20and%20Technical%20Documents%20with%20R%20Markdown.pdf?dl=0)
 
 [Efficient R programming](https://bookdown.org/csgillespie/efficientR/) - [DB](https://www.dropbox.com/s/oqud5zq3jit5b6l/Efficient%20R%20programming.pdf?dl=0)
 
@@ -74,15 +74,15 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [Using parLapply and clusterExport inside a function - Stack Overflow](https://stackoverflow.com/questions/12023403/using-parlapply-and-clusterexport-inside-a-function) - [DB](https://www.dropbox.com/s/wlb9mx2dwzhtbln/Using%20parLapply%20and%20clusterExport%20inside%20a%20function%20-%20Stack%20Overflow.pdf?dl=0)
 
-[22 Parallel Computation | R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/parallel-computation.html) - [DB](https://www.dropbox.com/s/mxxg3cam0ikna2l/22%20Parallel%20Computation%20%7C%20R%20Programming%20for%20Data%20Science.pdf?dl=0)
+[22 Parallel Computation - R Programming for Data Science](https://bookdown.org/rdpeng/rprogdatascience/parallel-computation.html) - [DB](https://www.dropbox.com/s/mxxg3cam0ikna2l/22%20Parallel%20Computation%20%7C%20R%20Programming%20for%20Data%20Science.pdf?dl=0)
 
 [rClone](https://rclone.org)
 
-[AWS Lambda for the Lazy. Sometimes you partner with other… | by ken b | Medium](https://medium.com/@pvs/aws-lambda-for-the-lazy-d703c64d7fa5) - [DB](https://www.dropbox.com/s/iww6k56pnyyyih0/AWS%20Lambda%20for%20the%20Lazy.%20Sometimes%20you%20partner%20with%20other%E2%80%A6%20%7C%20by%20ken%20b%20%7C%20Medium.pdf?dl=0)
+[AWS Lambda for the Lazy. Sometimes you partner with other… - by ken b - Medium](https://medium.com/@pvs/aws-lambda-for-the-lazy-d703c64d7fa5) - [DB](https://www.dropbox.com/s/iww6k56pnyyyih0/AWS%20Lambda%20for%20the%20Lazy.%20Sometimes%20you%20partner%20with%20other%E2%80%A6%20%7C%20by%20ken%20b%20%7C%20Medium.pdf?dl=0)
 
 [GitHub - timhodson/google-drive-file-download: A simple script to fetch files from a google drive folder and upload to S3](https://github.com/timhodson/google-drive-file-download)
 
-[Getting started with R on Amazon Web Services | AWS Open Source Blog](https://aws.amazon.com/blogs/opensource/getting-started-with-r-on-amazon-web-services/) - [DB](https://www.dropbox.com/s/zxdcj38odayinr3/Getting%20started%20with%20R%20on%20Amazon%20Web%20Services%20%7C%20AWS%20Open%20Source%20Blog.pdf?dl=0)
+[Getting started with R on Amazon Web Services - AWS Open Source Blog](https://aws.amazon.com/blogs/opensource/getting-started-with-r-on-amazon-web-services/) - [DB](https://www.dropbox.com/s/zxdcj38odayinr3/Getting%20started%20with%20R%20on%20Amazon%20Web%20Services%20%7C%20AWS%20Open%20Source%20Blog.pdf?dl=0)
 
 [Basic usage](https://cran.r-project.org/web/packages/cronR/vignettes/cronR.html) - [DB](https://www.dropbox.com/s/petcnmykkot86g7/Basic%20usage.pdf?dl=0)
 
@@ -96,7 +96,7 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [How to use Terminal on Mac: Basic commands and functions](https://macpaw.com/how-to/use-terminal-on-mac) - [DB](https://www.dropbox.com/s/umtfgpv5soiv7fu/How%20to%20use%20Terminal%20on%20Mac%3A%20Basic%20commands%20and%20functions.pdf?dl=0)
 
-[Understand curl more | Documenting APIs](https://idratherbewriting.com/learnapidoc/docapis_understand_curl.html) - [DB](https://www.dropbox.com/s/yqnb4507lc8n55d/Understand%20curl%20more%20%7C%20Documenting%20APIs.pdf?dl=0)
+[Understand curl more - Documenting APIs](https://idratherbewriting.com/learnapidoc/docapis_understand_curl.html) - [DB](https://www.dropbox.com/s/yqnb4507lc8n55d/Understand%20curl%20more%20%7C%20Documenting%20APIs.pdf?dl=0)
 
 [Dropbox API - Get A Temporary Link](https://www.dropbox.com/developers/documentation/http/documentation#files-get_temporary_link)
 
@@ -108,11 +108,11 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [Tutorial: Create a pipeline that uses Amazon S3 as a deployment provider - AWS CodePipeline](https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-s3deploy.html#tutorials-s3deploy-acc)
 
-[Deploy files stored on Amazon S3, Dropbox, or your Desktop to the AWS Amplify Console | Front-End Web & Mobile](https://aws.amazon.com/blogs/mobile/deploy-files-s3-dropbox-amplify-console/) - [DB](https://www.dropbox.com/s/iuwaxldphnfnydt/Deploy%20files%20stored%20on%20Amazon%20S3%2C%20Dropbox%2C%20or%20your%20Desktop%20to%20the%20AWS%20Amplify%20Console%20%7C%20Front-End%20Web%20%26%20Mobile.pdf?dl=0)
+[Deploy files stored on Amazon S3, Dropbox, or your Desktop to the AWS Amplify Console - Front-End Web & Mobile](https://aws.amazon.com/blogs/mobile/deploy-files-s3-dropbox-amplify-console/) - [DB](https://www.dropbox.com/s/iuwaxldphnfnydt/Deploy%20files%20stored%20on%20Amazon%20S3%2C%20Dropbox%2C%20or%20your%20Desktop%20to%20the%20AWS%20Amplify%20Console%20%7C%20Front-End%20Web%20%26%20Mobile.pdf?dl=0)
 
-[Combining Netlify with Dropbox For a One-Click Publishing Process | Netlify](https://www.netlify.com/blog/2018/10/15/combining-netlify-with-dropbox-for-a-one-click-publishing-process/) - [DB](https://www.dropbox.com/s/fxk4bl8vjjxvhs1/Combining%20Netlify%20with%20Dropbox%20For%20a%20One-Click%20Publishing%20Process%20%7C%20Netlify.pdf?dl=0)
+[Combining Netlify with Dropbox For a One-Click Publishing Process - Netlify](https://www.netlify.com/blog/2018/10/15/combining-netlify-with-dropbox-for-a-one-click-publishing-process/) - [DB](https://www.dropbox.com/s/fxk4bl8vjjxvhs1/Combining%20Netlify%20with%20Dropbox%20For%20a%20One-Click%20Publishing%20Process%20%7C%20Netlify.pdf?dl=0)
 
-[AWS CodePipeline Pricing | Amazon Web Services](https://aws.amazon.com/codepipeline/pricing/)
+[AWS CodePipeline Pricing - Amazon Web Services](https://aws.amazon.com/codepipeline/pricing/)
 
 [Common Voice by Mozilla](https://commonvoice.mozilla.org/en/datasets)
 
@@ -120,17 +120,17 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [How to Convert Speech to Text in Python - Python Code](https://www.thepythoncode.com/article/using-speech-recognition-to-convert-speech-to-text-python) - [DB](https://www.dropbox.com/s/sj0xn6mlsbvrnv1/How%20to%20Convert%20Speech%20to%20Text%20in%20Python%20-%20Python%20Code.pdf?dl=0)
 
-[Connect your Amazon S3 to Dropbox integration in 2 minutes | Zapier](https://zapier.com/apps/amazon-s3/integrations/dropbox)
+[Connect your Amazon S3 to Dropbox integration in 2 minutes - Zapier](https://zapier.com/apps/amazon-s3/integrations/dropbox)
 
 [Can I upload files to google cloud storage from url?](https://stackoverflow.com/questions/18107545/can-i-upload-files-to-google-cloud-storage-from-url)
 
 [Uploading objects - Amazon Simple Storage Service](https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html)
 
-[Automate static website deployment from Github to S3 using AWS CodePipeline | by Sithum Jayarathna | AVM Consulting Blog | Medium](https://medium.com/avmconsulting-blog/automate-static-website-deployment-from-github-to-s3-using-aws-codepipeline-16acca25ebc1) - [DB](https://www.dropbox.com/s/1iq3eohap29lavy/Automate%20static%20website%20deployment%20from%20Github%20to%20S3%20using%20AWS%20CodePipeline%20%7C%20by%20Sithum%20Jayarathna%20%7C%20AVM%20Consulting%20Blog%20%7C%20Medium.pdf?dl=0)
+[Automate static website deployment from Github to S3 using AWS CodePipeline - by Sithum Jayarathna - AVM Consulting Blog - Medium](https://medium.com/avmconsulting-blog/automate-static-website-deployment-from-github-to-s3-using-aws-codepipeline-16acca25ebc1) - [DB](https://www.dropbox.com/s/1iq3eohap29lavy/Automate%20static%20website%20deployment%20from%20Github%20to%20S3%20using%20AWS%20CodePipeline%20%7C%20by%20Sithum%20Jayarathna%20%7C%20AVM%20Consulting%20Blog%20%7C%20Medium.pdf?dl=0)
 
 [Integrations with CodePipeline action types - AWS CodePipeline](https://docs.aws.amazon.com/codepipeline/latest/userguide/integrations-action-type.html#integrations-source-s3)
 
-[Chapter 15 New project, GitHub first | Happy Git and GitHub for the useR](https://happygitwithr.com/new-github-first.html) - [DB](https://www.dropbox.com/s/wnt5addxd84jelw/Chapter%2015%20New%20project%2C%20GitHub%20first%20%7C%20Happy%20Git%20and%20GitHub%20for%20the%20useR.pdf?dl=0)
+[Chapter 15 New project, GitHub first - Happy Git and GitHub for the useR](https://happygitwithr.com/new-github-first.html) - [DB](https://www.dropbox.com/s/wnt5addxd84jelw/Chapter%2015%20New%20project%2C%20GitHub%20first%20%7C%20Happy%20Git%20and%20GitHub%20for%20the%20useR.pdf?dl=0)
 
 [Build a Music Sharing App with Amazon S3 and AWS Amplify · We Learn Code](https://welearncode.com/get-started-s3/) - [DB](https://www.dropbox.com/s/gcoftzb0854a2g5/Build%20a%20Music%20Sharing%20App%20with%20Amazon%20S3%20and%20AWS%20Amplify%20%C2%B7%20We%20Learn%20Code.pdf?dl=0)
 
@@ -140,7 +140,7 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [R Package - PAWS - Function reference](https://paws-r.github.io/docs/)
 
-[12.2 Project structure | R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/bookdown-project.html) - [DB](https://www.dropbox.com/s/bsmltqo0hcj2x70/12.2%20Project%20structure%20%7C%20R%20Markdown%3A%20The%20Definitive%20Guide.pdf?dl=0)
+[12.2 Project structure - R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/bookdown-project.html) - [DB](https://www.dropbox.com/s/bsmltqo0hcj2x70/12.2%20Project%20structure%20%7C%20R%20Markdown%3A%20The%20Definitive%20Guide.pdf?dl=0)
 
 [Managing Multiple RStudio Sessions – Information Technology](https://wp.stolaf.edu/it/managing-multiple-rstudio-sessions/) - [DB](https://www.dropbox.com/s/uy2r23vuvf6icre/Managing%20Multiple%20RStudio%20Sessions%20%E2%80%93%20Information%20Technology.pdf?dl=0)
 
@@ -166,9 +166,9 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [R User Guide to Amazon SageMaker - Amazon SageMaker](https://docs.aws.amazon.com/sagemaker/latest/dg/r-guide.html) - [DB](https://www.dropbox.com/s/3yoix6i9n8b8n86/R%20User%20Guide%20to%20Amazon%20SageMaker%20-%20Amazon%20SageMaker-2.pdf?dl=0)
 
-[Forecasting financial time series with dynamic deep learning on AWS | AWS Machine Learning Blog](https://aws.amazon.com/blogs/machine-learning/forecasting-time-series-with-dynamic-deep-learning-on-aws/) - [DB](https://www.dropbox.com/s/met0lch7jgudgky/Forecasting%20financial%20time%20series%20with%20dynamic%20deep%20learning%20on%20AWS%20%7C%20AWS%20Machine%20Learning%20Blog.pdf?dl=0)
+[Forecasting financial time series with dynamic deep learning on AWS - AWS Machine Learning Blog](https://aws.amazon.com/blogs/machine-learning/forecasting-time-series-with-dynamic-deep-learning-on-aws/) - [DB](https://www.dropbox.com/s/met0lch7jgudgky/Forecasting%20financial%20time%20series%20with%20dynamic%20deep%20learning%20on%20AWS%20%7C%20AWS%20Machine%20Learning%20Blog.pdf?dl=0)
 
-[Features | Time Series Forecasting | Amazon Forecast](https://aws.amazon.com/forecast/features/) - [DB](https://www.dropbox.com/s/nlosot8wouqcsuq/Features%20%7C%20Time%20Series%20Forecasting%20%7C%20Amazon%20Forecast.pdf?dl=0)
+[Features - Time Series Forecasting - Amazon Forecast](https://aws.amazon.com/forecast/features/) - [DB](https://www.dropbox.com/s/nlosot8wouqcsuq/Features%20%7C%20Time%20Series%20Forecasting%20%7C%20Amazon%20Forecast.pdf?dl=0)
 
 ## AWS EC2 Instance
 
@@ -180,7 +180,7 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 ## General
 
-[Using Amazon Lightsail with other AWS services | Lightsail Documentation](https://lightsail.aws.amazon.com/ls/docs/en_us/articles/using-lightsail-with-other-aws-services) - [DB](https://www.dropbox.com/s/99tm296niim5cwj/Using%20Amazon%20Lightsail%20with%20other%20AWS%20services%20%7C%20Lightsail%20Documentation.pdf?dl=0)
+[Using Amazon Lightsail with other AWS services - Lightsail Documentation](https://lightsail.aws.amazon.com/ls/docs/en_us/articles/using-lightsail-with-other-aws-services) - [DB](https://www.dropbox.com/s/99tm296niim5cwj/Using%20Amazon%20Lightsail%20with%20other%20AWS%20services%20%7C%20Lightsail%20Documentation.pdf?dl=0)
 
 [Building a Membership Site with Jekyll](https://joebuhlig.com/building-a-membership-site-with-jekyll/) - [DB](https://www.dropbox.com/s/umu05ehp6n46qod/Building%20a%20Membership%20Site%20with%20Jekyll.pdf?dl=0)
 
@@ -208,11 +208,11 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [Predictive Analytics for Fantasy Football: Predicting Player Performance Across the NFL](https://scholars.unh.edu/cgi/viewcontent.cgi?article=1418&context=honors) - [DB](https://www.dropbox.com/s/jrixt4v555n3hwf/PDF%20document.pdf?dl=0)
 
-[AI Stock Trading agent to predict stock prices | Towards Data Science](https://towardsdatascience.com/24x5-stock-trading-agent-to-predict-stock-prices-with-deep-learning-with-deployment-c15570720ae9) - [DB](https://www.dropbox.com/s/voytqhfjw8gthhm/AI%20Stock%20Trading%20agent%20to%20predict%20stock%20prices%20%7C%20Towards%20Data%20Science.pdf?dl=0)
+[AI Stock Trading agent to predict stock prices - Towards Data Science](https://towardsdatascience.com/24x5-stock-trading-agent-to-predict-stock-prices-with-deep-learning-with-deployment-c15570720ae9) - [DB](https://www.dropbox.com/s/voytqhfjw8gthhm/AI%20Stock%20Trading%20agent%20to%20predict%20stock%20prices%20%7C%20Towards%20Data%20Science.pdf?dl=0)
 
 ## Chron Jobs
 
-[Combining Netlify with Dropbox For a One-Click Publishing Process | Netlify](https://www.netlify.com/blog/2018/10/15/combining-netlify-with-dropbox-for-a-one-click-publishing-process/) - [DB](https://www.dropbox.com/s/fxk4bl8vjjxvhs1/Combining%20Netlify%20with%20Dropbox%20For%20a%20One-Click%20Publishing%20Process%20%7C%20Netlify.pdf?dl=0)
+[Combining Netlify with Dropbox For a One-Click Publishing Process - Netlify](https://www.netlify.com/blog/2018/10/15/combining-netlify-with-dropbox-for-a-one-click-publishing-process/) - [DB](https://www.dropbox.com/s/fxk4bl8vjjxvhs1/Combining%20Netlify%20with%20Dropbox%20For%20a%20One-Click%20Publishing%20Process%20%7C%20Netlify.pdf?dl=0)
 
 [simonpcouch/scheduled-commit-action: Running R Scripts on a Schedule with GitHub Actions](https://github.com/simonpcouch/scheduled-commit-action) - [DB](https://www.dropbox.com/s/8wwe7jfs58v5cee/simonpcouch%3Ascheduled-commit-action%3A%20Running%20R%20Scripts%20on%20a%20Schedule%20with%20GitHub%20Actions.pdf?dl=0)
 
@@ -226,13 +226,13 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 ## R for Optimization & Machine Learning
 
-[Using Machine Learning to Predict Fantasy Football Points | by Jim King | Towards Data Science](https://towardsdatascience.com/using-machine-learning-to-predict-fantasy-football-points-72f77cb0678a) - [DB](https://www.dropbox.com/s/5hj50oiplz6rvxu/Using%20Machine%20Learning%20to%20Predict%20Fantasy%20Football%20Points%20%7C%20by%20Jim%20King%20%7C%20Towards%20Data%20Science.pdf?dl=0)
+[Using Machine Learning to Predict Fantasy Football Points - by Jim King - Towards Data Science](https://towardsdatascience.com/using-machine-learning-to-predict-fantasy-football-points-72f77cb0678a) - [DB](https://www.dropbox.com/s/5hj50oiplz6rvxu/Using%20Machine%20Learning%20to%20Predict%20Fantasy%20Football%20Points%20%7C%20by%20Jim%20King%20%7C%20Towards%20Data%20Science.pdf?dl=0)
 
 [predictive-data-science-with-amazon-sagemaker-and-a-data-lake-on-aws](https://aws-quickstart.s3.amazonaws.com/quickstart-datalake-pariveda/doc/predictive-data-science-with-amazon-sagemaker-and-a-data-lake-on-aws.pdf) - [DB](https://www.dropbox.com/s/jrixt4v555n3hwf/PDF%20document.pdf?dl=0)
 
 [Optimization Using R - KDnuggets](https://www.kdnuggets.com/2018/05/optimization-using-r.html/2) - [DB](https://www.dropbox.com/s/b7wzszv6yeuonfr/Optimization%20Using%20R%20-%20KDnuggets.pdf?dl=0)
 
-[Optimizing with Excel Solver: Student Loan Payments | by Erik L | Medium](https://medium.com/@lobodemonte/optimizing-with-excel-solver-student-loan-payments-b28a352f964e) - [DB](https://www.dropbox.com/s/38qcvhd25ijte6j/Optimizing%20with%20Excel%20Solver%3A%20Student%20Loan%20Payments%20%7C%20by%20Erik%20L%20%7C%20Medium.pdf?dl=0)
+[Optimizing with Excel Solver: Student Loan Payments - by Erik L - Medium](https://medium.com/@lobodemonte/optimizing-with-excel-solver-student-loan-payments-b28a352f964e) - [DB](https://www.dropbox.com/s/38qcvhd25ijte6j/Optimizing%20with%20Excel%20Solver%3A%20Student%20Loan%20Payments%20%7C%20by%20Erik%20L%20%7C%20Medium.pdf?dl=0)
 
 [Use R to do monte carlo simulation and solve following questions - Stack Overflow](https://stackoverflow.com/questions/44599931/use-r-to-do-monte-carlo-simulation-and-solve-following-questions) - [DB](https://www.dropbox.com/s/k3c2t5sqyyo0i4o/Use%20R%20to%20do%20monte%20carlo%20simulation%20and%20solve%20following%20questions%20-%20Stack%20Overflow.pdf?dl=0)
 
@@ -242,11 +242,11 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 ## Html and Documentation
 
-[Documentation Style Guide | GitLab](https://docs.gitlab.com/ee/development/documentation/styleguide/#documentation-is-the-single-source-of-truth-ssot) - [DB](https://www.dropbox.com/s/8a0v8377mzcmb2r/Documentation%20Style%20Guide%20%7C%20GitLab.pdf?dl=0)
+[Documentation Style Guide - GitLab](https://docs.gitlab.com/ee/development/documentation/styleguide/#documentation-is-the-single-source-of-truth-ssot) - [DB](https://www.dropbox.com/s/8a0v8377mzcmb2r/Documentation%20Style%20Guide%20%7C%20GitLab.pdf?dl=0)
 
-[Making a Command Line HTML Rendering Script for “The Art of the Command Line” (in R) | R-bloggers](https://www.r-bloggers.com/2019/05/making-a-command-line-html-rendering-script-for-the-art-of-the-command-line-in-r/amp/) - [DB](https://www.dropbox.com/s/iedydgdl6kd7q6g/Making%20a%20Command%20Line%20HTML%20Rendering%20Script%20for%20%E2%80%9CThe%20Art%20of%20the%20Command%20Line%E2%80%9D%20%28in%20R%29%20%7C%20R-bloggers.pdf?dl=0)
+[Making a Command Line HTML Rendering Script for “The Art of the Command Line” (in R) - R-bloggers](https://www.r-bloggers.com/2019/05/making-a-command-line-html-rendering-script-for-the-art-of-the-command-line-in-r/amp/) - [DB](https://www.dropbox.com/s/iedydgdl6kd7q6g/Making%20a%20Command%20Line%20HTML%20Rendering%20Script%20for%20%E2%80%9CThe%20Art%20of%20the%20Command%20Line%E2%80%9D%20%28in%20R%29%20%7C%20R-bloggers.pdf?dl=0)
 
-[HTML Best Practices | Proper HTML Structure & Formatting](https://www.webfx.com/blog/web-design/20-html-best-practices-you-should-follow/amp/) - [DB](https://www.dropbox.com/s/627kv4z58zb4u3t/HTML%20Best%20Practices%20%7C%20Proper%20HTML%20Structure%20%26%20Formatting.pdf?dl=0)
+[HTML Best Practices - Proper HTML Structure & Formatting](https://www.webfx.com/blog/web-design/20-html-best-practices-you-should-follow/amp/) - [DB](https://www.dropbox.com/s/627kv4z58zb4u3t/HTML%20Best%20Practices%20%7C%20Proper%20HTML%20Structure%20%26%20Formatting.pdf?dl=0)
 
 [GitHub - flowforfrank/performance-checklist: A comprehensive list of performance optimization techniques to improve your site's performance](https://github.com/flowforfrank/performance-checklist#%EF%B8%8F-html-optimization)
 
@@ -260,7 +260,7 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [HTML Living Standard](https://html.spec.whatwg.org)
 
-[Site Structure | Web Style Guide 3](https://webstyleguide.com/wsg3/3-information-architecture/3-site-structure.html) - [DB](https://www.dropbox.com/s/cil0vacpf0wlcp8/Site%20Structure%20%7C%20Web%20Style%20Guide%203.pdf?dl=0)
+[Site Structure - Web Style Guide 3](https://webstyleguide.com/wsg3/3-information-architecture/3-site-structure.html) - [DB](https://www.dropbox.com/s/cil0vacpf0wlcp8/Site%20Structure%20%7C%20Web%20Style%20Guide%203.pdf?dl=0)
 
 ## Google Adsense
 
@@ -274,9 +274,9 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [rekordbox - CLOUD-CONNECTED PROFESSIONAL DJ PLATFORM](https://rekordbox.com/en/)
 
-[Roland - DJ-808 | DJ Controller](https://www.roland.com/us/products/dj-808/)
+[Roland - DJ-808 - DJ Controller](https://www.roland.com/us/products/dj-808/)
 
-[TRAKTOR Digital DJing | Native Instruments](https://www.native-instruments.com/en/catalog/traktor/)
+[TRAKTOR Digital DJing - Native Instruments](https://www.native-instruments.com/en/catalog/traktor/)
 
 [XDJ-XZ Professional all-in-one DJ system (Black) - Pioneer DJ](https://www.pioneerdj.com/en-us/product/all-in-one-system/xdj-xz/black/overview/)
 
@@ -284,11 +284,11 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [Louisa H. Smith: Secrets and Robots: Accessing password-protected data with R](https://www.louisahsmith.com/posts/2018-09-11-secrets-and-robots-accessing-password-protected-data-with-r/) - [DB](https://www.dropbox.com/s/weztkswe1js06fp/Louisa%20H.%20Smith%3A%20Secrets%20and%20Robots%3A%20Accessing%20password-protected%20data%20with%20R.pdf?dl=0)
 
-[Using Scrapy to Build your Own Dataset | by Michael Galarnyk | Towards Data Science](https://towardsdatascience.com/using-scrapy-to-build-your-own-dataset-64ea2d7d4673) - [DB](https://www.dropbox.com/s/vsl7viz3tyu4o7r/Using%20Scrapy%20to%20Build%20your%20Own%20Dataset%20%7C%20by%20Michael%20Galarnyk%20%7C%20Towards%20Data%20Science.pdf?dl=0)
+[Using Scrapy to Build your Own Dataset - by Michael Galarnyk - Towards Data Science](https://towardsdatascience.com/using-scrapy-to-build-your-own-dataset-64ea2d7d4673) - [DB](https://www.dropbox.com/s/vsl7viz3tyu4o7r/Using%20Scrapy%20to%20Build%20your%20Own%20Dataset%20%7C%20by%20Michael%20Galarnyk%20%7C%20Towards%20Data%20Science.pdf?dl=0)
 
 [R - XML Files - Tutorialspoint](https://www.tutorialspoint.com/r/r_xml_files.htm) - [DB](https://www.dropbox.com/s/ndqv30f5qhny17s/R%20-%20XML%20Files%20-%20Tutorialspoint.pdf?dl=0)
 
-[Parse and process XML (and HTML) with xml2 | RStudio Blog](https://blog.rstudio.com/2015/04/21/xml2/) - [DB](https://www.dropbox.com/s/0ambbugv3htl34i/Parse%20and%20process%20XML%20%28and%20HTML%29%20with%20xml2%20%7C%20RStudio%20Blog.pdf?dl=0)
+[Parse and process XML (and HTML) with xml2 - RStudio Blog](https://blog.rstudio.com/2015/04/21/xml2/) - [DB](https://www.dropbox.com/s/0ambbugv3htl34i/Parse%20and%20process%20XML%20%28and%20HTML%29%20with%20xml2%20%7C%20RStudio%20Blog.pdf?dl=0)
 
 [R API Tutorial: Getting Started with APIs in R – Dataquest](https://www.dataquest.io/blog/r-api-tutorial/) - [DB](https://www.dropbox.com/s/lmx7470px43adtb/R%20API%20Tutorial%3A%20Getting%20Started%20with%20APIs%20in%20R%20%E2%80%93%20Dataquest.pdf?dl=0)
 
@@ -298,7 +298,7 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [emayili: Sending Email from R - datawookie](https://datawookie.dev/blog/2019/05/emayili-sending-email-from-r/) - [DB](https://www.dropbox.com/s/q99l5rb2p0oo3nd/emayili%3A%20Sending%20Email%20from%20R%20-%20datawookie.pdf?dl=0)
 
-[Hacking it: Setting up your own Bulk Mail Server — using Sendy and AWS | by Neha M | Level Up Coding](https://levelup.gitconnected.com/setting-up-your-own-bulk-mail-server-using-sendy-and-aws-20d05ee01362) - [DB](https://www.dropbox.com/s/jf27o5ivnxqrwj1/Hacking%20it%3A%20Setting%20up%20your%20own%20Bulk%20Mail%20Server%20%E2%80%94%20using%20Sendy%20and%20AWS%20%7C%20by%20Neha%20M%20%7C%20Level%20Up%20Coding.pdf?dl=0)
+[Hacking it: Setting up your own Bulk Mail Server — using Sendy and AWS - by Neha M - Level Up Coding](https://levelup.gitconnected.com/setting-up-your-own-bulk-mail-server-using-sendy-and-aws-20d05ee01362) - [DB](https://www.dropbox.com/s/jf27o5ivnxqrwj1/Hacking%20it%3A%20Setting%20up%20your%20own%20Bulk%20Mail%20Server%20%E2%80%94%20using%20Sendy%20and%20AWS%20%7C%20by%20Neha%20M%20%7C%20Level%20Up%20Coding.pdf?dl=0)
 
 [SMTP relay: Route outgoing non-Gmail messages through Google - Google Workspace Admin Help](https://support.google.com/a/answer/2956491#sendinglimitsforrelay&zippy=%2Cturn-on-comprehensive-mail-storage%2Creview-sending-limits-for-the-smtp-relay-service)
 
@@ -308,4 +308,4 @@ Research for a future post on downloading podcast audio files from RSS feeds.
 
 [mrooney/mintapi: a screen-scraping API for Mint.com](https://github.com/mrooney/mintapi) - [DB](https://www.dropbox.com/s/wny9nnih3xy8xho/mrooney%3Amintapi%3A%20a%20screen-scraping%20API%20for%20Mint.com.pdf?dl=0)
 
-[The Mint API with Python and Google Sheets | by McKlayne Marshall | Level Up Coding](https://levelup.gitconnected.com/the-mint-api-with-python-and-google-sheets-311b61379d4c) - [DB](https://www.dropbox.com/s/phau8o4652jmfxy/The%20Mint%20API%20with%20Python%20and%20Google%20Sheets%20%7C%20by%20McKlayne%20Marshall%20%7C%20Level%20Up%20Coding.pdf?dl=0)
+[The Mint API with Python and Google Sheets - by McKlayne Marshall - Level Up Coding](https://levelup.gitconnected.com/the-mint-api-with-python-and-google-sheets-311b61379d4c) - [DB](https://www.dropbox.com/s/phau8o4652jmfxy/The%20Mint%20API%20with%20Python%20and%20Google%20Sheets%20%7C%20by%20McKlayne%20Marshall%20%7C%20Level%20Up%20Coding.pdf?dl=0)
