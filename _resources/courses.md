@@ -5,6 +5,14 @@ title: Courses on R and Other Topics
 
 ## basics of R
 
+[Course: Intro to R Bootcamp](http://uc-r.github.io/r_bootcamp)
+
+## data
+
+[Course: Data Wrangling with R · UC Business Analytics R Programming Guide](http://uc-r.github.io/data_wrangling) - [DB](https://www.dropbox.com/s/9wkmq2uq4ftqd54/Course%3A%20Data%20Wrangling%20with%20R%20%C2%B7%20UC%20Business%20Analytics%20R%20Programming%20Guide.pdf?dl=0)
+
+
+
 ## statistics
 - [Statistics 101-103, Introduction to Statistics at Yale University](http://www.stat.yale.edu/Courses/1997-98/101/welcome.html)
   + [Statistical Topics](http://www.stat.yale.edu/Courses/1997-98/101/toplist.htm)

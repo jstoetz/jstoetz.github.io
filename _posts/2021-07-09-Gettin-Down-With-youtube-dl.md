@@ -99,7 +99,7 @@ webpage <- read_html("https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Albums
 # - return a list of tables from the page to review to select the correct one (ie, number 3)
 tbls <- html_nodes(webpage, "table")
 
-# - create a list of dataframes of the particular table we want tonparse
+# - create a list of dataframes of the particular table we want to parse
 df.tbls <- webpage %>%
         html_nodes("table") %>%
         .[3] %>%

@@ -377,6 +377,8 @@ summary {
 
 <div id="r-cheatsheet---file-and-folder-management" class="section level1">
 <h1>R Cheatsheet - File and Folder Management</h1>
+<p><a href="https://cloud.r-project.org/web/packages/fs/vignettes/function-comparisons.html" class="uri">https://cloud.r-project.org/web/packages/fs/vignettes/function-comparisons.html</a> <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/files" class="uri">https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/files</a> <a href="https://theautomatic.net/2018/07/11/manipulate-files-r/" class="uri">https://theautomatic.net/2018/07/11/manipulate-files-r/</a></p>
+<p>Order of operations 1. Does path exist 2. Overwrite 3. Recursive</p>
 <div id="basics" class="section level2">
 <h2>1 Basics</h2>
 <table>
@@ -399,9 +401,9 @@ summary {
 <td align="left">changes the working directory</td>
 </tr>
 <tr class="odd">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">set file path</td>
+<td align="left"><strong><code>file.path()</code></strong></td>
+<td align="left">sets the path</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -429,36 +431,27 @@ summary {
 <tbody>
 <tr class="odd">
 <td align="left">create folder</td>
-<td align="left"><strong><code>dir.create()</code></strong></td>
-<td align="left">creates a folder in the working directory</td>
+<td align="left"><strong><code>dir.create(file.path(&quot;path&quot;))</code></strong></td>
+<td align="left">creates a folder in the working directory if <code>file.path()</code> left blank or other location if <strong>path</strong> specified</td>
 </tr>
 <tr class="even">
 <td align="left">create file</td>
-<td align="left"><strong><code>file.create()</code></strong></td>
-<td align="left">creates a file in the working directory</td>
+<td align="left"><strong><code>file.create(file.path(&quot;path&quot;))</code></strong></td>
+<td align="left">creates a file in the working directory if <code>file.path()</code> left blank or other location if <strong>path</strong> specified</td>
 </tr>
 <tr class="odd">
 <td align="left">create multiple folders</td>
-<td align="left"><strong><code>sapply(paste0(&quot;folder&quot;,1:10),dir.create)</code></strong></td>
-<td align="left">creates 10 empty folders in the working directory called <strong>folder1</strong>, <strong>folder2</strong> etc.</td>
+<td align="left"><strong><code>sapply(file.path(paste0(&quot;path&quot;,&quot;folder&quot;,1:10)),dir.create)</code></strong></td>
+<td align="left">creates 10 empty folders in the working directory called <strong>folder1</strong>, <strong>folder2</strong> etc. if <code>file.path()</code> left blank or other location if <strong>path</strong> specified</td>
 </tr>
 <tr class="even">
 <td align="left">create multiple files</td>
-<td align="left"><strong><code>sapply(paste0(&quot;file&quot;,1:10,&quot;.txt&quot;),file.create)</code></strong></td>
-<td align="left">creates 10 empty <strong>.txt</strong> files in the working directory called <strong>file1.txt</strong>, <strong>file2.txt</strong> etc.</td>
-</tr>
-<tr class="odd">
-<td align="left">copy folder</td>
-<td align="left"><strong><code>dir.create(&quot;new-path&quot;); file.copy(&quot;path&quot;, &quot;new-path&quot;, recursive=TRUE)</code></strong></td>
-<td align="left">folders and the contents of those folders cannot be copied unless they first exist. to copy an existing folder <strong>path</strong> including the content and sub-folders, R first creates <strong>new-path</strong> then copies the <strong>path</strong> folder.</td>
-</tr>
-<tr class="even">
-<td align="left">copy file</td>
-<td align="left"><strong><code>file.copy()</code></strong></td>
-<td align="left">creates a copy of the file in the specified folder. <code>file.copy(&quot;current-file.txt&quot;, &quot;new-path&quot;)</code> will make a copy of <strong>current-file.txt</strong> and move it to <strong>new-path</strong> returning TRUE if successful.</td>
+<td align="left"><strong><code>sapply(file.path(paste0(&quot;path&quot;,&quot;file&quot;,1:10,&quot;.txt&quot;)),file.create)</code></strong></td>
+<td align="left">creates 10 empty <strong>.txt</strong> files in the working directory called <strong>file1.txt</strong>, <strong>file2.txt</strong> etc. if <code>file.path()</code> left blank or other location if <strong>path</strong> specified</td>
 </tr>
 </tbody>
 </table>
+<p>|copy folder |<strong><code>dir.create(&quot;new-path&quot;); file.copy(&quot;path&quot;, &quot;new-path&quot;, recursive=TRUE)</code></strong>|folders and the contents of those folders cannot be copied unless they first exist. to copy an existing folder <strong>path</strong> including the content and sub-folders, R first creates <strong>new-path</strong> then copies the <strong>path</strong> folder. | |copy file |<strong><code>file.copy()</code></strong> |creates a copy of the file in the specified folder. <code>file.copy(&quot;current-file.txt&quot;, &quot;new-path&quot;)</code> will make a copy of <strong>current-file.txt</strong> and move it to <strong>new-path</strong> returning TRUE if successful. |</p>
 </div>
 <div id="template" class="section level2">
 <h2>1 Template</h2>
