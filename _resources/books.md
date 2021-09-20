@@ -4,6 +4,7 @@ title: Books on R
 ---
 
 ## Summary
+<hr/>
 
 Most of the books listed below were taken from [R - Books](https://www.r-project.org/doc/bib/R-books.html) - [DB](https://www.dropbox.com/s/rk7ed5f8wcml578/R%20-%20Books.pdf?dl=0) on the CRAN website. Others were found from google search or referenced in articles.
 
@@ -13,7 +14,55 @@ R provides its own list of help built into the program:
 * ```vignette()``` calls a list of short summaries of pre-installed packages
 * ```vignette(package = 'dplyr', 'introduction')``` calls the introductory package for **dplyr**.
 
+## Basic Programming Books
+<hr/>
+
+### Code Complete: A Practical Handbook of Software Construction
+
+[Link](https://stevemcconnell.com/books/) - [Google Books](https://www.google.com/books/edition/Code_Complete/LpVCAwAAQBAJ?hl=en&gbpv=0)
+
+A practical handbook of software-construction practices. Updated for web development, object-oriented development, agile practices, and other modern construction issues.
+
+### Design Patterns: Elements of Reusable Object-Oriented Software
+
+[Google Books](https://www.google.com/books/edition/Design_Patterns/6oHuKQe3TjQC?hl=en&gbpv=0)
+
+### The Art of Computer Programming. Volume 1: Fundamental Algorithms
+
+[Google Books](https://www.google.com/books/edition/The_Art_of_Computer_Programming/x9AsAwAAQBAJ?hl=en&gbpv=0)
+
+### The Art of Computer Programming. Volume 2: Seminumerical Algorithms
+
+[Google Books](https://www.google.com/books/edition/Art_of_Computer_Programming_Volume_2/Zu-HAwAAQBAJ?hl=en&gbpv=0)
+
+### The Art of Computer Programming. Volume 3: Sorting and Searching
+
+[Google Books](https://www.google.com/books/edition/The_Art_of_Computer_Programming/cYULBAAAQBAJ?hl=en&gbpv=0)
+
+### The Pragmatic Programmer
+
+[Google Books](https://www.google.com/books/edition/The_Pragmatic_Programmer/LhOlDwAAQBAJ?hl=en&gbpv=0)
+
+### Programming Pearls
+
+[Google Books](https://www.goodreads.com/book/show/52084.Programming_Pearls)
+
+### Types and Programming Languages
+
+[Link](https://www.cis.upenn.edu/~bcpierce/tapl/) - [Google Books](https://www.google.com/books/edition/Types_and_Programming_Languages/ti6zoAC9Ph8C?hl=en&gbpv=0)
+
+### Clean Code: A Handbook of Agile Software Craftsmanship
+
+[Google Books](https://www.google.com/books/edition/Clean_Code/_i6bDeoCQzsC?hl=en&gbpv=0)
+
+### Refactoring: Improving the Design of Existing Code
+
+### The Design of the UNIX Operating System
+
+### Structure and Interpretation of Computer Programs
+
 ## R Basics
+<hr/>
 
 ### Introduction to R
 
@@ -46,13 +95,13 @@ The manuals listed below were mostly produced by CRAN, the “Comprehensive R Ar
 
 #### [R: A Language and Environment for Statistical Computing](https://cran.r-project.org/doc/manuals/fullrefman.pdf)
 
-The complete 3700+ page manual on everything R. 
+The complete 3700+ page manual on everything R.
 
 [PDF](https://cran.r-project.org/doc/manuals/fullrefman.pdf) | [DB](https://www.dropbox.com/s/ogx1xjl4703g1y2/R_A%20Language%20and%20Environment%20for%20Statistical%20Computing.pdf?dl=0)
 
 #### [R FAQ](https://cran.r-project.org/doc/manuals/R-FAQ.html)
 
-Answers to some of the most frequently asked questions about R from CRAN. 
+Answers to some of the most frequently asked questions about R from CRAN.
 
 [DB](https://www.dropbox.com/s/g2hpoaddgyhbiev/R%20FAQ.pdf?dl=0)
 
@@ -99,6 +148,7 @@ A guide to the internal structures of R and coding standards for the core team w
 [PDF](http://phylab.fudan.edu.cn/lib/exe/fetch.php?media=home:whyx:proj:r.cookbook.pdf) | [DB](https://www.dropbox.com/s/qmhvno57kzf6cc0/r.cookbook.pdf?dl=0)
 
 ## Statistics
+<hr/>
 
 #### [Bayesian Statistics the Fun Way](https://nostarch.com/learnbayes)
 
@@ -113,12 +163,14 @@ A guide to the internal structures of R and coding standards for the core team w
 [DB](https://www.dropbox.com/s/uf5i1hcwyay8e8y/An%20Introduction%20to%20Statistical%20Learning%20Gareth%20James%20Daniela%20Witten%20Trevor%20Hastie%20Robert%20Tibshirani%20with%20Applications%20in%20R.pdf?dl=0)
 
 ## advanced R
+<hr/>
 
 #### [Advanced R by Hadley Wickham](https://adv-r.hadley.nz/)
 
 [PDF](https://englianhu.files.wordpress.com/2016/05/advanced-r.pdf) | [DB](https://www.dropbox.com/s/lme6dggr6fgwn0g/advanced-r.pdf?dl=0)
 
 ## time series
+<hr/>
 
 #### [Forecasting: Principles and Practice](https://otexts.com/fpp3/)
 
@@ -131,6 +183,7 @@ A guide to the internal structures of R and coding standards for the core team w
 [PDF](https://www.researchgate.net/publication/221936126_Introductory_Time_Series_With_R)
 
 ## R Markdown
+<hr/>
 
 #### [R Markdown from R Studio](https://rmarkdown.rstudio.com/lesson-1.html)
 
@@ -143,21 +196,24 @@ A guide to the internal structures of R and coding standards for the core team w
 [PDF](https://bookdown.org/yihui/bookdown/bookdown.pdf) | [DB](https://www.dropbox.com/s/3sm5j0wq3vs9m08/bookdown.pdf?dl=0)
 
 ## Sports
+<hr/>
 
-#### [Analyzing Baseball Data with R](https://baseballwithr.wordpress.com/) 
+#### [Analyzing Baseball Data with R](https://baseballwithr.wordpress.com/)
 
 [PDF](http://rgonzo.us/shiny/books/Baseball.pdf) | [DB](https://www.dropbox.com/s/szyiwnxdv9dx3zf/Analyzing%20Baseball%20Data%20with%20R%20by%20Max%20Marchi%2C%20Jim%20Albert%20%28z-lib.org%29.pdf?dl=0)
 
 ## graphics
+<hr/>
 
 ## finance and financial theory
+<hr/>
 
-#### [A Non-Random Walk Down Wall Street](https://press.princeton.edu/books/paperback/9780691092560/a-non-random-walk-down-wall-street)
+### [A Non-Random Walk Down Wall Street](https://press.princeton.edu/books/paperback/9780691092560/a-non-random-walk-down-wall-street)
 
 [PDF](http://kadamaee.ir/payesh/books-tank/17/Lo%20&%20MacKinlay%20-%20A%20Non-Random%20Walk%20Down%20Wall%20Street%20(1999).pdf) | [DB](https://www.dropbox.com/s/u8c9ar27a2552dv/Lo%20%26%20MacKinlay%20-%20A%20Non-Random%20Walk%20Down%20Wall%20Street%20%281999%29.pdf?dl=0)
 
-#### [Data Science: Theories, Models, Algorithms, and Analytics](https://srdas.github.io/MLBook/IntroductoryRprogamming.html#regression)
+### [Data Science: Theories, Models, Algorithms, and Analytics](https://srdas.github.io/MLBook/IntroductoryRprogamming.html#regression)
 
 [DB](https://www.dropbox.com/s/mo91sqbbjptpmi9/Data%20Science%3A%20Theories%2C%20Models%2C%20Algorithms%2C%20and%20Analytics.pdf?dl=0)
 
-#### [Business Analytics with R](https://bookdown.org/jeffreytmonroe/business_analytics_with_r7/)
+### [Business Analytics with R](https://bookdown.org/jeffreytmonroe/business_analytics_with_r7/)
