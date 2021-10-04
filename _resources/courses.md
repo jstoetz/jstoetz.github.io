@@ -14,10 +14,20 @@ title: Courses on R and Other Topics
 
 
 ## statistics
+
 - [Statistics 101-103, Introduction to Statistics at Yale University](http://www.stat.yale.edu/Courses/1997-98/101/welcome.html)
+
   + [Statistical Topics](http://www.stat.yale.edu/Courses/1997-98/101/toplist.htm)
 
 ## machine learning
+
 - [SDS 293 - Machine Learning at Smith College](http://www.science.smith.edu/~jcrouser/SDS293/)
   + [Linear Regression in R](http://www.science.smith.edu/~jcrouser/SDS293/labs/lab2-r.html)
   + [Logistic Regression in R](http://www.science.smith.edu/~jcrouser/SDS293/labs/lab4-r.html)
+
+## Financial Risk Management with R
+
+### Financial Risk Management with R (Duke University)
+
+[Link](https://www.coursera.org/learn/financial-risk-management-with-r) - [DB](https://www.dropbox.com/s/bwkgk0a8jfc71x9/2021.09.27%20-%20Financial%20Risk%20Management%20with%20R.pdf?dl=0) 
+

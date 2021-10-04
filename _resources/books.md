@@ -162,6 +162,21 @@ A guide to the internal structures of R and coding standards for the core team w
 
 [DB](https://www.dropbox.com/s/uf5i1hcwyay8e8y/An%20Introduction%20to%20Statistical%20Learning%20Gareth%20James%20Daniela%20Witten%20Trevor%20Hastie%20Robert%20Tibshirani%20with%20Applications%20in%20R.pdf?dl=0)
 
+#### [An Introduction to Statistical Learning with Applications in R](https://www.statlearning.com/)
+
+[PDF](https://web.stanford.edu/~hastie/ISLR2/ISLRv2_website.pdf)
+
+#### Practical Regression and Anova using R
+
+[PDF](https://cran.r-project.org/doc/contrib/Faraway-PRA.pdf) - [DB](https://www.dropbox.com/s/xf1pevxgt0sj73y/Practical%20Regression%20and%20Anova%20using%20R.pdf?dl=0)
+
+## Financial Analysis in R
+<hr/>
+
+### Financial Engineering Analytics: A Practice Manual Using R
+
+[PDF](https://bookdown.org/wfoote01/faur/faur.pdf) - [Bookdown](https://bookdown.org/wfoote01/faur/) - [DB]()
+
 ## advanced R
 <hr/>
 
