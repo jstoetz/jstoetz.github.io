@@ -79,10 +79,28 @@ The main tools that are discussed are:
 
 The Workflows can be summarized as:
 
-1. Dropbox > Zapier > Amazon S3
-2. Dropbox > Netlify
-3. Github > CodePipeline > Amazon S3
-4. Github > Amazon Amplify/Github Pages
+- Manual Workflow
+
+Edit files on text editor, 
+```
+Text Editor > Dropbox > iOS ftp or S3 App > Amazon S3
+```
+
+- Chron Workflow
+- Zapier Workflow
+
+```
+Dropbox > Zapier > Amazon S3
+```
+
+- Dropbox Workflow
+
+```
+Dropbox > Netlify
+```
+
+- Github > CodePipeline > Amazon S3
+- Github > Amazon Amplify/Github Pages
 
 ## Zapier Workflow
 
@@ -100,7 +118,12 @@ An example of a one of these workflows is:
 iA Writer > Dropbox > Zapier > Amazon S3
 ```
 
-You would write on [iA Writer](https://ia.net/writer) (on iOS, Mac, Windows or Android), save files to [Dropbox](http://dropbox.com) and use Zapier to sync with [Amazon S3](https://aws.amazon.com/s3/) as your hosting provider. 
+You would write on [iA Writer](https://ia.net/writer) (on iOS, Mac, Windows or Android), save files to [Dropbox](http://dropbox.com) and use Zapier to sync with [Amazon S3](https://aws.amazon.com/s3/) as your hosting provider.
+
+### Steps for the Zapier Workflow
+
+1. Setup accounts with Dropbox, Zapier and Amazon.
+2. Follow the [tutorial to create a static website on Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html).
 
 ## Netlify Workflow
 

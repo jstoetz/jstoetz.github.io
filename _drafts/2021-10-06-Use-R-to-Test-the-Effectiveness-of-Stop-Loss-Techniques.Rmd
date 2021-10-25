@@ -1,0 +1,147 @@
+---
+title: "2021-10-06-Use-R-to-Test-the-Effectiveness-of-Stop-Loss-Techniques"
+author: "Jake Stoetzner"
+date: "10/6/2021"
+output: 
+  html_document:
+    code_download: TRUE
+    keep_md: TRUE
+    toc: TRUE
+    toc_depth: 2
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(QuantTools)
+library(rvest)
+
+```
+
+## Overview
+
+In this post, I will discuss a method using R code to determine whether stop-loss techniques alone are sufficient to create a profitable trading system assuming random entries.  The stop-loss methods are:
+
+1. Profit Target
+2. Profit Target and Stop-Loss
+3. Trailing Stop-Loss
+
+Monte carlo methods will be used to cycle through the data 10,000 times to give a broad sample of the outcome(s).
+
+A few caveats:
+
+* **20 Large Cap Stocks**. I chose to pick the top 20 stocks by market cap to test the theory on.  There is no (intended) reasoning behind this, only that the data was readily available for each.  You can re-run the code for any stock(s), ETFs or crypto you choose.
+
+```{r, echo=TRUE}
+url.data <- "https://companiesmarketcap.com/usa/largest-companies-in-the-usa-by-market-cap/"
+
+top.20 <- url.data %>% read_html() %>% html_element(css = "table") %>% html_table()
+
+top.20.sym <- c("AAPL", "MSFT", "GOOG", "AMZN", "FB", "TSLA", "BRK.A", "NVDA", "JPM", "V", "JNJ", "WMT", "BAC", "UNH", "HD", "MA", "PG", "DIS", "PYPL", "NFLX")
+
+```
+
+* **Long Only**.  The system is long only.  No short trades.
+
+
+## Setting Initial Paramaters
+
+A few paramters need to be set, including the time periods we want to look at for the data and the start and end dates to download each stock's data.  2021 has been a good year for stocks (at least at the time of this writing), but the system is comparing itself to the market as a whole. Rather, it is competing against random entries on the same underlying.  Hopefully this does away with any directional bias.
+
+
+```{r, echo=TRUE}
+################################################################
+#<--------------- 1. Set Parameters ---------------->
+################################################################
+
+# parameter for both stock and options
+################################################################
+
+# - first date to download data
+p.start <- format("2021-01-01")
+
+# - last date to download data
+p.end <- format("2021-09-30")
+
+# - stock symbol
+p.symbol <- top.20.sym
+
+# - time period for bar
+p.period <- 'hour'
+```
+
+## Exit Functions
+
+These stop-loss and profit target functions are lightly modified versions of those found on the [Systematic Investor Toolbox Repo](https://github.com/systematicinvestor/SIT/blob/8356d5ec9de8e04c5960ec77335fe3311771f1d0/R/bt.stop.test.r).  If you haven't checked that out or [his blog](http://systematicinvestor.github.io/) you are missing out.
+
+The functions below return either the index of where the profit target was reached OR the last index of the price vector. 
+
+### Profit Target Function
+
+The profit target function in R is as follows:
+
+```{r, echo=TRUE}
+fn.profit.target.long <- function(weight, price, tstart, tend, pprofit) {
+    index = tstart : tend
+    if(weight > 0) {
+    # profit target
+        temp = price[ index ] > (1 + pprofit) * price[ tstart ]
+        temp2 = ifelse(length(first(which(temp==TRUE)))>0,first(which(temp==TRUE)),length(price[index]))
+    }
+    return( temp2 )
+}
+```
+
+### Profit Target + Stop Loss Function
+
+The profit target and stop-loss function in R is as follows:
+
+```{r, echo=TRUE}
+fn.profit.target.stop.loss.long <- function(weight, price, tstart, tend, pprofit, pstop) {
+    index = tstart : tend
+    if(weight > 0) {
+    # profit target
+      temp = price[ index ] > (1 + pprofit) * price[ tstart ]
+        pt = first(which(temp==TRUE))
+      temp2 = price[ index ] < (1 - pstop) * price[ tstart ]
+        pt2 = first(which(temp2==TRUE))
+      temp3 = ifelse(min(pt,pt2) < length(price[index]), min(pt,pt2), length(price[index]))}
+    return( temp3 )
+}
+```
+
+### Trailing Stop Loss Function
+
+The trailing stop loss function in R is as follows:
+
+```{r, echo=TRUE}
+# ----- trailing stop: exit trade once price falls below % from max price since start of trade
+fn.trailing.stop.long <- function(weight = 1, price, tstart, tend, positive.percent.stop) {
+    index = tstart : tend
+    if(weight > 0){
+        temp = price[ index ] < (1 - positive.percent.stop) * cummax(price[ index ])
+        pt = first(which(temp==TRUE))
+    
+        temp2 = price[ index ] > (1 + positive.percent.stop) * cummin(price[ index ])
+        pt2 = first(which(temp2==TRUE))
+        temp3 = ifelse(min(pt,pt2) < length(price[index]), min(pt,pt2), length(price[index]))
+    }
+    return( temp3 )
+}
+```
+
+## Download the Data
+
+The next step is to download the data.  I like the **QuantTools** package because of the integration with [IQFeed](https://www.iqfeed.net/) to download data.  For Mac users, be aware that IQFeed only runs on Windows natively.
+
+```{r, echo=TRUE}
+stock.data = lapply(p.symbol, function(x)(get_iqfeed_data(x, from = p.start, to = p.end, period = p.period)))
+
+
+```
+
+## Main Functions to Randomize the Entry and Exit
+
+The next step is to create the functions that will randomize the entry into our position and determining when the exit functions fire.  In a [previous post](https://jstoetz.github.io/r/random%20walk/2020/09/28/Random-Everything/), I built several functions that hel
