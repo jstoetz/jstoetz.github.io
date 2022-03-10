@@ -28,7 +28,7 @@ In short, I have long admired the work they do and the ideas their research gene
 
 The Trend Analyzer tool is offered to Bespoke Premium and Bespoke Institutional members. It "uses a proprietary algorithm to identify how stocks and ETFs across asset classes are trending so that users can make more informed decisions." [Source - Bespoke Members Only](https://www.bespokepremium.com/interactive/trend-analyzer/).
 
-![](/Users/jake_macbook_pro/Dropbox/jstoetz.github.io/jstoetz.github.io/assets/img/bespoke-trend.png)
+![](/assets/img/bespoke-trend.png)
 
 The tool is simple to use and analyzes ETF, indices and different sectors and individual stocks to determine:
 
@@ -66,7 +66,7 @@ Once the Trend Analyzer data was downloaded, the excel files were read in using 
 ### All Perfect Trend Score Returns versus All Returns from Same Time Period
 The first step was to look at mean return percentage over the defined time periods. Recall that we enter on the first open following the report being published and exit on the open after the given days from entry.
 
-For example, in the table below, the first column shows the days since entry; "ret.5" means the return was calculated from the open the day following the report to five (5) days after. 
+For example, in the table below, the first column shows the days since entry; "ret.5" means the return was calculated from the open the day following the report to five (5) days after.
 The second column shows the mean return for all of the data for the given holding period, not just the perfect trend score instruments.
 
 The third column separates just the perfect score data from the rest of the data.
@@ -121,7 +121,7 @@ Duplicates were removed and, as expected, mean returns improved.
 
 #### Plot: Comparison of Mean Returns for All Data, Perfect Data and First Entry Perfect Data
 
-![](/Users/jake_macbook_pro/Dropbox/jstoetz.github.io/jstoetz.github.io/assets/img/bespoke-trend-plot1.png)
+![](/assets/img/bespoke-trend-plot1.png)
 
 The blue line is the first entry only and for most of the measurement windows, it stays well above the "all signals" line.
 
@@ -152,7 +152,7 @@ Note: the table below shows the perfect trend score mean return percentage with 
 
 #### Plot: Comparison of All Data versus Yearly Mean Return Percentage
 
-![](/Users/jake_macbook_pro/Dropbox/jstoetz.github.io/jstoetz.github.io/assets/img/bespoke-trend-plot2.png)
+![](/assets/img/bespoke-trend-plot2.png)
 
 I was not expecting the difference between the years to be so pronounced. The All Data column shows the mean for all years. Just going off of the returns for 2020, you can see how wildly stocks and ETFs moved om average. You could basically throw the signals out the window. 2021 settled in as stocks regained some of the losses from 2020.
 
@@ -201,7 +201,6 @@ Additional research needed:
 
 *Note that the table below shows mean returns by stock/ETF. These returns are NOT multipled by 100 such that "0.0036" is represented to be "0.36%". The column labeled "n()" is the number of times the instrument is mentioned as a perfect trend score candidate from 2018 to 2021.
 
-<div class="datatable-begin"></div>
 |ticker | n()|   ret.2|   ret.3|   ret.4|   ret.5|   ret.6|   ret.7|   ret.8|   ret.9|  ret.10|  ret.15|  ret.20|  ret.25|  ret.30|  ret.60|
 |:------|---:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|-------:|
 |DDR    |  36|  0.0036|  0.0046|  0.0043|  0.0083|  0.0066|  0.0109|  0.0122|  0.0086|  0.0088|  0.0142|  0.0206|  0.0242|  0.0316|  0.0559|
@@ -3259,5 +3258,3 @@ Additional research needed:
 |XNCR   |   1|  0.0087|  0.0163|  0.0251|  0.0662|  0.0574|  0.0233|  0.0265| -0.0090|  0.0195| -0.0006|  0.1845|  0.1262|  0.1043|  0.1221|
 |YPF    |   1| -0.0685| -0.0755| -0.0902| -0.1232| -0.1431| -0.1301| -0.1587| -0.1700| -0.1769| -0.2767| -0.2125| -0.2541| -0.2368| -0.1613|
 |ZEUS   |   1| -0.0106| -0.0265| -0.0304| -0.0145| -0.0178| -0.0357|  0.0096|  0.0304|  0.0043|  0.0627|  0.1133|  0.1378|  0.0516|  0.1311|
-
-<div class="datatable-end"></div>
