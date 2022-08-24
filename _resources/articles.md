@@ -3,53 +3,37 @@ layout: collection
 title: Articles on R
 ---
 
-## basics
+## R basics
 
-[R Tutorial by Kelly Black, Dept of Mathematics, University of Georgia](http://www.cyclismo.org/tutorial/R/index.html#)
+* [R Tutorial by Kelly Black, Dept of Mathematics, University of Georgia](http://www.cyclismo.org/tutorial/R/index.html#)
+* [A List of Books and Articles Related to R on r-project.org](https://www.r-project.org/doc/bib/R-jabref.html)
+* [Data Science Essentials in R](https://uvastatlab.github.io/phdplus/index.html).  "A  six-session series to build data analysis, wrangling, and visualization skills."
+* [R Basics · UC Business Analytics R Programming Guide](http://uc-r.github.io/basics) - [DB](https://www.dropbox.com/s/13sh2gefumeqwhl/R%20Basics%20%C2%B7%20UC%20Business%20Analytics%20R%20Programming%20Guide.pdf?dl=0)
 
-[A List of Books and Articles Related to R on r-project.org](https://www.r-project.org/doc/bib/R-jabref.html)
+### R tools
 
-[Data Science Essentials in R](https://uvastatlab.github.io/phdplus/index.html).  "A  six-session series to build data analysis, wrangling, and visualization skills."
+* [RStudio Projects](http://uc-r.github.io/r_projects)
+* [R Markdown](http://uc-r.github.io/r_markdown)
+* [R Notebook](http://uc-r.github.io/r_notebook)
 
-[R Basics · UC Business Analytics R Programming Guide](http://uc-r.github.io/basics) - [DB](https://www.dropbox.com/s/13sh2gefumeqwhl/R%20Basics%20%C2%B7%20UC%20Business%20Analytics%20R%20Programming%20Guide.pdf?dl=0)
+### R data type
 
-### r tools
+* [Dealing with Numbers](http://uc-r.github.io/section3_numbers)
+* [Dealing with Characters](http://uc-r.github.io/characters)
+* [Dealing with Regex](http://uc-r.github.io/regex)
+* [Dealing with Factors](http://uc-r.github.io/factors)
+* [Dealing with Logical Values](http://uc-r.github.io/logicals)
+* [Dealing with Dates](http://uc-r.github.io/dates)
+* [Dealing with NA's](http://uc-r.github.io/missing_values)
 
-[RStudio Projects](http://uc-r.github.io/r_projects)
+### R Data Structures
 
-[R Markdown](http://uc-r.github.io/r_markdown)
-
-[R Notebook](http://uc-r.github.io/r_notebook)
-
-### r data type
-
-[Dealing with Numbers](http://uc-r.github.io/section3_numbers)
-
-[Dealing with Characters](http://uc-r.github.io/characters)
-
-[Dealing with Regex](http://uc-r.github.io/regex)
-
-[Dealing with Factors](http://uc-r.github.io/factors)
-
-[Dealing with Logical Values](http://uc-r.github.io/logicals)
-
-[Dealing with Dates](http://uc-r.github.io/dates)
-
-[Dealing with NA's](http://uc-r.github.io/missing_values)
-
-### r Data Structures
-
-[Basics](http://uc-r.github.io/structure_basics)
-
-[Managing Vectors](http://uc-r.github.io/vectors)
-
-[Managing Lists](http://uc-r.github.io/lists)
-
-[Managing Matrices](http://uc-r.github.io/matrices)
-
-[Managing Data Frames](http://uc-r.github.io/dataframes)
-
-[Managing Tibbles](http://uc-r.github.io/tibbles)
+* [Basics](http://uc-r.github.io/structure_basics)
+* [Managing Vectors](http://uc-r.github.io/vectors)
+* [Managing Lists](http://uc-r.github.io/lists)
+* [Managing Matrices](http://uc-r.github.io/matrices)
+* [Managing Data Frames](http://uc-r.github.io/dataframes)
+* [Managing Tibbles](http://uc-r.github.io/tibbles)
 
 ### r Functions
 
@@ -96,7 +80,7 @@ title: Articles on R
 
 ## webscraping
 
-[Web Scraping with R - RCpedia - visit rcpedia.stanford.edu](https://sites.google.com/a/stanford.edu/rcpedia/screen-scraping/web-scraping-with-r) - [PDF]() - Date Read: - [Notes]() - [Dropbox Link](https://www.dropbox.com/s/4goegyyjl879zct/Web%20Scraping%20with%20R%20-%20RCpedia%20-%20%E2%9A%A0%EF%B8%8Fvisit%20rcpedia.stanford.edu.pdf?dl=0)
+[Web Scraping with R - RCpedia - visit rcpedia.stanford.edu](https://sites.google.com/a/stanford.edu/rcpedia/screen-scraping/web-scraping-with-r) - [DB](https://www.dropbox.com/s/4goegyyjl879zct/Web%20Scraping%20with%20R%20-%20RCpedia%20-%20%E2%9A%A0%EF%B8%8Fvisit%20rcpedia.stanford.edu.pdf?dl=0)
 
 [Reading Web Pages with R | Department of Statistics](https://statistics.berkeley.edu/computing/faqs/reading-web-pages-r) - [DB](https://www.dropbox.com/s/ag9pq7bm1pma1ot/Reading%20Web%20Pages%20with%20R%20%7C%20Department%20of%20Statistics.pdf?dl=0)
 

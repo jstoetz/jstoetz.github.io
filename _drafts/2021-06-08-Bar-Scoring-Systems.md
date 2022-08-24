@@ -120,7 +120,8 @@ Using a simple example of the ```permutations()``` function, find all possible p
 # n = Size of the source vector
 # r = Size of the target vectors
 # v = Source vector. Defaults to 1:n
-# repeats.allowed = Logical flag indicating whether the constructed vectors may include duplicated values. Defaults to FALSE.
+# repeats.allowed = Logical flag indicating whether the constructed vectors may include duplicated values. Defaults to FALSE.
+
 
 permutations(n = 3, r = 2, v = 1:3, repeats.allowed = FALSE)
 
@@ -140,11 +141,33 @@ As an interesting side note, if you have ever shuffled a deck of cards and [you 
 <!-- text-->
 
 ## <a name="h2"></a>Bar Scoring Systems
+<hr />
 <sub>[jump back to top](#toc)</sub>
+
 "Bar‐scoring is an objective way to classify an instrument’s movement potential every bar. The two parts to bar‐scoring are the criterion and the resultant profit X days hence. Both the criterion and the number of days to measure profit are user‐defined."  [Building Reliable Trading Systems: Tradable Strategies That Perform as They Backtest and Meet Your Risk‐Reward Goals by Keith Fitschen, page 120](https://www.google.com/books/edition/Building_Reliable_Trading_Systems/Lh7YHl9yiAYC?hl=en&gbpv=1&dq=stock+trading+bar+scoring&pg=PT123&printsec=frontcover).  "Each bar is scored using any number of user‐defined criteria; the score is the expected value of the profit in a user‐defined number of days after entry. When the bar scores high the chances of an upward move are good; when the bar scores low the chances of a downward move are good.
 Bar‐scoring can be used as a standalone entry technique, an exit technique, or as an aid to other entry criteria.""  [Building Reliable Trading Systems: Tradable Strategies That Perform as They Backtest and Meet Your Risk‐Reward Goals by Keith Fitschen, page 119](https://www.google.com/books/edition/Building_Reliable_Trading_Systems/Lh7YHl9yiAYC?hl=en&gbpv=1&dq=stock+trading+bar+scoring&pg=PT123&printsec=frontcover).  Scoring systems have also been created to measure the stock trend and volatility, incorporating market sentiment, stock sentiment, candle pattern, volume and other criteria.  [Trading by Numbers Scoring Strategies for Every Market By Rick Swope, W. Shawn Howell](https://www.google.com/books/edition/Trading_by_Numbers/Y75kYDu3028C?hl=en&gbpv=0).
 
-Most trading systems use some type of bar-scoring.  For instance, a mean-reversion Bollinger Band  
+Most trading systems use some type of bar-scoring.  For instance, a mean-reversion Bollinger Band
+
+As noted above, assume for a second that the prior 20 opening prices have the ability to forecast or predict the opening price *n* bars into the future. 
+
+Whether the open was higher or lower than the prior open determines the permutation. An open higher than the prior open will be indicated as a "1", and an open lower than the prior open is "0". 
+
+For example, a run of 20 bars that have 5 higher opens than each prior bar, 3 lower opens, 7 higher opens and 5 lower opens would be:
+
+```
+1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0
+```
+
+I pressuppose that order matters. Two up opens followed by 10 down opens is more meaningful (in a predictive sense) than 12 alternating up and down opens or 6 down followed by 6 up.
+
+The permutation is defined as a vector `c(0,1)` with `n = 20` and repeats allowed. 
+
+The length of the permutation is 2.432902e+18. A vector or data.frame this long is unwieldy to work with. Also, a length of actual stock data - opening prices for 1-minute bars over a period of 2-3 days - woukd only have a fraction of the total permutations even if each length was distinct.
+
+That leaves 2 options:
+1. Solve for the actual permutations and only backtest the performance of those. 
+2. Reduce the total number of permutations by combining each run in a distinctive manner.
 
 
 
