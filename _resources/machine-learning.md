@@ -33,6 +33,8 @@ title: Machine Learning in R and Python
 
 * **CRAN Task View: Machine Learning & Statistical Learning**
   * [Link](https://cran.r-project.org/web/views/MachineLearning.html)
+* **R Packages**
+	* [mlr package](https://mlr.mlr-org.com)
 * **Tensorflow for R - R Studio**
   * [Guide](https://tensorflow.rstudio.com/guide/)
   * [Tutorials](https://tensorflow.rstudio.com/tutorials/)

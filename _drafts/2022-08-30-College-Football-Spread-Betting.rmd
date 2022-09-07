@@ -1,0 +1,152 @@
+---
+title: "College Football Spread Betting"
+author: "Jake Stoetzner"
+date: "8/30/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Short post on setting up a "down and dirty" [Github Action](https://docs.github.com/en/actions/quickstart) to download, analyze and report on college football spreads. The R-code provided below should help you create a simple (yet effective) betting system. The theory gpes like this: aggregate the expert and computer predictions and compare them to the actual line. The games that have the largest difference from the expert predictions *should* be the best picks.
+
+## Steps
+
+* Create a new Github Repository to host your code.
+
+Follow the steps to create a new [github repository](https://docs.github.com/en/get-started/quickstart/create-a-repo). Here, we are going to call it `cfb-spreads`. You can check out the repository on [github](https://github.com/jstoetz/cfb-spreads).
+
+You may want to also [clone the repo with Github Desktop](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository). For example, my repository is saved locally at `/Users/jake_macbook_pro/Dropbox/cfb-spreads`.
+
+* Create a `.github/workflows` directory in your repo, if one doesn't already exist. Check out the [Quickstart for GitHub Actions](https://docs.github.com/en/actions/quickstart) for more information on workflows.
+
+You can do this in R locally and then push the changes afterward, or [follow these steps to create a directory and file on Github.com](https://docs.github.com/en/github/managing-files-in-a-repository/creating-new-files).
+
+```{r create local workflow directory, echo=TRUE, include=TRUE}
+
+# set local repo directory path
+p_repo_dir <- '/Users/jake_macbook_pro/Dropbox/cfb-spreads'
+
+# set local .github and workflows directory paths
+p_workflow_dir <- paste(p_repo_dir, ".github", "workflows", sep = "/")
+
+# create .github and workflows directory
+if(!dir.exists(p_workflow_dir)){dir.create(p_workflow_dir)}
+
+```
+
+* Create a `R` directory locally to store the R-code. You can also add an empty file called `jobs.R` in this directory.
+
+Again, you can do this as you choose or use the code below.
+
+```{r create local R directory, echo=TRUE, include=TRUE}
+
+# set local R code directory path
+p_rcode_dir <- paste(p_repo_dir, "R", sep = "/")
+
+# create local R code directory
+if(!dir.exists(p_rcode_dir)){dir.create(p_rcode_dir)}
+
+# name and create jobs.R file in local R code directory
+p_rjobs_file <- paste(p_rcode_dir, "jobs.r", sep = "/")
+if(!file.exists(p_rjobs_file)){file.create(p_rjobs_file)}
+```
+
+* Create a `raw-data` directory locally. This will be used to store the data from the `jobs.R` functions.
+
+```{r create local raw-data directory, echo=TRUE, include=TRUE}
+
+# set local raw-data directory path
+p_rawdata_dir <- paste(p_repo_dir, "raw-data", sep = "/")
+
+# create local raw-data directory
+if(!dir.exists(p_rawdata_dir)){dir.create(p_rawdata_dir)}
+```
+
+Now the local github repo directory should look like this:
+
+```
+cfb-spreads
+├── .github
+│   ├── workflows
+├── R
+│   ├── jobs.R
+├── raw-data
+├── LICENSE
+├── README.md
+```
+
+* Add the code as shown below to the `jobs.R` file.
+
+This code will be do the majority of the work for us. As noted in the summary above, the idea is to aggregate the computer and expert predictions and compare them to the actual line. The lines with the largest difference indicate the "best plays".
+
+First, load the required R-package libraries.
+
+```{r load libraries, echo=TRUE, include=TRUE}
+library(tidyverse)
+library(rvest)
+```
+
+This package uses data published by [The Prediction Tracker](https://www.thepredictiontracker.com/). This site diligently compiles and tracks expert predictions on NCAA and NFL football games. Data is updated throughout the week, especially during football season.
+
+TPT uses the average of the computer rankings in its calculations. As stated on the website:
+
+> The prediction average is the average prediction of a set of computer ratings. All lines are in reference to the home team.  +3 means the home team is favored to win by 3 points and -3 means the visitor is favored by 3 points.  I am using predictions that are posted on the various web pages or the ratings that are sent to me. These predictions are being used for research and informational purposes only.
+
+TPT publishes a `.csv` file, as well as publishing the data on the website. We will download, save and read the `csv` file in the `raw-data` directory. Because this data is updated sporadically, we will date-stamp the csv file for future reference.
+
+```{r download csv file, echo=TRUE, include=TRUE}
+# set the url for the csv file
+p_tpt_address <- 'https://www.thepredictiontracker.com/ncaapredictions.csv'
+
+# create a file path and name with the timestamp for the csv file
+p_csv_file <- paste(Sys.Date(), "ncaa-predictions.csv", sep="-")
+
+# download the file and save it to the raw-data directory
+download.file(p_tpt_address, paste(p_rawdata_dir, p_csv_file, sep="/"))
+
+# read the file
+df_tpt_file <- read_csv(paste(p_rawdata_dir, p_csv_file, sep="/"))
+```
+
+Plot the `lineavg` and the current `line` to see who might be the best spreads to look at.
+
+```{r echo=TRUE}
+df_avg <- 
+  df_tpt_file %>%
+    select(road,home,lineopen, lineavg, line, linemedian, phcover, phwin) %>%
+    mutate(diff = lineavg-line) %>%
+    arrange(desc(diff))
+```
+
+Because of the dynamic nature of this data, here is a screenshot of the top 5 teams as of today:
+
+```
+# A tibble: 46 × 5
+   road             home            lineavg  line  diff
+   <chr>            <chr>             <dbl> <dbl> <dbl>
+ 1 Texas St.        Nevada           14.8     0   14.8 
+ 2 TCU              Colorado         -4.24  -13.5  9.26
+ 3 Arizona          San Diego St.    11.7     6    5.69
+ 4 SMU              North Texas      -6.24  -11    4.76
+ 5 North Carolina   Appalachian St.   2.65   -2    4.65
+```
+
+As of today, the biggest "difference" between the current line and the average of all experts prediction is in the Texas St. at Nevada game. The experts have it at 14.8 meaning that the home team (Nevada) should win by 14.8 points. But the actual line is 0. So based on the theory, the line is mismatched by 14.8 points. If you believe the average of the experts, you should bet on Nevada to cover.
+
+Looking at the next game, the expert average is -4.24 (meaning the home team is -4.24 vs the road team), but the actual line on the home team is -13.5 points. In other words, the experts think that the home team is only 4.24 points better against the road team, but the actual line says that the home team needs to be better than the road team by more than 13.5 points. Thus, you should take the points and bet on the road team.
+
+It takes a minute to get used to the +/- way the line is displayed. To be honest, I still get confused! Its always in relation to the home team; if the home team is positive then they are the underdog and are getting points, and if the home team is negative then they are the favorite and are giving points. A simple rule-of-thumb is **if the average expert line is greater than the actual line, take the home team and if not take the road team.**
+
+To take advantage of this "rule-of-thumb", go ahead and add a column called `my_pred` showing who the experts pick.
+
+```{r echo=TRUE}
+df_avg <- 
+  df_avg %>%
+    mutate(my_pred = ifelse(lineavg > line, home, road))
+
+```
+
