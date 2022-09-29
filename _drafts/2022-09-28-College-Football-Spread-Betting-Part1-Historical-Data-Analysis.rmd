@@ -1,0 +1,147 @@
+---
+title: "College Football Spread Betting - Part 1 - Historical Data Analysis"
+author: "Jake Stoetzner"
+date: "9/28/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Sports betting [recently became legal in the Sunflower State](https://www.sportsbettingdime.com/news/betting/millions-kansas-sports-bets-placed-since-september-1/). The news re-ignited my interest in the topic, if not from a "money making" standpoint, then a purely data-driven one. Like most projects, this started small then turned into a 3-part series:
+
+* Part 1 (this post) will examine and analyze the historical data
+* Part 2 outlines my first foray into [Github Actions](https://docs.github.com/en/actions/quickstart)
+* Part 3, which attempts to put everything together and propose an actionable, if not winnable, system.
+
+This series relies upon a simple, but possibly wrong, hypothesis: **the average of the expert predictions is more accurate than the Vegas line.** Many people have gone broke based on their belief that somehow they are smarter or better at predicting the line than Vegas. So these degenerate gamblers figure that they will ask a bunch of people - possibly very smart people with large computers - what they think the outcome of a football game will be. Then they take the average of all of these guesses and this determines their pick. This is called [the wisdom of the crowd](https://en.wikipedia.org/wiki/Wisdom_of_the_crowd) or "the collective opinion of a diverse independent group of individuals rather than that of a single expert. 
+
+## The Prediction Tracker
+
+This post owes a huge debt of gratitude for the data published by [The Prediction Tracker](https://www.thepredictiontracker.com/). The site diligently compiles and tracks expert predictions on NCAA and NFL football games. Data is updated at least daily throughout the week, especially during football season. It also has compiled historical data of expert predictions from past seasons going back to 2001.
+
+The Prediction Tracker or "TPT" uses the average of the expert and computer rankings in its calculations. 
+
+As stated on the website:
+
+> The prediction average is the average prediction of a set of computer ratings. All lines are in reference to the home team.  +3 means the home team is favored to win by 3 points and -3 means the visitor is favored by 3 points.  I am using predictions that are posted on the various web pages or the ratings that are sent to me. These predictions are being used for research and informational purposes only.
+
+TPT publishes a `.csv` file daily, as well as publishing the data in `html` table form data on the website.
+
+But for this post, we will be looking solely at historical data, which is a compilation of all of the experts' picks. This data for college football can be found on the [Prediction Tracker site](https://www.thepredictiontracker.com/ncaaarchive.html) in `csv` format.
+
+```{r post setup, include=FALSE}
+
+# main directory location
+p_file_main <- "/Users/jake_macbook_pro/Dropbox/@P63 - Blog Pages and Drafts/2022-09-28-post-part1-historical-betting-analysis"
+
+# list of sub directories
+p_file_sub <- c("data", "notes")
+```
+
+## Download and clean historical files
+
+Download all files to your local directory and then read them into R. Note that all of the `csv` files were saved locally in ` paste(p_file_main, p_file_sub[1], sep = "/")` so change that to where your files were saved, ie, something like `Users/YourUserName/DataDirectory/`.
+
+```{r read data, include=TRUE, echo=FALSE}
+
+# list all files
+p_file_sub_list <- list.files(paste(p_file_main, p_file_sub[1], sep = "/"), full.names = T)
+
+# get year from file
+p_file_year <- list.files(paste(p_file_main, p_file_sub[1], sep = "/"), full.names = F) %>% gsub("ncaa","",.) %>% gsub(".csv","",.)
+
+# read all csv files
+df_all_data <- lapply(p_file_sub_list, function(x)(read_csv(file = x)))
+
+# add file year
+df_all_data <- lapply(seq_along(p_file_year),function(x)(df_all_data[[x]] %>% add_column(year = as.numeric(p_file_year[[x]]))))
+
+# get all column names for each data frame
+df_names<-lapply(df_all_data,names)
+
+# bind the data into one big data frame
+df_all_data2 <- rbindlist(df_all_data,use.names = T,fill = T)
+
+# select all relevant columns
+df_all_data3 <- df_all_data2 %>% select(Home,Road,line,linesag,vscore,hscore,week,actual,total, year, phcover, phwin)
+
+# remove NA rows if the linesag column is NA
+df_all_data3 <- df_all_data3[!is.na(df_all_data3$linesag),]
+```
+
+## Deciphering Wins and Losses
+
+Adding helper columns at this stage will make the analysis easier;
+
+* The `linesag` column shows the average of all of the expert's predictions
+* `my_diff` and `my_diff_pct` show the absolute and relative difference between the average prediction and the actual line
+* `my_pick` implements the basic strategy where if the average line is greater than the actual line, the `Home` team should cover else the `Visitor` team should cover
+* `my_act_cov` shows the actual results of the game
+* `my_wl` determines if the pick was equal to the actual results and returns a "W" if correct and a "L" if wrong
+
+```{r}
+df_all_data4 <- df_all_data3 %>% mutate(
+  # difference between the average line and the actual line
+  my_diff = linesag-line,
+  my_diff_pct = (linesag-line)/line,
+  # if the average line is greater than the actual line, pick Home, if not pick Road
+  my_pick = ifelse(linesag>line,'H','R'),
+  # push -> actual score (home score minus road score) is equal to the line, H -> actual is greater than line, R -> actual less than line
+  my_act_cov = ifelse((hscore-vscore)==line,'P',ifelse((hscore-vscore)>line,'H','R')),
+  # 
+  my_wl = ifelse((hscore-vscore)==line,'P',ifelse(my_pick == my_act_cov,'W','L'))
+)
+```
+
+We can then summarise the data by year and see how it performed.
+
+```{r}
+# summarise all data - grouped by year
+summ_base <- 
+  df_all_data4 %>%
+  group_by(year) %>%
+  summarise(
+    no_win = length(which(my_wl=='W')),
+    no_loss = length(which(my_wl=='L')),
+    no_push = length(which(my_wl=='P')),
+    total = length(which(my_wl=='W')) + length(which(my_wl=='L')),
+    wp = length(which(my_wl=='W'))/(length(which(my_wl=='W')) + length(which(my_wl=='L')))
+  )
+
+summ_base
+```
+
+```{r}
+# summarise all years
+df_all_data4 %>%
+  summarise(
+    no_win = length(which(my_wl=='W')),
+    no_loss = length(which(my_wl=='L')),
+    no_push = length(which(my_wl=='P')),
+    total = length(which(my_wl=='W')) + length(which(my_wl=='L')),
+    wp = length(which(my_wl=='W'))/(length(which(my_wl=='W')) + length(which(my_wl=='L')))
+  )
+```
+
+Don't start buying that boat just yet! We were no better than a coin flip with a winning percentage of 49.4% across 13,534 games. Considering we have to win more than 52.4% of bets with standard -110 odds just to break even, we would have lost money following this system.
+
+## Other Options
+
+### Option 1: Bet it All 
+
+1. bet all - take all bets regardless of diff from average line
+2. bet top - only take the best X number or Y % of games across entire period
+3. bet top each week - for a given week, only take top X number or Y%
+4. parlay top each week - for a given week, parlay top X number or Y%
+5. kelly top each week - 
+6. parlay skewed dogs - top dogs (avg line vs actual) and then parlay them for ML
+7. t
+
+
+Historical NCAA Football Scores and Odds Archives - [Link](https://www.sportsbookreviewsonline.com/scoresoddsarchives/ncaafootball/ncaafootballoddsarchives.htm)
+
+Sports Betting Spread to Moneyline Converter | The Action Network - [Link](https://www.actionnetwork.com/betting-calculators/moneyline-converter)

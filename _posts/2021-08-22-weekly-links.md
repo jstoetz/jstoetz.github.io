@@ -6,14 +6,12 @@ categories: [links]
 ---
 
 <!-- TOC depthFrom:1 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
-
-	- [General](#general)
-	- [Personal Schema](#personal-schema)
-
+## Table of Contents
+- [General](#general)
+- [Personal Schema](#personal-schema)
 <!-- /TOC -->
 
 ## General
-<hr />
 
 ### Best 5 free stock market APIs in 2020</a></li>
 
@@ -37,14 +35,13 @@ A good cheatsheet for ToDoist.
 
 [Link](https://www.gastonsanchez.com/r4strings/) - [DB](https://www.dropbox.com/s/qkevuv2bfyl8bps/2021.08.21%20-%20Handling%20Strings%20With%20R.pdf?dl=0)
 
-### 18 Free Email Trackers | Mailtrap
+### 18 Free Email Trackers - Mailtrap
 
 [Link](https://mailtrap.io/blog/free-email-tracking-tools/amp/) - [DB](https://www.dropbox.com/s/qtqgsyq8r71pwqy/2021.08.21%20-%2018%20Free%20Email%20Trackers%20%7C%20Mailtrap.pdf?dl=0)
 
 At some point, I would like to create a package in R that operates as a bulk mailer for Newsletters and automated reporting. One feature Inwould like to add is the ability to track emails received, bounced, opened and clicked. This was research related to that.
 
 ## Personal Schema
-<hr />
 
 Recently, I have been searching for a way to categorize my work and personal world. The end goal being that I would have some type of structure to organize and access both. It's a surprisingly hard thing to *define*, but [this article does a good job](https://kottke.org/02/02/developing-a-personal-schema): "if you had to organize all the stuff that a person comes into contact with, how would you do it?"
 

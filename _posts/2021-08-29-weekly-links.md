@@ -10,7 +10,6 @@ categories: [links]
 Here are some links I covered in the past week.
 
 ## Table of Contents
-<hr/>
 
 - General
 - Why I Hate Calendars
@@ -20,7 +19,6 @@ Here are some links I covered in the past week.
 - AWS Tools: Amazon EMR
 
 ## General
-<hr />
 
 ### Setting up a new MacBook Pro
 
@@ -63,7 +61,6 @@ See also the rmarkdown site generator section of the rmarkdown book:  [Link](htt
 [Link](https://bookauthority.org/books/best-google-analytics-books) - [DB](https://www.dropbox.com/s/8wz5al9ju02urks/2021.08.26%20-%2058%20Best%20Google%20Analytics%20Books%20of%20All%20Time.pdf?dl=0)
 
 ## Why I Hate Calendars
-<hr />
 
 I am **terrible** at keeping a calendar (just ask my wife).  Calendars are obviously useful tools but something in my brain stops me from using them effectively.
 
@@ -98,9 +95,8 @@ How to get a calendar for any range of ```month-years``` in the R console.
 [Link](https://simplyorganizedyou.com/why-should-you-use-a-calendar/) - [DB](https://www.dropbox.com/s/dnl23aig9tpm0m1/2021.08.23-why-should-you-use-a-calendar.pdf?dl=0)
 
 ## Algorithmic Trading
-<hr />
 
-### 24x5 AI Stock Trading agent to predict stock prices | Live trading
+### 24x5 AI Stock Trading agent to predict stock prices - Live trading
 
 [Link](https://towardsdatascience.com/24x5-stock-trading-agent-to-predict-stock-prices-with-deep-learning-with-deployment-c15570720ae9) - [DB](https://www.dropbox.com/s/qfqu2h9fa92m9xu/2021.08.24%20-%2024x5%20AI%20Stock%20Trading%20agent%20to%20predict%20stock%20prices%20%7C%20Live%20trading.pdf?dl=0)
 
@@ -123,7 +119,6 @@ In-depth review of creating an algo trading bot hosted on AWS. Mostly python but
 [Link](https://blog.quantinsti.com/forecasting-stock-returns-using-arima-model/) - [DB](https://www.dropbox.com/s/0hhosudaxgvf9ba/2021.08.24-forecasting-stock-returns-using-arima-model.pdf?dl=0)
 
 ## Working With Audio Files and DeepSpeech in R and Python
-<hr/>
 
 ### Efficiently split a large audio file in R - Stack Overflow
 
@@ -148,7 +143,6 @@ Python code to build a DeepSpeech API and Batch API to build  a streaming transc
 This one is outside my comfort zone but still a good read.
 
 ## Developer Documentation as a Learning Tool
-<hr/>
 
 As a new coder, one of the (many) challenges I encounter is understanding the workflow and process that it takes to develop **good code**. What decisions does someone developing an R package make along the way? How do they decide what to include and what not to include? How do they utilize the architecture of the project to support their end goal?
 
@@ -183,7 +177,6 @@ More links to help with practicing coding:
 * Six Essential Language Agnostic Programming Books.  [Link](https://www.hanselman.com/blog/six-essential-language-agnostic-programming-books) - [DB](https://www.dropbox.com/s/vrzhz3jxjm0gqqu/2021.08.24-six-essential-language-agnostic-programming-books.pdf?dl=0)
 
 ## AWS Tools: Amazon EMR
-<hr />
 
 ### Getting Started With AWS EMR
 

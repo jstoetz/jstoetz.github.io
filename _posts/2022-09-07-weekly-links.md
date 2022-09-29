@@ -5,8 +5,6 @@ by: "Jake Stoetzner"
 categories: [links]
 ---
 
-# Links for the Week of 2022-09-05
-
 Here are some links I covered in the past week.
 
 ![](https://i0.wp.com/fronkonstin.com/wp-content/uploads/2022/03/dkzwov.png?resize=768%2C595&ssl=1)
@@ -14,7 +12,6 @@ Here are some links I covered in the past week.
 Enjoy [neoplastic art](https://en.wikipedia.org/wiki/Neoplasticism) from the [Fronkonstin blog](https://fronkonstin.com/2022/03/25/the-mondrianomies/) while you read.
 
 ## Table of Contents
-<hr/>
 
 * [Serialized Listening](#searialized-listening)
 * [Art and Coding](#art-and-coding)
@@ -23,7 +20,6 @@ Enjoy [neoplastic art](https://en.wikipedia.org/wiki/Neoplasticism) from the [Fr
 * [Machine Learning in R](#machine-learning-in-R)
 
 ## Serialized Listening
-<hr/>
 
 ### 1001 Albums You Must Hear Before You Die
 
@@ -38,7 +34,6 @@ My first “assigned” album is David Bowie’s 6th studio album from 1973 titl
 **TLDR: Listening to and ranking the best 1001 albums is easier with https://1001albumsgenerator.com/**
 
 ## Art and Coding
-<hr/>
 
 ### Why Love Generative Art? — Artnome
 
@@ -67,7 +62,6 @@ Other articles on generative art:
 **TLDR: Make computer assisted art in R with packages like [generative art](https://github.com/cutterkom/generativeart), [jasmines](https://github.com/djnavarro/jasmines) and [aRtsy](https://github.com/koenderks/aRtsy)**
 
 ## Static Site Generator "Lite": R Markdown and Wordpress
-<hr/>
 
 ### Publish R Markdown to WordPress site? Yes You Can! – Catbird Analytics
 
@@ -90,7 +84,6 @@ The [Wordpress REST API](https://developer.wordpress.org/rest-api/) allows you t
 **TODO: Finish R code for working with the Wordpress API.**
 
 ## Data Shows History Repeats Itself (Again)
-<hr/>
 
 ### Mathematicians Predict the Future With Data From the Past - WIRED
 
@@ -116,7 +109,6 @@ Other articles on this subject:
 **TODO: Check out the [rptR package](https://CRAN.R-project.org/package=rptR).**
 
 ## Machine Learning in R
-<hr/>
 
 ### Scikit-Learn vs. Machine Learning in R (mlr) - DZone AI
 

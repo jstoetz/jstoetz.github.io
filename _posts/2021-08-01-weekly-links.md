@@ -5,11 +5,9 @@ by: "Jake Stoetzner"
 categories: [links]
 ---
 
-# Links for 2021-08-01
-
 Below are some links that I found interesting and/or instructive last week. Enjoy!
 
-[Summary](#links-for-2021-08-01)
+## Table of Contents
 
 * [Employee Retention Credit](#employee-retention-credit)
 * [Items to Add to (this) Website](#items-to-add-to--this--website)

@@ -10,7 +10,6 @@ categories: [links]
 Here are some links I covered in the past week.
 
 ## Table of Contents
-<hr/>
 
 - General
 - Automating File Organization
@@ -19,7 +18,6 @@ Here are some links I covered in the past week.
 - R on AWS
 
 ## General
-<hr />
 
 ### Hosting images with Dropbox
 
@@ -50,7 +48,6 @@ A nifty little tool to make a **PDF** of your favorite RSS feeds appear like a p
 [Link](https://www.schaeffersresearch.com/education/options-basics/options-trading-mechanics/rolling-options-out-up-and-down) - [DB](https://www.dropbox.com/s/xxf1826k356d12j/2021.10.28%20-%20Learn%20to%20Trade%20Options%20Now%3A%20Rolling%20Options%20Out%2C%20Up%20and%20Down.pdf?dl=0)
 
 ## Automating File Organization
-<hr />
 
 ### Automating my workflow with Python #1: File Organizer
 
@@ -61,7 +58,6 @@ A nifty little tool to make a **PDF** of your favorite RSS feeds appear like a p
 [Link](https://github.com/tfeldmann/organize)
 
 ## Exporting Apple Notes and The Plain Text Movement
-<hr />
 
 Apple notes, for all its sleekness, syncing capabilities and ease of use, only allows you to [export notes on Mac](https://support.apple.com/guide/notes/import-and-export-notes-not201900c07/mac) in **PDF** format. Getting them out of the Apple ecosystem is like breaking Sean Connery out of Alcatraz with Nic Cage. Doable, but not without its challenges.
 
@@ -100,16 +96,14 @@ Never tried this but plan to.
 A nice little Automator script by the makers of Bear that you run on your Mac to export notes into **HTML** format. Theoretically, you could then convert those notes into **txt** format.
 
 ## App to Post to Facebook
-<hr />
 
 ### How to Post on Your Facebook Page With the Graph API
 
 [Link](https://medium.com/swlh/how-to-post-on-your-facebook-page-with-the-graph-api-701b2a79b056) - [DB](https://www.dropbox.com/s/sexycw05b59sg5x/2021.10.26%20-%20How%20to%20Post%20on%20Your%20Facebook%20Page%20With%20the%20Graph%20API.pdf?dl=0)
 
 ## R on AWS
-<hr/>
 
-### Getting started with R on Amazon Web Services | Amazon Web Services
+### Getting started with R on Amazon Web Services - Amazon Web Services
 
 [Link](https://aws.amazon.com/blogs/opensource/getting-started-with-r-on-amazon-web-services/) - [DB](https://www.dropbox.com/s/bol4nqcx2wak6gb/2021.10.28%20-%20Getting%20started%20with%20R%20on%20Amazon%20Web%20Services%20%7C%20Amazon%20Web%20Services.pdf?dl=0)
 

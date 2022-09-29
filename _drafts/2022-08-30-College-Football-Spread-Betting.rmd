@@ -11,17 +11,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-Short post on setting up a "down and dirty" [Github Action](https://docs.github.com/en/actions/quickstart) to download, analyze and report on college football spreads. The R-code provided below should help you create a simple (yet effective) betting system. The theory gpes like this: aggregate the expert and computer predictions and compare them to the actual line. The games that have the largest difference from the expert predictions *should* be the best picks.
+This is a post on setting up a "down and dirty" [Github Action](https://docs.github.com/en/actions/quickstart) to download, analyze and report on college football spreads. The R-code provided below should help you create a simple betting system. The theory goes like this:
+
+* aggregate the expert and computer predictions for college and NFL games,
+* compare them to the actual line, and 
+* the games that have the largest difference from the expert predictions *should* be the best picks.
 
 ## Steps
 
-* Create a new Github Repository to host your code.
+### Step 1: Create a new Github Repository to host your code.
 
 Follow the steps to create a new [github repository](https://docs.github.com/en/get-started/quickstart/create-a-repo). Here, we are going to call it `cfb-spreads`. You can check out the repository on [github](https://github.com/jstoetz/cfb-spreads).
 
 You may want to also [clone the repo with Github Desktop](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository). For example, my repository is saved locally at `/Users/jake_macbook_pro/Dropbox/cfb-spreads`.
 
-* Create a `.github/workflows` directory in your repo, if one doesn't already exist. Check out the [Quickstart for GitHub Actions](https://docs.github.com/en/actions/quickstart) for more information on workflows.
+### Step 2: Create a `.github/workflows` directory in your repo, if one doesn't already exist. Check out the [Quickstart for GitHub Actions](https://docs.github.com/en/actions/quickstart) for more information on workflows.
 
 You can do this in R locally and then push the changes afterward, or [follow these steps to create a directory and file on Github.com](https://docs.github.com/en/github/managing-files-in-a-repository/creating-new-files).
 
@@ -33,14 +37,16 @@ p_repo_dir <- '/Users/jake_macbook_pro/Dropbox/cfb-spreads'
 # set local .github and workflows directory paths
 p_workflow_dir <- paste(p_repo_dir, ".github", "workflows", sep = "/")
 
-# create .github and workflows directory
+# create .github and workflows directory if they don't already exist
 if(!dir.exists(p_workflow_dir)){dir.create(p_workflow_dir)}
 
 ```
 
-* Create a `R` directory locally to store the R-code. You can also add an empty file called `jobs.R` in this directory.
+### Step 3: Create an `R` directory locally to store the R-code. 
 
-Again, you can do this as you choose or use the code below.
+You can also add an empty file called `jobs.R` in this directory.
+
+Again, you can do this as you choose manually or use the code below.
 
 ```{r create local R directory, echo=TRUE, include=TRUE}
 
@@ -55,7 +61,9 @@ p_rjobs_file <- paste(p_rcode_dir, "jobs.r", sep = "/")
 if(!file.exists(p_rjobs_file)){file.create(p_rjobs_file)}
 ```
 
-* Create a `raw-data` directory locally. This will be used to store the data from the `jobs.R` functions.
+### Step 4: Create a `raw-data` directory locally. 
+
+This will be used to store the data from the `jobs.R` functions.
 
 ```{r create local raw-data directory, echo=TRUE, include=TRUE}
 
@@ -79,24 +87,23 @@ cfb-spreads
 ├── README.md
 ```
 
-* Add the code as shown below to the `jobs.R` file.
+### Step 5: Add the code as shown below to the `jobs.R` file.
 
 This code will be do the majority of the work for us. As noted in the summary above, the idea is to aggregate the computer and expert predictions and compare them to the actual line. The lines with the largest difference indicate the "best plays".
 
 First, load the required R-package libraries.
 
-```{r load libraries, echo=TRUE, include=TRUE}
+```{r load libraries, echo=FALSE, include=TRUE}
 library(tidyverse)
-library(rvest)
 ```
 
 This package uses data published by [The Prediction Tracker](https://www.thepredictiontracker.com/). This site diligently compiles and tracks expert predictions on NCAA and NFL football games. Data is updated throughout the week, especially during football season.
 
-TPT uses the average of the computer rankings in its calculations. As stated on the website:
+The Prediction Tracker or "TPT" uses the average of the computer rankings in its calculations. As stated on the website:
 
 > The prediction average is the average prediction of a set of computer ratings. All lines are in reference to the home team.  +3 means the home team is favored to win by 3 points and -3 means the visitor is favored by 3 points.  I am using predictions that are posted on the various web pages or the ratings that are sent to me. These predictions are being used for research and informational purposes only.
 
-TPT publishes a `.csv` file, as well as publishing the data on the website. We will download, save and read the `csv` file in the `raw-data` directory. Because this data is updated sporadically, we will date-stamp the csv file for future reference.
+TPT publishes a `.csv` file, as well as publishing the data in table form on the website. We will download, save and read the `.csv` file in the `raw-data` directory. Because this data is updated sporadically, we will date-stamp the csv file for future reference.
 
 ```{r download csv file, echo=TRUE, include=TRUE}
 # set the url for the csv file
@@ -112,9 +119,11 @@ download.file(p_tpt_address, paste(p_rawdata_dir, p_csv_file, sep="/"))
 df_tpt_file <- read_csv(paste(p_rawdata_dir, p_csv_file, sep="/"))
 ```
 
-Plot the `lineavg` and the current `line` to see who might be the best spreads to look at.
+Plot the `lineavg` (which is the average of all of the computer and expert predictions) and the current `line` to see who might be the best games to look at.
 
 ```{r echo=TRUE}
+
+# create the data table
 df_avg <- 
   df_tpt_file %>%
     select(road,home,lineopen, lineavg, line, linemedian, phcover, phwin) %>%
@@ -122,7 +131,7 @@ df_avg <-
     arrange(desc(diff))
 ```
 
-Because of the dynamic nature of this data, here is a screenshot of the top 5 teams as of today:
+Because of the dynamic nature of this data, here is a table of the top 5 teams as of the first week of college football for 2022 (note that the graphs below are of different teams):
 
 ```
 # A tibble: 46 × 5
@@ -135,18 +144,88 @@ Because of the dynamic nature of this data, here is a screenshot of the top 5 te
  5 North Carolina   Appalachian St.   2.65   -2    4.65
 ```
 
-As of today, the biggest "difference" between the current line and the average of all experts prediction is in the Texas St. at Nevada game. The experts have it at 14.8 meaning that the home team (Nevada) should win by 14.8 points. But the actual line is 0. So based on the theory, the line is mismatched by 14.8 points. If you believe the average of the experts, you should bet on Nevada to cover.
+As of today, the biggest "difference" between the current line and the average of all experts prediction is in the Texas St. at Nevada game. The experts have it at 14.8 meaning that the home team (Nevada) should win by 14.8 points. But the actual line is 0. So based on the theory, the line is mismatched by 14.8 points. If you believe the average of the experts, you should bet on Nevada to cover because the home team is predicted to be 14.8 points better than the road team.
 
-Looking at the next game, the expert average is -4.24 (meaning the home team is -4.24 vs the road team), but the actual line on the home team is -13.5 points. In other words, the experts think that the home team is only 4.24 points better against the road team, but the actual line says that the home team needs to be better than the road team by more than 13.5 points. Thus, you should take the points and bet on the road team.
+Looking at the next game, the expert average is -4.24 (meaning the home team is -4.24 points worse vs the road team), but the actual line on the home team is -13.5 points. In other words, the experts think that the home team is only 4.24 points worse against the road team, but the actual line says that the home team needs to be better than the road team by more than 13.5 points. Thus, you should take the points and bet on the road team.
 
-It takes a minute to get used to the +/- way the line is displayed. To be honest, I still get confused! Its always in relation to the home team; if the home team is positive then they are the underdog and are getting points, and if the home team is negative then they are the favorite and are giving points. A simple rule-of-thumb is **if the average expert line is greater than the actual line, take the home team and if not take the road team.**
+It takes a minute to get used to the +/- way the line is displayed. To be honest, I still get confused! Remember that the line displayed is always in relation to the home team; if the home team is positive then they are the underdog and are getting points, and if the home team is negative then they are the favorite and are giving points. A simple rule-of-thumb is **if the average expert line is greater than the actual line, take the home team and if not take the road team.**
 
 To take advantage of this "rule-of-thumb", go ahead and add a column called `my_pred` showing who the experts pick.
+
+We are also going to add columns a few columns at this state:
+
+* `my_pred_id` that specifies whether the pick is the home or road team,
+* `my_abs_diff` that shows the absolute difference from the line and the average prediction. By sorting this absolute difference of the prediction average and the line, it will show you the picks with the highest absolute "edge."
+* `my_abs_diff_pct` that shows the percentage difference of the prediction average and the line. Sorting this column will show the picks with the highest relative or percentage "edge."
 
 ```{r echo=TRUE}
 df_avg <- 
   df_avg %>%
-    mutate(my_pred = ifelse(lineavg > line, home, road))
+    mutate(
+      my_pred = ifelse(lineavg > line, home, road),
+      my_pred_id = ifelse(lineavg > line, "home", "road"),
+      my_abs_diff = abs(diff),
+      my_abs_diff_pct = abs(diff/line)
+    ) %>%
+    arrange(desc(my_abs_diff_pct))
+```
+
+To finalize the `jobs.r` package we will add a simple graph showing the best picks for the week. Below is an example for the top 20 best picks for Week 2 of the 2022 NCAAF season.
+
+```{r echo=TRUE}
+# limit to top 20 picks
+my_plot1 <- df_avg[1:20,] %>% arrange(desc(my_abs_diff))
+
+# team names
+my_plot1_teams <- my_plot1$my_pred
+
+plot(my_plot1$my_abs_diff, 
+     type = "p", 
+     lwd=3, 
+     col="blue",
+     main = paste("Absolute Difference - NCAAF Games for", Sys.Date(),sep = " "),
+     xlab = "Game Number",
+     ylab = "Abs Diff Prediction Avg",
+     ylim=c(0, (max(my_plot1$diff)+2))
+)
+text(seq_along(my_plot1$my_pred), my_plot1$my_abs_diff, labels = my_plot1$my_pred, cex=0.4, pos=3, col="black")
 
 ```
+
+We can also create a graph showing the relative or percentage difference.
+
+```{r echo=TRUE}
+# limit to top 20 picks
+my_plot2 <- df_avg %>% filter(line != 0) %>% arrange(desc(my_abs_diff_pct)) %>% head(.,20)
+
+# team names
+my_plot2_teams <- my_plot2$my_pred
+
+plot(my_plot2$my_abs_diff_pct, type = "p", lwd=3, col="blue",
+     main = paste("Relative (Pct) Difference - NCAAF Games for", Sys.Date(),sep = " "),
+     xlab = "Game Number",
+     ylab = "Relative (Pct) Diff Prediction Avg",
+     ylim=c(0, max(my_plot2$my_abs_diff_pct)+1))
+text(seq_along(my_plot2_teams), my_plot2$my_abs_diff_pct, my_plot2_teams, cex=0.4, pos=3, col="black")
+```
+### Step 6: Setup the `schedule-commit.yaml` file in `.github/worflows` directory
+
+Now that we have our `jobs.R` file setup, it is time to set-up the Github Action to run the code once per day.
+
+This is completed through the use of a workflow called `schedule-commit.yaml`. You can review the workflow in the [cfb-spreads repository](https://github.com/jstoetz/cfb-spreads/blob/main/.github/workflows/schedule-commit.yaml).
+
+Github actions initially look complex, but the best way to learn them is to simply try it yourself. I found the following articles extremely helpful in getting the `cfb-spreads` setup:
+
+* Running R Scripts on a Schedule with GitHub Actions - [Link](https://blog--simonpcouch.netlify.app/blog/r-github-actions-commit/)
+* Automatic Rendering of a Plot with GitHub Actions - [Link](https://amitlevinson.com/blog/automated-plot-with-github-actions/)
+* Writing R Extensions by the R Core Team - [Link](https://cran.r-project.org/doc/manuals/R-exts.html)
+* Quickstart for GitHub Actions - [Link](https://docs.github.com/en/actions/quickstart)
+* GitHub Actions for the R language - [Link](https://github.com/r-lib/actions)
+
+In particular, the [Simon Couch article](https://blog--simonpcouch.netlify.app/blog/r-github-actions-commit/) is particularly instructive. You can [review the actual repository from the article](https://github.com/simonpcouch/scheduled-commit-action) if you want to dig in to the details of Github Actions.
+
+### Step 7: Set the Cron for `jobs.r`
+
+Part of the action involves the use of CRON, which allows you to tell Github how often to run the `jobs.R` script. A good source for this is [Crontab by Cronhub](https://crontab.cronhub.io/) that helps you generate expressions. In this workflow, we are telling Github actions to run the script once per day at 12:00 AM with the expression `0 0 * * *`.
+
 

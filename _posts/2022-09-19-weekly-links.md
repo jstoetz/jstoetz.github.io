@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Links for the Week of 2022-09-05
+title: Links for the Week of 2022-09-16
 by: "Jake Stoetzner"
 categories: [links]
 ---
 
-Here are some links I enjoyed from the past week. 
+Here are some links I enjoyed from the past week.
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@ Here are some links I enjoyed from the past week.
 
 [Link](https://www.alpharithms.com/predicting-stock-prices-with-linear-regression-214618/) - [DB](https://www.dropbox.com/s/qatwzu75q4ihf6z/2022-Sep-08-%20Predicting%20Stock%20Prices%20with%20Linear%20Regression%20in%20Python.pdf?dl=0)
 
-A very well written article on using linear regression in python to predict stock price action. 
+A very well written article on using linear regression in python to predict stock price action.
 
 <img src="https://dl.dropboxusercontent.com/s/tbja197orenp7y9/linear-regression-price-prediction-plot-with-residual-lines.jpg?dl=0" alt="the author’s error graph for his linear model">
 
@@ -29,7 +29,7 @@ The steps can be outlined as follows:
 
 #### Step 1: Load the data
 
-See 3 Easy Ways to Get Financial Data in Python for Stock Analysis - αlphαrithms - [Link](https://www.alpharithms.com/python-financial-data-491110/) - [DB](https://www.dropbox.com/s/46b7qo8q6dq3jlo/2022-Sep-08-%203%20Easy%20Ways%20to%20Get%20Financial%20Data%20in%20Python%20for%20Stock%20Analysis%20-%20%CE%B1lph%CE%B1rithms.pdf?dl=0). 
+See 3 Easy Ways to Get Financial Data in Python for Stock Analysis - αlphαrithms - [Link](https://www.alpharithms.com/python-financial-data-491110/) - [DB](https://www.dropbox.com/s/46b7qo8q6dq3jlo/2022-Sep-08-%203%20Easy%20Ways%20to%20Get%20Financial%20Data%20in%20Python%20for%20Stock%20Analysis%20-%20%CE%B1lph%CE%B1rithms.pdf?dl=0).
 
 #### Step 2: Prepare the data
 
@@ -39,9 +39,9 @@ Check to see if the variables are independent meaning that the “residuals (dif
 
 #### Step 3: Use a technical indicator rather than the date as the *independent variable*
 
-The author chooses a 10-day exponential moving average (EMA)  via the ‘pandas_ta’ import. 
+The author chooses a 10-day exponential moving average (EMA)  via the ‘pandas_ta’ import.
 
-Drop all ‘NA’ values caused by the technical indicator. 
+Drop all ‘NA’ values caused by the technical indicator.
 
 #### Step 4: Train-Test Split with 80/20 ratio
 
@@ -63,7 +63,7 @@ This is where the author really shines - he makes the point that the model uses 
 
 As I have noted before, you have 3 options to chose for your entry when a model uses current day data
 
-* **Option 1:** use the closing price of the current day as your entry, offset by a certain amount (ie, slippage in the wrong direction) because it is unlikely to get filled right at the close. 
+* **Option 1:** use the closing price of the current day as your entry, offset by a certain amount (ie, slippage in the wrong direction) because it is unlikely to get filled right at the close.
 * **Option 2:** use the opening price for the following day as the entry since this is the next available data point.
 * **Option 3:** assume that you can trade after-hours. This option is not available to most retail traders.
 
@@ -73,7 +73,7 @@ The author chose Option 2: “If our model predicts a higher closing value than 
 
 The article concludes that the strategy made ~15% on 4 trades out of 49 days.
 
-This would be a good time to run common trading statistics on the model, such as win percentage, drawdown etc. 
+This would be a good time to run common trading statistics on the model, such as win percentage, drawdown etc.
 
 **TLDR: Linear regression in Python can be a useful tool in stock price prediction.**
 
@@ -83,13 +83,13 @@ This would be a good time to run common trading statistics on the model, such as
 
 ![](https://book.stat420.org/mlr_files/figure-html/unnamed-chunk-4-1.png)
 
-The image above is a 3-dimensional visualization of multiple linear regression using 2 predictor variables. 
+The image above is a 3-dimensional visualization of multiple linear regression using 2 predictor variables.
 
-Instead of minimizing the distance between the response variable and a single predictor variable in simple linear regression, multiple regression seeks to fit more than one predictor variables to the response (or independent) variable. 
+Instead of minimizing the distance between the response variable and a single predictor variable in simple linear regression, multiple regression seeks to fit more than one predictor variables to the response (or independent) variable.
 
  This approach has 2 main advantages
 
-* **First** datasets (and by extension, the “real” world) rarely have a single predictor variable. In the context of stock price prediction, multiple factors like volume, technical indicators derived from price and other instruments may influence future price action. 
+* **First** datasets (and by extension, the “real” world) rarely have a single predictor variable. In the context of stock price prediction, multiple factors like volume, technical indicators derived from price and other instruments may influence future price action.
 * **Second** response variables rarely if ever only depend on a single variable
 
 ### [LIST] Resources for Linear Regression in R
@@ -98,7 +98,7 @@ Instead of minimizing the distance between the response variable and a single pr
 * Multiple Linear Regression - Applied Statistics with R - [Link](https://book.stat420.org/multiple-linear-regression.html). Note: this is from Chapter 9 of the book Applied Statistics with R - [DB](https://www.dropbox.com/s/zoom0jaygpcc70e/applied_statistics.pdf?dl=0)
 * Regression in R - [Link](http://www.sthda.com/english/articles/40-regression-analysis/) - [DB](https://www.dropbox.com/s/ny7i9f7g2om5n8n/sthda.com-Articles%20-%20Regression%20Analysis.pdf?dl=0)
 * Multiple linear regression made simple - [Link](https://statsandr.com/blog/multiple-linear-regression-made-simple/) - [DB](https://www.dropbox.com/s/xun7f1b3gvolozk/2022-09.19-Multiple%20linear%20regression%20made%20simple%20-%20Stats%20and%20R.pdf?dl=0)
-* 
+*
 
 ### A Sample Workflow for Multiple Linear Regression of Stock Prices in R
 
@@ -166,12 +166,12 @@ This [Stats and R Article titled “Multiple linear regression made simple”](h
 
 [Link](https://www.nytimes.com/2022/09/06/well/mind/melatonin-dependency.html) - [DB](https://www.dropbox.com/s/mdditvbdxqmpd46/Can%20You%20Get%20Addicted%20to%20Melatonin%20-%20The%20New%20York%20Times.pdf?dl=0)
 
-An interesting article on the unknown effects of melatonin. 
+An interesting article on the unknown effects of melatonin.
 
 * **How it works** “Melatonin is a hormone produced primarily in a structure in the brain, called the pineal gland, that regulates the sleep-wake cycle. During the day, the gland does not create melatonin. After the sun sets, darkness triggers it to secrete the hormone, causing drowsiness and other signals that it’s time to sleep.”
 * **It’s non-addictive and you can’t become physically dependent on it, but it’s not for long-term use.** “In general, experts consider melatonin to be safe for short-term use, say, a few nights per week for one to four weeks…”
 * **Opt for good sleep hygiene rather than melatonin**
-    * Aim to wake up and go to bed around the same time each day, including on the weekends. 
+    * Aim to wake up and go to bed around the same time each day, including on the weekends.
     * Make sure your room is quiet and dark enough (a sleep mask can help block external light)
     * avoid rigorous exercise for at least an hour and a half before bed, Dr. Rohr said. (Working out earlier in the day, however, can help you sleep.)
     * limit your caffeine consumption throughout the day and avoid alcohol in the hours right before you go to sleep.

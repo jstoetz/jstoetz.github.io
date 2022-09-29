@@ -1,0 +1,204 @@
+---
+layout: post
+title: "Segmented Returns for Stocks"
+by: "Jake Stoetzner"
+output:
+  md_document:
+    variant: gfm
+    preserve_yaml: TRUE
+---
+
+```{r "setup", include=FALSE}
+knitr::opts_knit$set(base.dir = "/Users/jake_macbook_pro/Dropbox/jstoetz.github.io/jstoetz.github.io", base.url = "/")
+
+knitr::opts_chunk$set(fig.path = "assets/img/")
+```
+
+## Introduction
+
+## Normal Distribution of Stock Returns
+
+Normal distribution of stock market returns is a subject that has been on my mind lately. I think [this post by Tony Yiu](https://towardsdatascience.com/understanding-the-normal-distribution-with-python-e70bb855b027) summed up what a normal distribution means in plain enough terms: "A normally distributed random variable might have a mean of 0 and a standard deviation of 1. What does that mean? That means that we expect the value to be 0 (on average) but the actual realized values of our random variable wiggle around 0. The amount that it wiggles by is 1."
+
+You can plot a normal distribution [easily enough in R](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/Normal.html):
+
+```{r}
+# plot a normal distibution
+# code below from https://www.statology.org/plot-normal-distribution-r/
+#Create a sequence of 100 equally spaced numbers between -4 and 4
+x <- seq(-4, 4, length=100)
+
+#create a vector of values that shows the height of the probability distribution
+#for each value in x
+y <- dnorm(x)
+
+#plot x and y as a scatterplot with connected lines (type = "l") and add
+#an x-axis with custom labels
+plot(x,y, type = "l", lwd = 2, axes = FALSE, xlab = "", ylab = "")
+axis(1, at = -3:3, labels = c("-3s", "-2s", "-1s", "mean", "1s", "2s", "3s"))
+```
+
+Research regarding whether stock market returns are normally distributed is a mixed bag at best
+
+* Stock returns are "roughly" normal - [Link](https://towardsdatascience.com/are-stock-returns-normally-distributed-e0388d71267e)
+* Normal distribution of returns approximate actual stock return distribution - [Link](https://stats.stackexchange.com/questions/125761/why-stock-prices-are-lognormal-but-stock-returns-are-normal)
+* Stock returns are log-normally distributed - [Link](http://www.insight-things.com/distribution-of-stock-return)
+* Stock returns are normally distributed but are "fat-tailed" - [Link](http://efinance.org.cn/cn/fe/19840301Models%20of%20Stock%20Returns--A%20Comparison,%20pp.%20147-165.pdf)
+* Stock returns are not normally distributed but bimodal (observing 3-year rolling returns) or trimodal (10-year rolling returns) - [Link](https://klementoninvesting.substack.com/p/the-distribution-of-stock-market)
+* Black-Scholes Model assumes lognormal distribution - [Link](https://www.maths.usyd.edu.au/u/UG/SM/MATH3075/r/Slides_8_Black_Scholes_Model.pdf)
+
+## Time Based Returns
+
+What struck me as I read through the articles and papers above regarding how stock return distributions are measured is that the researchers **always used time-based return measurements.**
+
+Most (actually all) of the articles and papers cited above dealt with returns based on **a set amount of time**: daily returns, monthly returns, annual returns, various rolling windows of annual returns etc.
+
+Time-based returns are easy enough to calculate, a universal way to measure performance across assets and are abundantly available when looking at historical stock market data. According to none other than the [CFA Institute](https://www.cfainstitute.org/-/media/documents/support/programs/cipm/2019-cipm-l1v1r4.ashx): "The term holding period rate of return is used to underscore the time period over which the rate of return was earned and is defined as the percentage gain or loss in wealth resulting from holding some asset or portfolio over the stated holding period; thus it is calculated as the change in wealth resulting from holding some investment for a stated time period divided by the initial amount invested."
+
+Time based returns are also involved in [money-weighted return calculations and discounted cash-flow analysis](https://soleadea.org/cfa-level-1/money-weighted-return-vs-time-weighted-return) like IRR.
+
+And I am willing to bet my last nickel that the first stock chart you and I looked at had price on the y-axis and time on the x-axis.
+
+But [friend-o](https://www.youtube.com/watch?v=3B_rRmkbA9I), might there be an alternative way to examine and measure returns?
+
+## Why Care if Something is Normally Distributed
+
+Before we look at alternative means to measure returns, I think it's fair to ask the question why researchers, scientists and stock traders care so much about why returns are or "almost are" normally distributed.
+
+The normal distribution is the model that drives statistical assumptions in both data science and financial market analysis. Inferences about the world at large (in statistical terms the "population") can be made by making measurements on a relatively miniscule part of it (again, in statistical terms a "sample"). [This post](https://towardsdatascience.com/understanding-the-normal-distribution-with-python-e70bb855b027) does an amaziing job of breaking down why scientists rely on the normal distribution so much.
+
+If we **know with reasonable certainty** that something is normally distributed, then on any given occurrence of that event you can calculate the probability that the event will or will not occur.
+
+For example, pretend you are a [degenerate gambler betting a cowboy-hat-wearing Houstononian on whether a flight will depart on-time while waiting for your comic friend at the Diplomat's Club in New York](https://www.youtube.com/watch?v=-Me_3LiublE). Kramerica Industries has determined that flights from Pittsburgh usually take off 3 minutes late (mean = 3 minutes after scheduled departure time) with a standard deviation of 8 minutes. The cowboy's flight to Houston has a historical mean of being 7 minutes late with a standard deviation of 5 minutes. Both flight departure times before or after scheduled takeoff are normally distributed. Assume that both flights are scheduled for the same departure time in this episode.
+
+If you were Kramer in the show, would you take a straight-up (even-odds) bet of $200 that Pittsburgh leaves before Houston? Or would you ask for better odds?
+
+```{r}
+pitt_mean <- 7
+pitt_sd <- 5
+
+houst_mean <- 3
+houst_sd <- 8
+
+# 1000 simulations with mean = 0
+houst_flts <- rnorm(1000,houst_mean,houst_sd)
+pitt_flts <- rnorm(1000,pitt_mean,pitt_sd)
+
+# plot both histograms
+hist(houst_flts,  col="yellow",breaks = 50,main = "Pittsburgh & Houston Departure Times", xlab = "")
+hist(pitt_flts, add=T, col="purple",breaks = 50, xlab = "")
+legend(15,50,legend = c("Houston", "Pittsburgh"), col = c("yellow", "purple"), cex=0.6)
+
+# prob pitt flight on time
+pnorm(0,pitt_mean,pitt_sd)
+
+# prob hous flight on time
+pnorm(0,houst_mean,houst_sd)
+```
+
+"The pnorm function gives the Cumulative Distribution Function (CDF) of the Normal distribution in R, which is the probability that the variable X takes a value lower or equal to x." *See* Normal distribution in R - [Link](https://r-coder.com/normal-distribution-r).  Using the `pnorm()` function shows that the Pittsburgh flight departs on time about 8% of the time and the Houston flight has a 35% probability of leaving on time.
+
+But the bet is not which flight will leave at the *scheduled time* but rather which flight will leave *first*. This requires us to evaluate the likelihood that the Pittsburgh flight will take off before the Houston flight **across all possible values of both normal distributions.**
+
+One way to do that is by using the `rnorm()` function. "the rnorm function allows obtaining random observations that follow a normal distibution." *See* Normal distribution in R - [Link](https://r-coder.com/normal-distribution-r). We can simulate the results of the normal distribution with a given mean and standard deviation for each flight, and then compare the results by counting how often one result is less than the other. Below, we simulate the Pittsburgh flight departing 10,000 times and then the Houston flight 10,000 times by using the `rnorm()` function with `n=10000`. This gives us one potential result for each flight. Then using the `length()` function we can count how often one leaves before the other.
+
+```{r}
+# 10,000 simulations with given mean and standard deviation
+houst_flts <- rnorm(10000,houst_mean,houst_sd)
+pitt_flts <- rnorm(10000,pitt_mean,pitt_sd)
+
+# how often houston leaves before pittsburgh - divided by the number of simulations
+length(which(houst_flts<pitt_flts))/10000
+
+# how often pittsburgh leaves before houston - divided by the number of simulations
+length(which(houst_flts>pitt_flts))/10000
+```
+
+So it looks like the Houston flight departs first 66% of the time, and the Pittsburgh flight departs first 33% of the time. It might be intuitive then that Kramer should ask for 2-to-1 odds. For every \$1 he puts up, the Texan should put up \$2 since it is more than twice as likely Pittsburgh leaves after Houston. But getting 2-to-1 on his money will only get Kramer back to even money. In other words his expected value is zero.
+
+```{r}
+fn_exp_val <- function(win_pct, lose_pct, win_amt, lose_amt){
+  return(win_pct * win_amt - lose_pct * lose_amt)
+}
+
+fn_exp_val(.33, .66, 200, 100)
+```
+
+If Kramer could get his Texan friend to give him \$250 for every \$100 he puts up, then he could say "Giddyup!". His expected is then positive.
+
+```{r}
+fn_exp_val(.33, .66, 250, 100)
+```
+
+
+
+A quick summary of the Normal Distribution functions in R
+
+* `dnorm`	Normal density or the Probability Density Function
+pnorm	Normal distribution
+(Cumulative Distribution Function)
+qnorm	Quantile function of the Normal distribution
+rnorm	Normal random number generation
+
+Whether or not options are underpriced or overpriced. See [How do you identify mispriced options?
+](https://quantcha.com/news/how-do-you-identify-mispriced-options/).
+
+## Another (Not Really New) Way to Measure Returns
+
+
+
+
+
+## Notes & Research
+
+# TODO GO THROUGH
+* https://mikmart.rbind.io/2018/02/17/finding-expected-values-of-random-variables/
+* [Running R Scripts on a Schedule with GitHub Actions | Simon Couch](https://blog--simonpcouch.netlify.app/blog/r-github-actions-commit/)
+* [Cron expression generator by Cronhub](https://crontab.cronhub.io/)
+* [Automatic Rendering of a Plot with GitHub Actions | Amit Levinson](https://amitlevinson.com/blog/automated-plot-with-github-actions/)
+* [Chapter 2 Example workflow to set up continuous integration for packages | Github actions with R](https://orchid00.github.io/actions_sandbox/packageci.html)
+* [Chapter 16 Existing project, GitHub first | Happy Git and GitHub for the useR](https://happygitwithr.com/existing-github-first.html#existing-github-first)
+* [Putting your R package on GitHub](https://kbroman.org/pkg_primer/pages/github.html)
+* [Using Github Actions as a job scheduler for R scripts | by Sabeeh Yunus | Medium](https://sabeeh.medium.com/using-github-actions-as-a-job-scheduler-for-r-scripts-7b92539372f4)
+* [Running an R Script on a Schedule: Gh-Actions - Roel's R-tefacts](https://blog.rmhogervorst.nl/blog/2020/09/24/running-an-r-script-on-a-schedule-gh-actions/)
+* [Bea Milz - Introduction to GitHub Actions to R users](https://beamilz.com/posts/series-gha/2022-series-gha-1-what-is/en/)
+* [aRtsy/.github/workflows at development · koenderks/aRtsy](https://github.com/koenderks/aRtsy/tree/development/.github/workflows)
+* [Double Stakes - Roulette with Martingale | Insight Things](http://www.insight-things.com/double-stakes-roulette-martingale)
+* [Understanding the Normal Distribution (with Python) | by Tony Yiu | Towards Data Science](https://towardsdatascience.com/understanding-the-normal-distribution-with-python-e70bb855b027)
+* [How to use standard deviation for betting | Betting strategy](https://www.pinnacle.com/en/betting-articles/Betting-Strategy/how-to-use-standard-deviation-for-betting/P8724GE57FBZWD3F#:~:text=The%20normal%20distribution%20uses%20the,lies%20within%202%20standard%20deviations.)
+* [9.1 Normal Distribution | R Programming: Zero to Pro](https://r02pro.github.io/normal-distribution.html)
+* [The Standard Normal Distribution](https://sphweb.bumc.bu.edu/otlt/mph-modules/bs/bs704_probability/bs704_probability9.html)
+* [Probability Density Function (PDF) - Definition, Formula, Graph, Example](https://byjus.com/maths/probability-density-function/)
+* [NORMAL DISTRIBUTION in R 🔔 [dnorm, pnorm, qnorm and rnorm]](https://r-coder.com/normal-distribution-r/#:~:text=The%20pnorm%20function%20gives%20the,lower%20or%20equal%20to%20x.)
+* [probability - What is the best way to compare probabilities? - Mathematics Stack Exchange](https://math.stackexchange.com/questions/231709/what-is-the-best-way-to-compare-probabilities)
+* [Guide to Sports Betting Statistical Analysis and Distributions](https://www.gamblingsites.com/sports-betting/strategy/statistical-analysis/)
+* [Comparing Distributions](http://homework.uoregon.edu/pub/class/es202/ztest.html#:~:text=The%20simplest%20way%20to%20compare,is%20via%20the%20Z%2Dtest.&text=The%20error%20in%20the%20mean,mean%20value%20for%20that%20population.)
+* [Chapter5.pdf](https://people.math.umass.edu/~lr7q/ps_files/teaching/math456/Chapter5.pdf)
+* [2.1 Random Variables and Probability Distributions | Introduction to Econometrics with R](https://www.econometrics-with-r.org/2-1-random-variables-and-probability-distributions.html)
+* [meaningful difference at a particular point of two cumulative distribution functions - Cross Validated](https://stats.stackexchange.com/questions/464304/meaningful-difference-at-a-particular-point-of-two-cumulative-distribution-funct)
+* [a-i-sports/bettoR: R Package for Sports betting](https://github.com/a-i-sports/bettoR)
+* [How I organised my life transforming it digitally over 5 years | by Sreeram Padmanabhan | Aug, 2022 | Medium](https://medium.com/@sreeramofficial/how-i-organised-my-life-over-the-past-5-years-578ad44212d6)
+* [Create a new Gist](https://gist.github.com/)
+* [Multiple linear regression made simple - Stats and R](https://statsandr.com/blog/multiple-linear-regression-made-simple/)
+* [Data manipulation in R - Stats and R](https://statsandr.com/blog/data-manipulation-in-r/#scale)
+* [Do my data follow a normal distribution? A note on the most widely used distribution and how to test for normality in R - Stats and R](https://statsandr.com/blog/do-my-data-follow-a-normal-distribution-a-note-on-the-most-widely-used-distribution-and-how-to-test-for-normality-in-r/#probabilities-and-standard-normal-distribution)
+* [tidyquant package - RDocumentation](https://www.rdocumentation.org/packages/tidyquant/versions/1.0.5)
+* [Assessment of Regression Models Performance • performance](https://easystats.github.io/performance/)
+* [Subset rows using their positions — slice • dplyr](https://dplyr.tidyverse.org/reference/slice.html)
+* [Predicting Stock Prices with Linear Regression in Python - αlphαrithms](https://www.alpharithms.com/predicting-stock-prices-with-linear-regression-214618/)
+* [extract - Using lapply and the lm function together in R - Stack Overflow](https://stackoverflow.com/questions/44735052/using-lapply-and-the-lm-function-together-in-r)
+* [purrr](https://evoldyn.gitlab.io/evomics-2018/ref-sheets/R_purrr.pdf)
+* [Running multiple simple regressions with purrr – Sebastian Sauer Stats Blog](https://sebastiansauer.github.io/multiple-lm-purrr2/)
+* [Functional Programming in R with purrr | by Thomas Mock | Towards Data Science](https://towardsdatascience.com/functional-programming-in-r-with-purrr-469e597d0229)
+* [Relationship to base and plyr functions](https://jennybc.github.io/purrr-tutorial/bk01_base-functions.html)
+* [Apply a function to each element of a list or atomic vector — map • purrr](https://purrr.tidyverse.org/reference/map.html)
+* [predict.lm function - RDocumentation](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/predict.lm)
+* [Map over multiple inputs simultaneously. — map2 • purrr](https://purrr.tidyverse.org/reference/map2.html)
+* [third party bookkeeping service checklist - Google Search](https://www.google.com/search?q=third+party+bookkeeping+service+checklist&sxsrf=ALiCzsa28sPV1hTWOlNOTgKL5n6TLiZsbA%3A1663093335159&ei=V8ogY_SxCYqN0PEP55KEuA8&ved=0ahUKEwi0ueG7sZL6AhWKBjQIHWcJAfcQ4dUDCA4&uact=5&oq=third+party+bookkeeping+service+checklist&gs_lcp=Cgdnd3Mtd2l6EAMyBQghEKABMgUIIRCgAToECCMQJzoFCAAQkQI6BAgAEEM6BQgAEIAEOg4ILhCxAxCDARDHARDRAzoRCC4QgAQQsQMQgwEQxwEQ0QM6BAguEEM6BQguEJECOgcILhDUAhBDOggILhCxAxCDAToICC4QgAQQsQM6EQguELEDEIMBEMcBENEDENQCOgsIABCABBCxAxDJAzoFCAAQkgM6CwguEIAEEMcBEK8BOgoIABCxAxCDARBDOggIABCxAxCDAToLCC4QgAQQsQMQ1AI6BwgAELEDEEM6CwgAEIAEELEDEIMBOgsILhCxAxDHARDRAzoICAAQgAQQsQM6CwguELEDEMcBEK8BOggIABCxAxDJAzoOCC4QgAQQsQMQxwEQrwE6CAgAEIAEEMkDOgUIABCGAzoGCAAQHhAWOgkIABAeEMkDEBY6BQghEKsCOggIIRAeEBYQHToKCCEQHhAPEBYQHUoECEEYAEoECEYYAFAAWKNJYMhKaAJwAXgAgAHKAogB-TKSAQgwLjQwLjEuMZgBAKABAcABAQ&sclient=gws-wiz)
+* [Accounting Client Onboarding Checklist | Corvee](https://corvee.com/blog/your-accounting-client-onboarding-checklist/)
+* [Top 10 Monthly Bookkeeping Checklist for Your Bookkeeper | Adcon Blog](https://adconaccounting.com/2021/03/the-top-10-monthly-bookkeeping-checklist-for-your-bookkeeper/)
+* [The Landlord’s Guide to Basic Real Estate Bookkeeping](https://www.stessa.com/blog/real-estate-bookkeeping/)
+* [Finding expected values of random variables in R :: Mikko Marttila — A simple theme for Hugo](https://mikmart.rbind.io/2018/02/17/finding-expected-values-of-random-variables/)
+
+* Log-normal distribution mistaken for normal - [Link](http://www.insight-things.com/log-normal-distribution-mistaken)
+* Black-Scholes-Merton Model - [Link](https://corporatefinanceinstitute.com/resources/knowledge/trading-investing/black-scholes-merton-model/)

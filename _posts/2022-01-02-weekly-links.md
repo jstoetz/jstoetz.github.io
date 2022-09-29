@@ -10,7 +10,7 @@ categories: [links]
 Here are some links I covered in the past week. Happy New Year!
 
 ## Table of Contents
-<hr/>
+
 
 * General
 * COVID & Parenting
@@ -18,7 +18,6 @@ Here are some links I covered in the past week. Happy New Year!
 * Tools
 
 ## General
-<hr/>
 
 ### RPubs - List all installed and loaded libraries
 
@@ -43,7 +42,6 @@ In-depth article re how to create a custom theme.  Very informative for new web 
 [Link](https://austinkleon.com/2021/12/30/100-things-that-made-my-year-2021/) - [DB](https://www.dropbox.com/s/qihxxiuah1wkm52/100%20things%20that%20made%20my%20year%20%282021%29%20-%20Austin%20Kleon.pdf?dl=0)
 
 ## COVID & Parenting
-<hr/>
 
 ### Parenting in 2021? “Not great, Bob!” 😖
 
@@ -64,7 +62,6 @@ I wish I could have been long jellycats back before my kids were born based on t
 For more stuffed-animal madness, check out the HBO Max documentary [Beanie Mania](https://www.avclub.com/hbo-max-s-beanie-mania-is-a-fascinating-retrospective-o-1848249871/amp) and see how plush animals + basic economics can [make you a multi-billionaire](https://en.m.wikipedia.org/wiki/Ty_Warner).
 
 ## Chart Pattern Analysis in R
-</hr>
 
 ### Recognising Visual Charting Patterns in the Dow Jones Industrials Index
 
@@ -75,7 +72,6 @@ For more stuffed-animal madness, check out the HBO Max documentary [Beanie Mania
 [Link](https://systematicinvestor.wordpress.com/2012/05/22/classical-technical-patterns/) - [DB](https://www.dropbox.com/sh/92bnsrhcpiu49ip/AACx9G5hdU_2aRyNFy7WAcPHa?dl=0)
 
 ## Tools
-</hr>
 
 ### Hacking it: Setting up your own Bulk Mail Server — using Sendy and AWS - by Neha M - Level Up Coding
 

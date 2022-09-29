@@ -5,13 +5,10 @@ by: "Jake Stoetzner"
 categories: [links]
 ---
 
-# Links for 2021-08-08
-
 Below are some links that I found interesting and/or instructive last week. Enjoy!
 
-<!-- TOC depthFrom:1 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
+## Table of Contents
 
-- [Links for 2021-08-08](#links-for-2021-08-08)
 	- [General](#general)
 	- [GTD Review](#gtd-review)
 	- [Table of Contents Generator and Other Tools in Markdown](#table-of-contents-generator-and-other-tools-in-markdown)
@@ -20,10 +17,8 @@ Below are some links that I found interesting and/or instructive last week. Enjo
 	- [Amazon Forecast](#amazon-forecast)
 	- [Apple Script](#apple-script)
 
-<!-- /TOC -->
-
 ## General
-<hr/>
+
 ### Options trading strategy based on ARIMA forecasting
 
 [Link](https://www.emerald.com/insight/content/doi/10.1108/PRR-07-2019-0023/full/pdf) - [DB](https://www.dropbox.com/s/jrixt4v555n3hwf/PDF%20document.pdf?dl=0)
@@ -83,7 +78,6 @@ A modern, high customizable, responsive Jekyll theme for documention with built-
 [Link](https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html) - [DB](https://www.dropbox.com/s/ejopkc5chd3s6s6/2021.08.06%20-%20Introduction%20to%20roxygen2.pdf?dl=0)
 
 ## GTD Review
-<hr/>
 
 Every few months, I find the need to update and tighten up my GTD game. Below are links I found helpful.
 
@@ -130,7 +124,6 @@ Package to call the todoist API. Manage your ToDo lists with todoist from R. See
 [Link](https://michaelsoolee.com/shortcuts-weekly-note/) - [DB](https://www.dropbox.com/s/qgewac6sfevugww/How%20I%20use%20Shortcuts%20on%20iOS%20and%20a%20template%20to%20automatically%20setup%20my%20weekly%20note%20%3A%20Michael%20Lee.pdf?dl=0)
 
 ## Table of Contents Generator and Other Tools in Markdown
-<hr/>
 
 ### jonschlinkert/markdown-toc
 
@@ -161,7 +154,6 @@ Excellent guide to install NPM on a mac using [Homebrew](https://brew.sh).
 [Link](https://rpubs.com/Deeeeeeeeeena/591276)
 
 ## curl Package and Working With APIs in R
-<hr/>
 
 ### Best practices for API packages • httr
 
@@ -200,7 +192,6 @@ r <- POST("http://api.spending.gov.ua/api/rest/1.0/transactions", body=posting,
 ```
 
 ## Emailing from R
-<hr/>
 
 ### emayili: Sending Email from R - datawookie
 
@@ -231,18 +222,16 @@ Introduction to the **emayili** package that works via the **curl** package in R
 [Link](https://htmlemail.io/blog/google-analytics-email-tracking)
 
 ## Amazon Forecast
-<hr/>
 
 ###  Introducing Amazon Forecast and a Look into the Future of Time Series Prediction - AWS Partner Network (APN) Blog
 
 [Link](https://aws.amazon.com/blogs/apn/introducing-amazon-forecast-and-a-look-into-the-future-of-time-series-prediction)
 
-### Amazon Forecast – Now Generally Available | AWS News Blog
+### Amazon Forecast – Now Generally Available - AWS News Blog
 
 [Link](https://aws.amazon.com/blogs/aws/amazon-forecast-now-generally-available)
 
 ## Apple Script
-<hr/>
 
 Tooling around with being able to (1) save all open tabs as a PDF locally to my Mac, (2) query the Dropbox API to get the link to the file and (3) return the original url of the page and the link to the Dropbox file in Markdown format.
 
@@ -263,7 +252,6 @@ Tooling around with being able to (1) save all open tabs as a PDF locally to my 
 [Link](https://macscripter.net/viewtopic.php?id=45518)
 
 ## HTML URL to PDF from R
-<hr/>
 
 ### R Code to Transform HTML URL to PDF from R
 <small>tags: cli</small>

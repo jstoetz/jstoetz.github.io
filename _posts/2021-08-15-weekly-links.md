@@ -5,13 +5,9 @@ by: "Jake Stoetzner"
 categories: [links]
 ---
 
-# Links for the Week of 2021-08-15
-
 Here are some links I covered in the past week.
 
 ## Table of Contents
-<hr/>
-<!-- TOC depthFrom:2 depthTo:2 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Table of Contents](#table-of-contents)
 - [General](#general)
@@ -25,10 +21,7 @@ Here are some links I covered in the past week.
 - [Google Sheets to Google Calendar](#google-sheets-to-google-calendar)
 - [DeepSpeech](#deepspeech)
 
-<!-- /TOC -->
-
 ## General
-<hr/>
 
 ### ADVFN
 
@@ -85,7 +78,6 @@ Documentation on how to link to the Gusto payroll API.
 [Link](http://www.cse.chalmers.se/~chrdimi/downloads/web/getting_web_data_r6_http_rcurl.pdf)
 
 ## Important Dental Metrics/KPI
-<hr />
 
 ### Clinical Metrics
 
@@ -152,7 +144,6 @@ java -cp ./vnu.jar nu.validator.servlet.Main 8888
 * A Chrome extension called [HTML5 Outliner](https://chrome.google.com/webstore/detail/html5-outliner/afoibpobokebhgfnknfndkgemglggomo)
 
 ## Membership Websites
-<hr />
 
 ### MemberSpace - Turn any part of your website into members-only with just a few clicks
 
@@ -165,9 +156,8 @@ java -cp ./vnu.jar nu.validator.servlet.Main 8888
 Slightly skewed reviews of membership hosing sites.
 
 ## Automating R Scripts and Github Actions
-<hr />
 
-### Running R Scripts on a Schedule with GitHub Actions | Simon Couch
+### Running R Scripts on a Schedule with GitHub Actions - Simon Couch
 
 [Link](https://blog--simonpcouch.netlify.app/blog/r-github-actions-commit/) - [DB](https://www.dropbox.com/s/oxhuuzon0aqqz3f/2021.08.10%20-%20Running%20R%20Scripts%20on%20a%20Schedule%20with%20GitHub%20Actions%20%7C%20Simon%20Couch.pdf?dl=0)
 
@@ -202,7 +192,6 @@ javascript:(function(){var a=;for(var ln=0;ln<document.links.length;ln++){var lk
 ```
 
 ## RDrop2 package
-<hr/>
 
 More to come on this one but this is a great R interface to Dropbox.
 
@@ -211,18 +200,16 @@ More to come on this one but this is a great R interface to Dropbox.
 [Link](https://github.com/karthik/rdrop2)
 
 ## Eaglesoft
-<hr/>
 
 ### [Support Home Page](https://pattersonsupport.custhelp.com/)
 
 ### [Eaglesoft - Provider Productivity Report](https://pattersonsupport.custhelp.com/app/answers/detail/a_id/20428/~/eaglesoft---provider-productivity-report)
 
-### [Reports in Eaglesoft | Dental Intel Education](https://intercom.help/dental-intel/en/articles/909502-reports-in-eaglesoft)
+### [Reports in Eaglesoft - Dental Intel Education](https://intercom.help/dental-intel/en/articles/909502-reports-in-eaglesoft)
 
 ## Google Sheets to Google Calendar
-<hr/>
 
-### How to automatically add a schedule from Google sheets to Calendar using Apps Script | by Varsha Das | Medium
+### How to automatically add a schedule from Google sheets to Calendar using Apps Script - by Varsha Das - Medium
 
 [Link](https://medium.com/@varsha.das22/how-to-automatically-add-a-schedule-from-google-sheets-to-calendar-using-apps-script-2d37990a1ddd)
 
@@ -234,12 +221,11 @@ More to come on this one but this is a great R interface to Dropbox.
 
 [Link](https://www.labnol.org/apps/calendar.html)
 
-### Class Calendar  |  Apps Script  |  Google Developers
+### Class Calendar  -  Apps Script  -  Google Developers
 
 [Link](https://developers.google.com/apps-script/reference/calendar/calendar#createEvent(String,Date,Date))
 
 ## DeepSpeech
-<hr/>
 
 ### [Using a Pre-trained Model — DeepSpeech 0.9.3 documentation](https://deepspeech.readthedocs.io/en/v0.9.3/USING.html#using-the-command-line-client)
 
@@ -255,13 +241,13 @@ More to come on this one but this is a great R interface to Dropbox.
 
 ### [tuneR: Analysis of Music and Speech](https://cran.r-project.org/web/packages/tuneR/tuneR.pdf)
 
-### [Working with audio in R using av | R-bloggers](https://www.r-bloggers.com/2020/02/working-with-audio-in-r-using-av/)
+### [Working with audio in R using av - R-bloggers](https://www.r-bloggers.com/2020/02/working-with-audio-in-r-using-av/)
 
 ### [audio - Fast way for splitting large .wav file using R - Stack Overflow](https://stackoverflow.com/questions/39047687/fast-way-for-splitting-large-wav-file-using-r)
 
 ### [mozilla/DeepSpeech-examples: Examples of how to use or integrate DeepSpeech](https://github.com/mozilla/DeepSpeech-examples)
 
-### [Command Line 101 | Learn Version Control with Git](https://www.git-tower.com/learn/git/ebook/en/command-line/appendix/command-line-101/)
+### [Command Line 101 - Learn Version Control with Git](https://www.git-tower.com/learn/git/ebook/en/command-line/appendix/command-line-101/)
 
 ### [Fast setup for using DeepSpeech to transcribe audio files for free -- compare to Google Speech-to-Text](https://satra.cogitatum.org/group/2019/07/07/transcription.html)
 
